@@ -1,0 +1,28 @@
+# Dependencies and build output
+node_modules/
+.next/
+dist/
+
+# Local Cloudflare D1 and R2 state
+.cloudflare/
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+.dev.vars*
+*.sqlite
+*.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local audio data
+*.wav
+*.mp3
+*.flac
+
+# macOS
+.DS_Store
