@@ -19,6 +19,7 @@ import Sidebar , {
 import StatCard from "@/components/overview/StatCard"; // Importing the StatCard component from a local file. This component is likely used to display statistical information in a card format.
 
 
+import TaskBuilder from "@/components/task-builder/TaskBuilder";
 import type { UserRole } from "@/lib/contracts/auth";
 import { demoMembers } from "@/fixtures/users";
 
@@ -28,6 +29,7 @@ import { demoMembers } from "@/fixtures/users";
 const titles: Record<PageId, string> = {
   labeller: "Labeller Mode",
   overview: "Research overview",
+  "task-builder": "Task Builder",
   negation: "Negation QC",
   grounding: "Sound grounding",
   caption: "Audio captioning",
@@ -57,12 +59,21 @@ export default function HomePage() {
     const [role, setRole] = useState<UserRole>("admin");
     const currentMember = demoMembers[role];
 
+    const [builderDirty, setBuilderDirty] = useState(false);
+    function canLeaveBuilder() {
+        return page !== "task-builder" || !builderDirty || window.confirm("Leave Task Builder and discard unsaved edits?");
+    }
+
     function navigate(nextPage: PageId) {
+        if (nextPage !== page && !canLeaveBuilder()) return;
+        if (nextPage !== page) setBuilderDirty(false);
         setPage(nextPage); // Update the page state to the newly selected page
         setMobileOpen(false); // Close the mobile sidebar when a new page is selected
     }
 
     function changeRole(nextRole: UserRole) {
+        if (!canLeaveBuilder()) return;
+        setBuilderDirty(false);
         setRole(nextRole); // Update the role state to the newly selected role
         // Update the page state based on the new role. If the new role is "admin", set the page to "overview"; otherwise, set it to "labeller".
         setPage(nextRole === "admin" ? "overview" : "labeller");
@@ -109,7 +120,7 @@ export default function HomePage() {
             {/* Current Page content */}
             <div className = "al-content">
               {/* Page heading */}
-              <div className = "al-page-heading">
+              {page !== "task-builder" && <div className = "al-page-heading">
                 <span className="al-eyebrow">
                   AUDIO NEGATION STUDY
                 </span>
@@ -119,7 +130,7 @@ export default function HomePage() {
                 <p>
                   From audio candidtaes to auditable human evidence
                 </p>
-              </div>
+              </div>}
 
               {/* Conditional rendering: Research overview */}
               {/* if page = overview, then render the statistics grid. If not, render a message indicating that the workspace has not been implemented yet. */}
@@ -132,6 +143,8 @@ export default function HomePage() {
                     <StatCard label = "Your remaining tasks" value = {0} note = "Tasks awaiting annotation" icon = {Headphones}/> {/* Render a StatCard component with the specified props */}
                 
                 </section>
+              ) : page === "task-builder" && role === "admin" ? (
+                  <TaskBuilder onDirty={setBuilderDirty} />
               ) : (
                   // In case page is not "overview", render a message indicating that the workspace has not been implemented yet.
                   // JSX: Render this section for unfinished workspaces.
