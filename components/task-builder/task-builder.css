@@ -528,6 +528,75 @@
   background: var(--tb-tint);
   border-color: #6b9f94;
 }
+/* Each question stores its own appearance; native inputs keep keyboard support. */
+.tb-choice-edit-fields {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 7px;
+}
+.tb-choice-options {
+  gap: 10px;
+}
+.tb-choice-options .tb-pick {
+  position: relative;
+  background: white;
+  min-height: 44px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.tb-choice-options .tb-pick input {
+  accent-color: var(--tb-accent);
+  flex-shrink: 0;
+}
+.tb-choice-options .tb-pick:has(input:checked) {
+  /* Match the existing Yes/No selection colours in all three appearances. */
+  background: var(--tb-tint);
+  border-color: #6b9f94;
+  color: var(--tb-ink);
+}
+/* Show the outer focus ring for keyboard navigation, not after mouse clicks.
+   Clicking a choice keeps the same single selected border as Yes/No. */
+.tb-choice-options .tb-pick:has(input:focus-visible) {
+  outline: 2px solid var(--tb-accent);
+  outline-offset: 3px;
+}
+.tb-choice-options .tb-pick:has(input:disabled) {
+  opacity: .55;
+  cursor: not-allowed;
+}
+.tb-choice-cards {
+  /* Cards wrap automatically instead of overflowing a narrow screen. */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+}
+.tb-choice-cards .tb-pick {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 132px;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 10px;
+}
+.tb-choice-cards .tb-pick > span {
+  font-weight: 600;
+}
+.tb-choice-description {
+  color: var(--tb-muted);
+  font-size: 12px;
+}
+.tb-choice-compact .tb-pick {
+  padding: 12px 20px;
+  border-radius: 9px;
+}
+.tb-choice-compact .tb-pick input {
+  /* Visually hide the marker, while retaining keyboard and screen-reader input. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
 .tb-number {
   display: flex;
   gap: 8px;

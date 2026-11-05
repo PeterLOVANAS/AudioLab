@@ -10,7 +10,10 @@ import type {
 
 type Kind = AnnotationBlock["type"];
 export type EditableKind = Exclude<Kind, "timeline_annotation" | "continuous_rating">;
-export type Option = { id: string; label: string; value?: string };
+export type AnswerAppearance = "cards" | "compact" | "bullets";
+// Descriptions belong to individual answers. Other styles keep this text saved
+// so switching back to large cards brings it back without retyping it.
+export type Option = { id: string; label: string; value?: string; description?: string };
 export type Block = {
   id: string;
   type: Kind;
@@ -20,6 +23,10 @@ export type Block = {
   scope?: AnnotationScope;
   showWhen?: BlockCondition;
   options?: Option[];
+  // Stored on this question, not the whole task. The existing draft save API
+  // preserves extra block fields, so this also travels into published versions.
+  // Optional so existing definitions retain the original bullet controls.
+  answerAppearance?: AnswerAppearance;
   minSelections?: number;
   maxSelections?: number;
   requiredValue?: boolean;

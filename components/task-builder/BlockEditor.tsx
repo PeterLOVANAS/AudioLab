@@ -12,6 +12,7 @@ import {
   newBlock,
   title,
   type Block,
+  type AnswerAppearance,
   type EditableKind,
 } from "./model";
 
@@ -161,6 +162,30 @@ function BlockSettings({
   const slots = block.stimulusSlots ?? [];
   return (
     <div className="tb-settings">
+      {/* These settings update only the question currently being edited. */}
+      {(block.type === "single_choice" || block.type === "multiple_choice") && (
+        <div className="tb-grid">
+          <Field label="Question type">
+            <select
+              value={block.type}
+              onChange={(event) => set({ type: event.target.value as "single_choice" | "multiple_choice" })}
+            >
+              <option value="single_choice">Single choice</option>
+              <option value="multiple_choice">Multiple choice</option>
+            </select>
+          </Field>
+          <Field label="Answer appearance">
+            <select
+              value={block.answerAppearance ?? "bullets"}
+              onChange={(event) => set({ answerAppearance: event.target.value as AnswerAppearance })}
+            >
+              <option value="cards">Large cards</option>
+              <option value="compact">Compact buttons</option>
+              <option value="bullets">Bullet points</option>
+            </select>
+          </Field>
+        </div>
+      )}
       <Field label="Question label">
         <input
           maxLength={300}
@@ -186,6 +211,8 @@ function BlockSettings({
           {options.map((option, index) => (
             <div key={option.id || index} className="tb-option-edit">
               <span>{index + 1}</span>
+              <div className="tb-choice-edit-fields">
+              {/* Changing the label or description keeps the answer's ID intact. */}
               <input
                 aria-label={"Choice " + (index + 1)}
                 value={option.label}
@@ -197,6 +224,22 @@ function BlockSettings({
                   })
                 }
               />
+              {/* Hide this editor for other styles, but preserve any description. */}
+              {(block.type === "single_choice" || block.type === "multiple_choice") && block.answerAppearance === "cards" && (
+                <input
+                  aria-label={"Description for choice " + (index + 1)}
+                  placeholder="Optional description beneath this answer"
+                  value={option.description ?? ""}
+                  onChange={(event) =>
+                    set({
+                      options: options.map((item, position) =>
+                        position === index ? { ...item, description: event.target.value } : item,
+                      ),
+                    })
+                  }
+                />
+              )}
+              </div>
               <button
                 type="button"
                 aria-label={"Remove choice " + (index + 1)}

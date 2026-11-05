@@ -189,13 +189,20 @@ function AnswerControl({
 }) {
   const name = useId(); // Each repeated item gets its own radio group.
   const options = block.options ?? [];
+  // Only choice questions get these styles. Older saved questions have no
+  // appearance field, so they fall back to the original bullet-point layout.
+  const isChoice = block.type === "single_choice" || block.type === "multiple_choice";
+  const appearance = isChoice ? (block.answerAppearance ?? "bullets") : undefined;
+  const optionsClass = "tb-options" + (isChoice ? " tb-choice-options tb-choice-" + appearance : "");
   function pick(
-    values: { id: string; label: string }[],
+    values: { id: string; label: string; description?: string }[],
     selected: unknown,
     choose: (id: string) => void,
   ) {
+    // All appearances use the same answer IDs and native radio inputs.
+    // Styling therefore does not change which answer gets saved.
     return (
-      <div className="tb-options">
+      <div className={optionsClass}>
         {values.map((option, index) => (
           <label key={option.id || index} className="tb-pick">
             <input
@@ -204,7 +211,8 @@ function AnswerControl({
               checked={selected === option.id}
               onChange={() => choose(option.id)}
             />
-            {option.label || "Unnamed choice"}
+            <span>{option.label || "Unnamed choice"}</span>
+            {appearance === "cards" && option.description && <small className="tb-choice-description">{option.description}</small>}
           </label>
         ))}
       </div>
@@ -214,9 +222,10 @@ function AnswerControl({
     case "single_choice":
       return pick(options, value, change);
     case "multiple_choice": {
+      // Checkboxes allow several answers; the appearance never changes the limit.
       const selected: string[] = Array.isArray(value) ? value : [];
       return (
-        <div className="tb-options">
+        <div className={optionsClass}>
           {options.map((option) => (
             <label className="tb-pick" key={option.id}>
               <input
@@ -233,7 +242,8 @@ function AnswerControl({
                   )
                 }
               />
-              {option.label}
+              <span>{option.label}</span>
+              {appearance === "cards" && option.description && <small className="tb-choice-description">{option.description}</small>}
             </label>
           ))}
         </div>
