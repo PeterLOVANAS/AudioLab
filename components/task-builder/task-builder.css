@@ -674,3 +674,197 @@
     padding: 12px;
   }
 }
+
+/* ===============================================================
+ * AudioLab 2.0 Task Builder enhancement — style isolation.
+ * All rules stay inside `.tb` or `.tb-workbench`. We deliberately do NOT
+ * modify app/globals.css: other friends can work on Labeller/Dataset pages
+ * without this PR altering their unrelated forms or buttons.
+ * =============================================================== */
+.tb .tb-preview-workspace { display: grid; gap: 16px; }
+.tb .tb-preview-source { display: grid; gap: 12px; }
+.tb .tb-preview-source p { margin: 0; }
+.tb .tb-preview-player { display: grid; gap: 10px; }
+.tb .tb-preview-player audio { width: 100%; }
+.tb .tb-preview-workspace .tb-workbench { min-width: 0; }
+.tb .tb-tool-option {
+  display: flex; gap: 10px; align-items: flex-start; padding: 12px;
+  border: 1px solid var(--tb-line); border-radius: 8px; cursor: pointer;
+  background: #f8fafc;
+}
+.tb .tb-tool-option span { display: grid; gap: 3px; }
+.tb .tb-tool-option small { font-weight: 400; }
+.tb .tb-tool-option input { margin-top: 3px; }
+.tb .tb-tier-config { display: grid; gap: 14px; margin-block: 12px; }
+.tb .tb-tier-configuration {
+  padding: 14px; border-radius: 10px; border: 1px solid var(--tb-line);
+  background: #f8fafc; display: grid; gap: 12px;
+}
+.tb-workbench .tb-display { display: grid; gap: 6px; padding: 14px 16px; border-radius: 10px; }
+.tb-workbench .tb-display h3 { margin: 0; }
+.tb-workbench .tb-display p { white-space: pre-wrap; margin: 0; }
+.tb-workbench .tb-section { border-bottom: 2px solid #cbd6e5; border-radius: 0; padding-left: 4px; }
+.tb-workbench .tb-callout { border: 1px solid #b6c6d8; background: #f4f7fb; }
+.tb-workbench .tb-tone-success { border-color: #7fb6a0; background: #eaf6ee; color: #1c5b47; }
+.tb-workbench .tb-tone-warning { border-color: #dab976; background: #fff5df; color: #70501c; }
+.tb-workbench .tb-tone-info { border-color: #a7c4dd; background: #edf5fc; color: #305575; }
+.tb-workbench .tb-tone-neutral { background: #f2f5f8; }
+.tb-workbench .tb-confirmation { border-color: #8ebca5; background: #f2faf4; }
+.tb-workbench .tb-timeline-question { padding: 14px 8px; border: 0; }
+.tb-workbench .tb-grounding {
+  border: 1px solid var(--tb-line); border-radius: 12px; background: #fff;
+  padding: 16px; display: grid; gap: 12px; min-width: 0;
+}
+.tb-workbench .tb-ground-toolbar,
+.tb-workbench .tb-ground-actions,
+.tb-workbench .tb-tier-heading { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.tb-workbench .tb-ground-toolbar strong { margin-right: auto; }
+.tb-workbench .tb-ground-toolbar > span { font-variant-numeric: tabular-nums; color: var(--tb-muted); }
+.tb-workbench .tb-ground-audio { width: 100%; min-width: 0; }
+.tb-workbench .tb-wave {
+  display: block; width: 100%; height: 112px; border: 1px solid #d8e1ed;
+  border-radius: 8px; cursor: crosshair; touch-action: none;
+}
+.tb-workbench .tb-scroll-label { display: grid; gap: 4px; font-size: 12px; color: var(--tb-muted); }
+.tb-workbench .tb-scroll-label input { width: 100%; }
+.tb-workbench .tb-follow { display: inline-flex; gap: 5px; align-items: center; font-size: 12px; }
+.tb-workbench .tb-tier-tabs { display: flex; gap: 7px; flex-wrap: wrap; }
+.tb-workbench .tb-tier-tabs button.active { background: #e9e8ff; border-color: #7973d9; color: #4f46b9; }
+.tb-workbench .tb-tier { display: grid; gap: 5px; }
+.tb-workbench .tb-tier-heading { justify-content: space-between; }
+.tb-workbench .tb-tier-heading span { color: var(--tb-muted); font-size: 12px; }
+.tb-workbench .tb-tier-lane { display: grid; grid-template-columns: minmax(80px, 105px) 1fr; gap: 8px; align-items: center; }
+.tb-workbench .tb-tier-lane > small { overflow-wrap: anywhere; }
+.tb-workbench .tb-tier-track { height: 34px; position: relative; overflow: hidden; border-radius: 6px;
+  background: repeating-linear-gradient(90deg, #f0f4f7 0, #f0f4f7 24px, #e8eff4 25px, #e8eff4 26px); }
+.tb-workbench button.tb-segment {
+  position: absolute; top: 2px; height: 30px; min-width: 0; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; padding: 3px 6px; font-size: 11px;
+  border: 1px solid #7ca2c6; background: #dceaf7; color: #214763; justify-content: flex-start;
+}
+.tb-workbench button.tb-segment.chosen { background: #dfddff; border-color: #7973d9; box-shadow: inset 0 0 0 1px #7973d9; }
+.tb-workbench .tb-ground-edit { border: 1px solid var(--tb-line); border-radius: 9px; padding: 12px;
+  display: grid; gap: 10px; background: #f9fbfd; }
+.tb-workbench .tb-ground-form { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+.tb-workbench .tb-ground-form label { display: grid; gap: 4px; font-size: 12px; font-weight: 600; }
+.tb-workbench .tb-ground-form :is(input,select) { min-width: 0; width: 100%; border: 1px solid #c7d5e3;
+  border-radius: 6px; padding: 7px 9px; color: #19324d; background: white; }
+.tb-workbench .tb-summary-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.tb-workbench .tb-summary-grid > div { padding: 12px; background: #f2f6fa; border-radius: 8px; min-width: 0; }
+.tb-workbench .tb-summary-grid p { white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 6px; }
+.tb-workbench .tb-ipa-palette { border: 1px solid #d2dce8; border-radius: 8px; padding: 10px; }
+.tb-workbench .tb-ipa-palette summary { cursor: pointer; font-weight: 600; }
+.tb-workbench .tb-ipa-palette > div { display: grid; gap: 5px; margin-top: 12px; }
+.tb-workbench .tb-ipa-palette > div > div { display: flex; flex-wrap: wrap; gap: 5px; }
+.tb-workbench .tb-ipa-palette button { min-width: 32px; font-family: "Noto Sans", sans-serif; font-size: 16px; padding: 4px 6px; }
+.tb-workbench .tb-textgrid-upload { display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  border: 1px solid var(--tb-line); background: white; padding: 7px 11px; border-radius: 7px; }
+.tb-workbench .tb-textgrid-upload input { max-width: 145px; font-size: 11px; }
+.tb-workbench .tb-inset { color: #586b7e; font-size: 12px; }
+.tb-workbench .tb-ground-notice { color: #31516e; border-left: 3px solid #6e9cc1; padding-left: 10px; }
+@media (max-width: 780px) {
+  .tb-workbench .tb-ground-form, .tb-workbench .tb-summary-grid { grid-template-columns: 1fr; }
+  .tb-workbench .tb-tier-lane { grid-template-columns: minmax(70px, 80px) 1fr; }
+}
+/* Restore the original prototype's purple choice emphasis. Green is reserved
+   for explicit absence confirmations, so a selected radio and a confirmed
+   absence panel don't communicate the same state through color alone. */
+.tb-workbench .tb-choice-options .tb-pick:has(input:checked) {
+  background: #eeecff; border-color: #7973d9; color: #4f46b9;
+  box-shadow: 0 0 0 1px #7973d9;
+}
+.tb-workbench .tb-choice-options .tb-pick input { accent-color: #7973d9; }
+.tb-workbench .tb-confirmation .tb-pick:has(input:checked) {
+  background: #e3f4e8; color: #1c5b47; border-color: #5c9e79;
+}
+.tb-workbench .tb-transcript-summary {
+  background: #f4f6fb; border: 1px solid #cfd9e7; display: grid; gap: 10px;
+}
+.tb-workbench .tb-transcript-summary > div { background: white; border-radius: 7px; padding: 10px; }
+.tb-workbench .tb-transcript-summary small { display: block; margin-bottom: 3px; }
+.tb-workbench .tb-transcript-summary p { white-space: pre-wrap; }
+.tb-workbench .tb-standalone-waveform { display: grid; gap: 9px; width: 100%; }
+.tb-workbench .tb-standalone-waveform > audio { width: 100%; }
+
+/* ========================================================================
+   AUDIOLAB PHONETIC WORKBENCH — PROTOTYPE UI PARITY (2026-11-06)
+   ========================================================================
+   Ported layout concepts from prototype/components/research/player.tsx and
+   prototype/app/globals.css. This is NOT the old player pasted into the new
+   app: all edits still go through the new controlled BlockFields answer.
+   The selector is intentionally scoped to the Task Builder workbench.
+*/
+.tb-workbench .tb-phonetic-workbench {
+  background:#fff; border:1px solid #cbd6e5; border-radius:10px;
+  padding:0; gap:0; overflow:hidden;
+  box-shadow:0 3px 18px rgba(27,46,70,.06);
+}
+.tb-workbench .tb-bench-header {display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;padding:12px 16px;background:#f7f9fd;border-bottom:1px solid #d9e2ef;}
+.tb-workbench .tb-bench-identity {display:grid;gap:3px;}
+.tb-workbench .tb-bench-identity strong {color:#223850;font-size:15px;}
+.tb-workbench .tb-bench-identity small,.tb-workbench .tb-bench-revision {color:#687991;font-size:11px;}
+.tb-workbench .tb-bench-header-actions {display:flex;align-items:center;gap:12px;}
+.tb-workbench .tb-bench-focus-toggle {display:inline-flex;align-items:center;gap:6px;
+  border:1px solid #98a8c3;background:white;color:#233f66;padding:7px 10px;border-radius:7px;cursor:pointer;}
+.tb-workbench .tb-phonetic-workbench > .tb-ground-toolbar {padding:9px 14px;background:#f9fbff;
+  border-bottom:1px solid #e0e5ef;}
+.tb-workbench .tb-phonetic-workbench > .tb-ground-audio {width:calc(100% - 28px);margin:10px 14px;}
+.tb-workbench .tb-phonetic-workbench > .tb-wave {width:calc(100% - 28px);margin:0 14px;
+  border-radius:2px;border-color:#bccce0;}
+.tb-workbench .tb-phonetic-workbench > .tb-scroll-label {padding:8px 14px;
+  background:#f8fafd;border-bottom:1px solid #e2e8f0;}
+.tb-workbench .tb-timeline-ruler {display:flex;align-items:center;gap:12px;justify-content:space-between;
+  background:#f1f4fa;padding:6px 14px;border-block:1px solid #dce4ee;font-size:11px;
+  color:#51637c;font-variant-numeric:tabular-nums;}
+.tb-workbench .tb-timeline-ruler b {margin-right:auto;color:#304b69;}
+.tb-workbench .tb-layout-settings {padding:6px 14px;background:#f8faff;border-bottom:1px solid #e0e7f1;}
+.tb-workbench .tb-layout-settings summary {font-size:12px;font-weight:600;cursor:pointer;color:#3f5370;}
+.tb-workbench .tb-layout-controls {display:flex;flex-wrap:wrap;gap:15px;padding:10px 0 4px;}
+.tb-workbench .tb-layout-controls label {display:flex;align-items:center;gap:7px;font-size:12px;}
+.tb-workbench .tb-layout-controls input[type=range] {width:110px;}
+.tb-workbench .tb-phonetic-workbench > .tb-tier-tabs {padding:9px 14px;background:#f9fbfd;}
+.tb-workbench .tb-tiers-viewport {overflow:auto;min-height:100px;border-block:1px solid #d6e0ea;background:#fff;padding:6px 14px;}
+.tb-workbench .tb-tiers-viewport .tb-tier {margin-bottom:6px;border:1px solid #d6dfec;
+  border-radius:5px;gap:0;overflow:hidden;}
+.tb-workbench .tb-tiers-viewport .tb-tier-heading {padding:5px 9px;background:#eef2f8;color:#3b5572;}
+.tb-workbench .tb-tiers-viewport .tb-tier-lane {gap:0;grid-template-columns:110px minmax(0,1fr);border-top:1px solid #e8edf4;}
+.tb-workbench .tb-tiers-viewport .tb-tier-lane > small {padding:8px 9px;background:#f8fafc;font-size:11px;}
+.tb-workbench .tb-tiers-viewport .tb-tier-track {border-radius:0;height:38px;}
+.tb-workbench .tb-tiers-viewport .tb-segment {top:3px;height:32px;border-radius:3px;background:#e5f2f4;color:#244953;border-color:#4b92a1;}
+.tb-workbench .tb-tiers-viewport .tb-segment.chosen {background:#ffe3a0;border:2px solid #b48224;color:#503a11;}
+.tb-workbench .tb-bench-status {display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;
+  padding:8px 14px;background:#eef3f9;color:#4d6079;font-size:11px;
+  font-variant-numeric:tabular-nums;border-bottom:1px solid #d8e0ee;}
+.tb-workbench .tb-phonetic-workbench > .tb-ground-edit,
+.tb-workbench .tb-phonetic-workbench > .tb-summary-grid,
+.tb-workbench .tb-phonetic-workbench > .tb-ground-actions,
+.tb-workbench .tb-phonetic-workbench > .tb-timing-section,
+.tb-workbench .tb-phonetic-workbench > .tb-ground-notice,
+.tb-workbench .tb-phonetic-workbench > .tb-inset {margin:12px 14px;}
+.tb-workbench .tb-timing-section {display:grid;gap:12px;border-top:1px solid #d5dfeb;padding-top:12px;}
+.tb-workbench .tb-timing-head h4 {margin:0;font-size:15px;}
+.tb-workbench .tb-timing-head p {font-size:12px;color:#64748b;margin:4px 0 0;}
+.tb-workbench .tb-timing-tier {border:1px solid #d7deeb;border-radius:7px;overflow:hidden;}
+.tb-workbench .tb-timing-tier h5 {padding:8px 12px;margin:0;background:#eff3f9;
+  display:flex;justify-content:space-between;font-size:12px;}
+.tb-workbench .tb-timing-tier h5 span {font-weight:400;color:#60728a;}
+.tb-workbench .tb-timing-scroll {overflow:auto;}
+.tb-workbench .tb-timing-table {width:100%;min-width:580px;border-collapse:collapse;}
+.tb-workbench .tb-timing-table th {text-align:left;background:#f7f9fd;color:#607088;font-size:11px;padding:8px;border-bottom:1px solid #d5deeb;}
+.tb-workbench .tb-timing-table td {padding:5px;border-bottom:1px solid #e5ebf2;}
+.tb-workbench .tb-timing-table input,.tb-workbench .tb-timing-table select {
+  width:100%;min-width:80px;padding:6px;border:1px solid #d6dfec;border-radius:4px;background:#fff;color:#243e59;font-size:12px;}
+.tb-workbench .tb-timing-table td:first-child input {min-width:115px;}
+.tb-workbench .tb-timing-tier > small {display:block;padding:9px;color:#60728a;}
+/* Focus mode is NOT a new route. It temporarily occupies the viewport,
+   exactly like the original prototype's r-workbench-focus presentation. */
+.tb-workbench .tb-phonetic-workbench.tb-grounding-focus {position:fixed!important;z-index:1500;
+  inset:8px;overflow:auto;display:block;max-width:none;width:auto;height:auto;
+  border-radius:9px;background:#fff;box-shadow:0 0 0 20px rgba(15,25,42,.75);}
+.tb-workbench .tb-grounding-focus > * {margin-bottom:0;}
+@media(max-width:700px){
+  .tb-workbench .tb-phonetic-workbench.tb-grounding-focus {inset:0;border-radius:0;}
+  .tb-workbench .tb-tiers-viewport .tb-tier-lane {grid-template-columns:80px minmax(0,1fr);}
+  .tb-workbench .tb-bench-header-actions {width:100%;justify-content:space-between;}
+}

@@ -1,10 +1,18 @@
+"use client";
+/**
+ * Shared question renderer. Preserve this public interface when integrating
+ * Friend D's Labeller Workspace. Both the preview and real assignment should
+ * call this same component; only the *parent* owns draft persistence.
+ */
+import AudioGroundingEditor, {AudioWaveformPlayer, type GroundingAnswer} from "@/components/audio-editor/AudioGroundingEditor";
+import { phoneticSummary } from "@/lib/audio/phonetics";
 import { useEffect, useId, useState } from "react";
 import { editable, title, type Block } from "../task-builder/model";
 
 // Answers live outside the block definitions. This lets the labeller page reuse the controls.
 export type Answers = Record<string, unknown>;
 type Item = { id: string; answers: Answers };
-export type Samples = { candidateText?: string; audio?: Record<string, string> };
+export type Samples = { candidateText?: string; audio?: Record<string, string>; primaryUrl?: string };
 type Props = {
   blocks: Block[];
   answers: Answers;
@@ -32,6 +40,8 @@ function visibleAnswers(blocks: Block[], proposed: Answers) {
   return kept;
 }
 function answerProblem(block: Block, value: unknown): string | undefined {
+  // Presentational blocks deliberately produce no annotation value.
+  if (["section", "callout", "audio_player", "transcript_summary"].includes(block.type)) return;
   if (!editable(block.type)) return;
   if (value === undefined || value === "" || (typeof value === "string" && !value.trim()))
     return block.required ? "An answer is required." : undefined;
@@ -65,6 +75,14 @@ function answerProblem(block: Block, value: unknown): string | undefined {
     if (slots.some((slot) => !Number.isInteger(ranks[slot]))) return "Rank every recording.";
     if (!block.allowTies && new Set(Object.values(ranks)).size !== slots.length)
       return "Give each recording a different rank.";
+  }
+  if (block.type === "timeline_annotation") {
+    // Preview checks the same canonical shape as the server, but only the
+    // backend can be authoritative for a submitted annotation revision.
+    const data = object(value);
+    if (!object(data.tiers)) return "Timeline needs a 'tiers' object.";
+    if (block.required && !(block.tiers??[]).some(t=>Array.isArray((data.tiers as Answers)[t.id]) &&
+      ((data.tiers as Answers)[t.id] as unknown[]).length>0)) return "Label at least one time interval.";
   }
   if (block.type === "repeated_group") {
     const count = Array.isArray(value) ? value.length : 0;
@@ -357,6 +375,16 @@ function AnswerControl({
         </>
       );
     }
+    case "audio_player": {
+      // The asset URL is supplied by the Task Instance or preview selector,
+      // NEVER persisted inside the Task Definition.
+      const url=block.stimulusSlot ? samples?.audio?.[block.stimulusSlot] : samples?.primaryUrl;
+      return block.showWaveform && url ? <AudioWaveformPlayer url={url}/> :
+        <Recording slot={block.stimulusSlot||"Primary audio"} url={url} allowLocal={allowLocalAudio}/>;
+    }
+    case "timeline_annotation":
+      return <AudioGroundingEditor block={block} audioUrl={samples?.primaryUrl}
+        value={value as GroundingAnswer | undefined} onChange={change}/>;
     case "audio_comparison":
       return (
         <>
@@ -432,7 +460,32 @@ export default function BlockFields({ blocks, answers, onChange, samples, allowL
       {blocks.map(
         (block, index) =>
           visible(block, answers) && (
-            <fieldset className="tb-question" key={block.id}>
+            // Display-only blocks deliberately don't get a fieldset or a
+            // required indicator. No fake empty answer enters `answers`.
+            block.type === "section" ? <header key={block.id} className={`tb-display tb-section tb-tone-${block.tone||"neutral"}`}>
+              <h3>{block.label}</h3>{block.description&&<p>{block.description}</p>}
+            </header> :
+            block.type === "callout" ? <aside key={block.id} className={`tb-display tb-callout tb-tone-${block.tone||"info"}`}>
+              <strong>{block.label}</strong>{block.description&&<p>{block.description}</p>}
+            </aside> :
+            block.type === "transcript_summary" ? (() => {
+              // This is derived output, not a second answer in D1. The source
+              // must be an earlier timeline block selected in Task Builder.
+              const origin = blocks.find(row=>row.id===block.sourceTimelineBlockId);
+              const raw = answers[block.sourceTimelineBlockId??""];
+              const timeline = raw && typeof raw === "object" && "tiers" in raw ?
+                (raw as GroundingAnswer).tiers : {};
+              const wordTier=origin?.tiers?.find(t=>t.id==="words")??origin?.tiers?.find(t=>t.labelMode==="text");
+              const phoneTier=origin?.tiers?.find(t=>t.labelMode==="ipa");
+              const words=wordTier?timeline[wordTier.id]??[]:[];
+              const phones=phoneTier?timeline[phoneTier.id]??[]:[];
+              return <aside key={block.id} className="tb-display tb-transcript-summary">
+                <strong>{block.label}</strong>
+                {(block.summaryMode??"both")!=="phones" && <div><small>Current words</small><p>{words.length?[...words].sort((a,b)=>a.start-b.start).map(s=>s.text).join(" "):"No word intervals yet."}</p></div>}
+                {(block.summaryMode??"both")!=="words" && <div><small>Current phones</small><p>{phones.length?phoneticSummary(phones,{alphabet:origin?.alphabet??"IPA",level:origin?.transcriptionLevel??"broad",symbols:[]}):"No phone intervals yet."}</p></div>}
+              </aside>;
+            })() :
+            <fieldset className={`tb-question${block.type === "boolean" && block.requiredValue === true?" tb-confirmation":""}${block.type === "timeline_annotation"?" tb-timeline-question":""}`} key={block.id}>
               <legend>
                 <span>{String(index + 1).padStart(2, "0")}</span> {block.label || title(block.type)}{" "}
                 {block.required && <em aria-label="required">*</em>}

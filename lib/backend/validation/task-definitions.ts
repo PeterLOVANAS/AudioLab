@@ -33,6 +33,8 @@ const blockTypeSchema = z.enum([
   "audio_comparison",
   "ranking",
   "repeated_group",
+  // Purely presentational blocks: their IDs never occur in human answers.
+  "section", "callout", "audio_player", "transcript_summary",
 ]);
 
 /**
@@ -185,6 +187,77 @@ export const taskDraftSchema = z.strictObject({
           }
           if (typeof o.id === "string") ids.add(o.id);
         }
+      }
+    }
+
+    /**
+     * A display-only block has no answer. `required=true` would falsely imply
+     * that the server expects a key in annotation_revisions.answers.
+     */
+    if (["section", "callout", "audio_player", "transcript_summary"].includes(block.type)) {
+      if (block.required) ctx.addIssue({
+        code: "custom", path: ["blocks", index, "required"],
+        message: "Display-only blocks must have required=false",
+      });
+      if ((block.type === "section" || block.type === "callout") &&
+          block.tone !== undefined &&
+          !["neutral", "success", "warning", "info"].includes(String(block.tone)))
+        ctx.addIssue({ code: "custom", path: ["blocks", index, "tone"], message: "Invalid display tone" });
+      if (block.description !== undefined &&
+          (typeof block.description !== "string" || block.description.length > 10000))
+        ctx.addIssue({ code: "custom", path: ["blocks", index, "description"],
+          message: "Display description must be text, max 10,000 characters" });
+    }
+    if (block.type === "transcript_summary") {
+      const source = definition.blocks.slice(0, index).find(
+        b => b.id === block.sourceTimelineBlockId && b.type === "timeline_annotation");
+      if (!source) ctx.addIssue({ code:"custom", path:["blocks",index,"sourceTimelineBlockId"],
+        message:"Summary must reference an earlier Timeline Grounding block" });
+      if (block.summaryMode !== undefined &&
+          !["words", "phones", "both"].includes(String(block.summaryMode)))
+        ctx.addIssue({ code:"custom", path:["blocks",index,"summaryMode"],
+          message:"Invalid summary mode" });
+    }
+    /**
+     * Timeline data needs a reliable schema even before a single segment
+     * exists. We check the tier topology here and *answers* separately on
+     * submission. A parent means semantic association, not forced timing.
+     */
+    if (block.type === "timeline_annotation") {
+      const tiers = block.tiers;
+      if (!Array.isArray(tiers) || tiers.length < 1 || tiers.length > 10) {
+        ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers"],
+          message: "Timeline needs between 1 and 10 tiers" });
+      } else {
+        const tierIds = new Set<string>();
+        tiers.forEach((tier, j) => {
+          if (!tier || typeof tier !== "object" || Array.isArray(tier)) {
+            ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers", j],
+              message: "Tier must be an object" });
+            return;
+          }
+          const t = tier as Record<string, unknown>;
+          if (typeof t.id !== "string" || !t.id.trim() || tierIds.has(t.id) ||
+              typeof t.name !== "string" || !t.name.trim() || t.kind !== "interval")
+            ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers", j],
+              message: "Each tier requires a unique ID, a name, and interval kind" });
+          if (typeof t.id === "string") tierIds.add(t.id);
+          if (typeof t.allowOverlap !== "boolean")
+            ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers", j, "allowOverlap"],
+              message: "Tier allowOverlap must be a boolean" });
+          if (!["text", "choice", "ipa", "speaker_id"].includes(String(t.labelMode)))
+            ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers", j, "labelMode"],
+              message: "Invalid tier label mode" });
+        });
+        tiers.forEach((tier, j) => {
+          if (tier && typeof tier === "object" && !Array.isArray(tier)) {
+            const t = tier as Record<string, unknown>;
+            if (t.parentTierId !== undefined &&
+                (typeof t.parentTierId !== "string" || !tierIds.has(t.parentTierId) || t.id === t.parentTierId))
+              ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers", j, "parentTierId"],
+                message: "Parent tier must be another tier in this block" });
+          }
+        });
       }
     }
 

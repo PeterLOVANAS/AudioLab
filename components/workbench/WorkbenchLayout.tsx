@@ -20,14 +20,14 @@ export default function WorkbenchLayout({
         {queue}
       </aside>
       <div className="tb-stack">
-        <section className="tb-panel">
-          <p className="tb-eyebrow">TASK INSTRUCTIONS</p>
+        <section className="tb-panel tb-workbench-instructions">
+          <p className="tb-eyebrow">01 / TASK INSTRUCTIONS</p>
           <h2>{name || "Untitled task"}</h2>
           <p className="tb-instructions">{instructions || "Instructions will appear here."}</p>
         </section>
         {grounding}
         <section className="tb-panel">
-          <p className="tb-eyebrow">ANNOTATION</p>
+          <p className="tb-eyebrow">03 / ANNOTATION</p>
           <h2>Task questions</h2>
           {children}
         </section>

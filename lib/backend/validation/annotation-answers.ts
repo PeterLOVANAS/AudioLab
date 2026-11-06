@@ -16,6 +16,7 @@
  * Those need their own per-type validators in a later lesson.
  */
 import type { PublishedDefinitionData } from "@/lib/contracts/task-instances";
+import { validateTimelineAnswer } from "./timeline-answers";
 
 export type AnswerIssue = { blockId: string; message: string };
 
@@ -73,10 +74,19 @@ export function validateAnswers(
       continue;
     }
 
-    // We do not claim to validate advanced formats until their schemas exist.
+    /**
+     * Display-only blocks still participate in conditional visibility, but
+     * must never produce an annotation answer. This is more precise than
+     * treating them as unsupported question types or inventing empty answers.
+     */
+    if (["section", "callout", "audio_player", "transcript_summary"].includes(block.type)) {
+      if (hasAnswer) issues.push({ blockId: block.id, message: "Display-only blocks cannot contain an answer." });
+      continue;
+    }
+    // We do not claim to validate the remaining advanced formats until their schemas exist.
     const supported = new Set([
       "single_choice", "multiple_choice", "boolean", "number",
-      "rating_scale", "text",
+      "rating_scale", "text", "transcript", "timeline_annotation",
     ]);
     if (!supported.has(block.type)) {
       issues.push({
@@ -107,14 +117,23 @@ export function validateAnswers(
         if (!ids || !Array.isArray(value) || !value.every(v => typeof v === "string" && ids.includes(v)) ||
             new Set(value).size !== value.length) {
           issues.push({ blockId: block.id, message: "Provide unique valid option IDs in an array." });
-        } else if (submitting && block.required && value.length === 0) {
-          issues.push({ blockId: block.id, message: "Select at least one option." });
+        } else {
+          const minimum = Math.max(typeof block.minSelections === "number" ? block.minSelections : 0,
+                                   submitting && block.required ? 1 : 0);
+          if (submitting && value.length < minimum)
+            issues.push({ blockId: block.id, message: `Select at least ${minimum} option(s).` });
+          if (typeof block.maxSelections === "number" && value.length > block.maxSelections)
+            issues.push({ blockId: block.id, message: "Too many options selected." });
         }
         break;
       }
       case "boolean":
         // false is a meaningful answer; never test truthiness for required!
         if (typeof value !== "boolean") issues.push({ blockId: block.id, message: "Answer must be true or false." });
+        // A verification checkbox must explicitly contain the required
+        // value; `false` remains a valid Boolean in ordinary questions.
+        else if (submitting && typeof block.requiredValue === "boolean" && value !== block.requiredValue)
+          issues.push({ blockId: block.id, message: "Confirmation has the wrong required value." });
         break;
       case "number":
       case "rating_scale": {
@@ -126,17 +145,27 @@ export function validateAnswers(
             typeof block.max === "number" && value > block.max) {
           issues.push({ blockId: block.id, message: "Answer falls outside the configured range." });
         }
-        if (block.type === "rating_scale" && !Number.isInteger(value)) {
-          issues.push({ blockId: block.id, message: "Rating must be an integer." });
-        }
+        if (block.type === "number" && block.integerOnly === true && !Number.isInteger(value))
+          issues.push({ blockId: block.id, message: "Value must be a whole number." });
+        if (block.type === "rating_scale" &&
+            (!Number.isInteger(value) || typeof block.step === "number" && block.step > 0 &&
+              Math.abs(((value - (typeof block.min === "number" ? block.min : 0)) / block.step) -
+                Math.round((value - (typeof block.min === "number" ? block.min : 0)) / block.step)) > 1e-7))
+          issues.push({ blockId: block.id, message: "Rating must use a configured scale step." });
         break;
       }
       case "text":
-        if (typeof value !== "string" || value.length > 20000 ||
+      case "transcript":
+        if (typeof value !== "string" || value.length > (typeof block.maxLength === "number" ? block.maxLength : 20000) ||
             (submitting && block.required && !value.trim())) {
           issues.push({ blockId: block.id, message: "Provide valid text (required answers cannot be blank)." });
         }
         break;
+      case "timeline_annotation": {
+        const result = validateTimelineAnswer(block.tiers, value, block.required, submitting);
+        for (const message of result) issues.push({ blockId: block.id, message });
+        break;
+      }
     }
   }
   return issues;

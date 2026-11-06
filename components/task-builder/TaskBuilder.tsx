@@ -16,6 +16,9 @@ import type { Project } from "@/lib/contracts/projects";
 import BlockEditor, { Field, Palette } from "./BlockEditor";
 import BlockFields, { checkAnswers, type Answers } from "../workbench/BlockFields";
 import WorkbenchLayout from "../workbench/WorkbenchLayout";
+import AudioPreviewPicker from "./AudioPreviewPicker";
+import WorkspaceSettings from "./WorkspaceSettings";
+import type { Samples } from "../workbench/BlockFields";
 import {
   blankDraft,
   publishLimit,
@@ -83,6 +86,9 @@ export default function TaskBuilder({ onDirty }: { onDirty: (dirty: boolean) => 
   const [answers, setAnswers] = useState<Answers>({});
   const [checked, setChecked] = useState(false);
   const [previewKey, setPreviewKey] = useState(0);
+  // Preview assets are independent from the definition JSON. A reusable
+  // protocol never contains paths/URLs for arbitrary test recordings.
+  const [samples, setSamples] = useState<Samples>({});
   const requestInProgress = useRef(false);
   const addedId = useRef("");
   const canvas = useRef<HTMLDivElement>(null);
@@ -91,6 +97,9 @@ export default function TaskBuilder({ onDirty }: { onDirty: (dirty: boolean) => 
   const unsupported = limits.length > 0;
   const problems = showIssues ? checkDraft(draft) : [];
   const trialProblems = checked ? checkAnswers(draft.blocks, answers) : [];
+  const previewSlots = draft.blocks.flatMap(block => [
+    ...(block.stimulusSlots ?? []), ...(block.stimulusSlot ? [block.stimulusSlot] : []),
+  ]);
 
   useEffect(() => {
     onDirty(dirty);
@@ -488,7 +497,13 @@ export default function TaskBuilder({ onDirty }: { onDirty: (dirty: boolean) => 
               </div>
             </section>
             <section className="tb-panel">
-              <p className="tb-eyebrow">02 / COMPOSITION</p>
+              <p className="tb-eyebrow">02 / AUDIO WORKSPACE</p>
+              <h2>Labeller audio tools</h2>
+              <WorkspaceSettings value={draft.workspace}
+                onChange={workspace=>edit({...draft,workspace})}/>
+            </section>
+            <section className="tb-panel">
+              <p className="tb-eyebrow">03 / COMPOSITION</p>
               <h2>Question sequence</h2>
               {draft.blocks.length ? (
                 <BlockEditor blocks={draft.blocks} onChange={(blocks) => edit({ ...draft, blocks })} />
@@ -512,6 +527,8 @@ export default function TaskBuilder({ onDirty }: { onDirty: (dirty: boolean) => 
           </div>
         </div>
       ) : (
+        <div className="tb-preview-workspace">
+        <AudioPreviewPicker projectId={projectId} slots={previewSlots} onChange={setSamples}/>
         <WorkbenchLayout
           name={draft.name}
           instructions={draft.instructions}
@@ -528,12 +545,12 @@ export default function TaskBuilder({ onDirty }: { onDirty: (dirty: boolean) => 
             </>
           }
           grounding={
-            <section className="tb-ground">
-              <AudioLines size={24} />
-              <div>
-                <strong>Audio &amp; grounding workspace</strong>
-                <p>Reserved for the player, timeline, and speech tools.</p>
-              </div>
+            <section className="tb-panel tb-preview-player">
+              <p className="tb-eyebrow">02 / AUDIO STIMULUS</p>
+              <h3>Recording and workspace</h3>
+              {samples.primaryUrl ? <audio controls src={samples.primaryUrl} preload="metadata" aria-label="Preview recording"/>
+                : <p className="tb-muted">Select a dataset asset above to play the real WAV file.</p>}
+              <p className="tb-inset">Waveform/phonetic editing appears inside a Grounding block below. Spectrogram, F0, formants and MFCC require separate DSP implementations.</p>
             </section>
           }
         >
@@ -550,7 +567,7 @@ export default function TaskBuilder({ onDirty }: { onDirty: (dirty: boolean) => 
               answers={answers}
               onChange={setAnswers}
               allowLocalAudio
-              samples={{ candidateText: "Example suggestion · A bird calls in this clip." }}
+              samples={{ ...samples, candidateText: "Example suggestion · A bird calls in this clip." }}
             />
           ) : (
             <div className="tb-empty">
@@ -576,6 +593,7 @@ export default function TaskBuilder({ onDirty }: { onDirty: (dirty: boolean) => 
             </div>
           )}
         </WorkbenchLayout>
+        </div>
       )}
     </fieldset>
   );

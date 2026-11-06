@@ -2,7 +2,8 @@
 export type TaskDomain = "sound" | "speech" | "general";
 
 export type ChoiceOption = {
-      value: string;  // value of whether it is male or female, or yes or no, etc.  This is the value that will be stored in the database when the user selects this option.
+      id: string;
+      value?: string;  // value of whether it is male or female, or yes or no, etc.  This is the value that will be stored in the database when the user selects this option.
       label: string; // e.g. male and female for speaker gender, or yes and no for boolean question
 }
 
@@ -27,9 +28,37 @@ export type BaseBlock = {
 
       scope?: AnnotationScope; // annotation scope default to clip level
 
-      showwhen?: BlockCondition; // Optional condition controlling visibility.
+      showWhen?: BlockCondition; // Canonical persisted conditional visibility.
+      showwhen?: BlockCondition; // Legacy spelling retained only for reading old definitions.
 }
 
+
+/**
+ * These three blocks ONLY render information. They never create an answer key.
+ * The annotation API ignores them even when the labeller submits a task.
+ * Appearance/configuration belongs to the immutable published definition.
+ */
+export type SectionBlock = BaseBlock & {
+  type: "section";
+  description?: string;
+  tone?: "neutral" | "success" | "warning" | "info";
+};
+export type CalloutBlock = BaseBlock & {
+  type: "callout";
+  description?: string;
+  tone?: "neutral" | "success" | "warning" | "info";
+};
+/** Display a live summary derived from a PREVIOUS timeline answer. */
+export type TranscriptSummaryBlock = BaseBlock & {
+  type: "transcript_summary";
+  sourceTimelineBlockId: string;
+  summaryMode?: "words" | "phones" | "both";
+};
+export type AudioPlayerBlock = BaseBlock & {
+  type: "audio_player";
+  stimulusSlot?: string; // blank means the Task Instance primary audio.
+  showWaveform?: boolean;
+};
 
 // ==== Basic Annotation Blocks ====
 
@@ -271,7 +300,11 @@ export type RepeatedGroupBlock = BaseBlock & {
 
 export type AnnotationBlock =
   | FieldBlock
-  | RepeatedGroupBlock;
+  | RepeatedGroupBlock
+  | SectionBlock
+  | CalloutBlock
+  | AudioPlayerBlock
+  | TranscriptSummaryBlock;
 
 /*
  * ==========================================

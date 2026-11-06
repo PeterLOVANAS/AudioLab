@@ -6,10 +6,11 @@ import type {
   AudioWorkspaceConfig,
   BlockCondition,
   TaskDomain,
+  TimelineTier,
 } from "@/lib/contracts/tasks";
 
 type Kind = AnnotationBlock["type"];
-export type EditableKind = Exclude<Kind, "timeline_annotation" | "continuous_rating">;
+export type EditableKind = Exclude<Kind, "continuous_rating">;
 export type AnswerAppearance = "cards" | "compact" | "bullets";
 // Descriptions belong to individual answers. Other styles keep this text saved
 // so switching back to large cards brings it back without retyping it.
@@ -46,6 +47,19 @@ export type Block = {
   stimulusSlots?: string[];
   randomizeOrder?: boolean;
   allowTies?: boolean;
+  // A presentational block draws a section/callout but stores no human answer.
+  description?: string;
+  tone?: "neutral" | "success" | "warning" | "info";
+  // Audio Player refers to a slot of the *task instance*, not a WAV path in definition.
+  stimulusSlot?: string;
+  showWaveform?: boolean;
+  sourceTimelineBlockId?: string;
+  summaryMode?: "words" | "phones" | "both";
+  // Timeline tier definitions are saved as metadata, whereas the recorded
+  // intervals live in annotation revisions as answers[block.id].
+  tiers?: TimelineTier[];
+  alphabet?: "IPA" | "SAMPA" | "X-SAMPA" | "ARPABET";
+  transcriptionLevel?: "phonemic" | "broad" | "narrow";
   itemLabel?: string;
   minItems?: number;
   maxItems?: number;
@@ -72,6 +86,11 @@ export const catalog = {
   audio_comparison: ["Audio comparison", "Compare recording slots", "09"],
   ranking: ["Ranking", "Order recordings", "10"],
   repeated_group: ["Repeated group", "Repeat a set of questions", "11"],
+  section: ["Section heading", "Organize questions without saving an answer", "12"],
+  callout: ["Information / confirmation panel", "Colored instructions shown conditionally", "13"],
+  audio_player: ["Audio player", "Display the assigned audio or a comparison slot", "14"],
+  timeline_annotation: ["Phonetic / sound grounding", "Editable word and phone tiers, IPA, TextGrid", "15"],
+  transcript_summary: ["Word / phone summary", "Live display of the grounding block's labels", "16"],
 } satisfies Record<EditableKind, [string, string, string]>;
 export const kinds = Object.keys(catalog) as EditableKind[];
 export function editable(kind: Kind): kind is EditableKind {
@@ -81,23 +100,13 @@ export function title(kind: Kind) {
   return editable(kind) ? catalog[kind][0] : "Grounding workspace";
 }
 export function canSubmit(kind: Kind) {
-  return ["single_choice", "multiple_choice", "boolean", "number", "rating_scale", "text"].includes(
+  return ["single_choice", "multiple_choice", "boolean", "number", "rating_scale", "text", "transcript", "timeline_annotation", "section", "callout", "audio_player", "transcript_summary"].includes(
     kind,
   );
 }
 // The current answer API enforces only these six types and a subset of their optional rules.
 export function publishLimit(block: Block): string | undefined {
   if (!canSubmit(block.type)) return title(block.type) + " answers";
-  if (block.type === "boolean" && block.requiredValue !== undefined) return "a fixed Yes / No answer";
-  if (block.type === "number" && block.integerOnly) return "whole-number-only answers";
-  if (block.type === "rating_scale" && (block.step ?? 1) !== 1) return "a custom rating step";
-  if (block.type === "text" && (block.maxLength ?? 20000) < 20000) return "a custom text limit";
-  if (
-    block.type === "multiple_choice" &&
-    ((block.minSelections ?? 0) > (block.required ? 1 : 0) ||
-      (block.maxSelections ?? Infinity) < (block.options?.length ?? 0))
-  )
-    return "custom selection limits";
 }
 export const blankDraft = (): Draft => ({
   name: "",
@@ -117,6 +126,19 @@ export function newBlock(type: EditableKind): Block {
   if (type === "rating_scale") Object.assign(block, { min: 1, max: 5, step: 1 });
   if (type === "ranking" || type === "audio_comparison") block.stimulusSlots = ["Audio A", "Audio B"];
   if (type === "ranking") block.allowTies = false;
+  if (type === "section") Object.assign(block, { required: false, description: "Describe what comes next.", tone: "neutral" });
+  if (type === "callout") Object.assign(block, { required: false, description: "Read this before continuing.", tone: "info" });
+  if (type === "audio_player") Object.assign(block, { required: false, showWaveform: true });
+  if (type === "transcript_summary") Object.assign(block, {
+    required: false, sourceTimelineBlockId: "", summaryMode: "both",
+  });
+  if (type === "timeline_annotation") Object.assign(block, {
+    alphabet: "IPA", transcriptionLevel: "broad",
+    tiers: [
+      { id: "words", name: "Words", labelMode: "text", kind: "interval", allowOverlap: true },
+      { id: "phones", name: "Phones", labelMode: "ipa", kind: "interval", allowOverlap: true, parentTierId: "words" },
+    ],
+  });
   if (type === "repeated_group")
     Object.assign(block, { itemLabel: "Speaker", blocks: [newBlock("text")] });
   return block;
@@ -132,6 +154,18 @@ export function exampleDraft(): Draft {
   other.label = "Which other sounds do you hear?";
   other.required = false;
   other.options = ["Rain", "Traffic", "Voices"].map((label) => ({ id: label.toLowerCase(), label }));
+  const confirmation = newBlock("boolean");
+  confirmation.label = "I listened to the complete clip and confirm this sound is absent.";
+  confirmation.requiredValue = true;
+  confirmation.showWhen = { blockId: presence.id, equals: "absent" };
+  const panel = newBlock("callout");
+  panel.label = "Absence verification";
+  panel.description = "Please listen all the way through before confirming absence.";
+  panel.tone = "success";
+  panel.showWhen = { blockId: presence.id, equals: "absent" };
+  const intro = newBlock("section");
+  intro.label = "Listening and presence";
+  intro.description = "Please answer according to the recording, not the reference caption.";
   const notes = newBlock("text");
   notes.label = "What made you unsure?";
   notes.required = false;
@@ -141,7 +175,7 @@ export function exampleDraft(): Draft {
     ...blankDraft(),
     name: "Bird-call check",
     instructions: "Listen to the whole clip once before answering.",
-    blocks: [presence, other, notes],
+    blocks: [intro, presence, panel, confirmation, other, notes],
   };
 }
 // Older drafts may use the names from tasks.ts. Keep other properties, including teammate-owned data.
@@ -181,7 +215,24 @@ export function checkBlocks(blocks: Block[], parent = ""): string[] {
     const report = (message: string) => errors.push("Block " + where + " · " + message);
     if (!block.id || seen.has(block.id)) report("Each block needs its own ID.");
     seen.add(block.id);
-    if (!block.label.trim()) report("Enter a question label.");
+    if (!block.label.trim()) report("Enter a block label.");
+    if (["section", "callout", "audio_player", "transcript_summary"].includes(block.type) && block.required)
+      report("Display-only blocks cannot require an answer.");
+    if (["section", "callout"].includes(block.type) &&
+        ![undefined, "neutral", "success", "warning", "info"].includes(block.tone))
+      report("Choose a valid panel tone.");
+    if (block.type === "transcript_summary" && !blocks.slice(0,index).some(
+      earlier => earlier.type === "timeline_annotation" && earlier.id === block.sourceTimelineBlockId))
+      report("Choose an earlier Grounding block to summarize.");
+    if (block.type === "timeline_annotation") {
+      const tiers = block.tiers ?? [];
+      const ids = tiers.map(t => t.id);
+      if (!tiers.length || tiers.length > 10 || new Set(ids).size !== ids.length ||
+          tiers.some(t => !t.id || !t.name.trim() || t.kind !== "interval"))
+        report("Define 1–10 uniquely named interval tiers.");
+      if (tiers.some(t => t.parentTierId && !ids.includes(t.parentTierId)))
+        report("Each parent tier must exist in this grounding block.");
+    }
     const rule = block.showWhen;
     if (rule) {
       const source = conditionSources(blocks.slice(0, index)).find(

@@ -1,4 +1,5 @@
 import { cloneElement, type ReactElement } from "react";
+import TimelineTierSettings from "./TimelineTierSettings";
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import type { AnnotationScope, BlockCondition } from "@/lib/contracts/tasks";
 import {
@@ -200,11 +201,47 @@ function BlockSettings({
           onChange={(event) => set({ helpText: event.target.value })}
         />
       </Field>
-      <Switch
+      {/* Information blocks do not write answer keys. The same setting is
+          validated by the server, preventing confusing required markers. */}
+      {!(["section", "callout", "audio_player"].includes(block.type)) && <Switch
         label="Answer required"
         checked={block.required}
         onChange={(required) => set({ required })}
-      />
+      />}
+      {(["section", "callout"].includes(block.type)) && <>
+        <Field label="Description / body text">
+          <textarea rows={3} maxLength={10000} value={block.description??""}
+            placeholder="Explain the next step, protocol or confirmation."
+            onChange={e=>set({description:e.target.value})}/>
+        </Field>
+        <Field label="Panel color">
+          <select value={block.tone??"neutral"} onChange={e=>set({tone:e.target.value as Block["tone"]})}>
+            <option value="neutral">Neutral</option><option value="success">Green — confirmed</option>
+            <option value="warning">Amber — caution</option><option value="info">Blue — information</option>
+          </select>
+        </Field>
+        <p className="tb-muted">This is a display-only block. Add a conditional Boolean block below it if the labeller must confirm something.</p>
+      </>}
+      {block.type === "audio_player" && <>
+        <Field label="Recording slot (optional)"><input value={block.stimulusSlot??""}
+          placeholder="Leave blank for primary task recording" onChange={e=>set({stimulusSlot:e.target.value})}/></Field>
+        <Switch label="Show waveform in the audio editor" checked={block.showWaveform}
+          onChange={showWaveform=>set({showWaveform})}/>
+        <p className="tb-muted">Audio is bound on a Task Instance. The reusable definition must not store real asset URLs.</p>
+      </>}
+      {block.type === "timeline_annotation" && <TimelineTierSettings block={block} onChange={onChange}/>}
+      {block.type === "transcript_summary" && <>
+        <Field label="Grounding block to summarize"><select value={block.sourceTimelineBlockId??""}
+          onChange={e=>set({sourceTimelineBlockId:e.target.value})}>
+          <option value="">Choose an earlier grounding block</option>
+          {prior.filter(b=>b.type==="timeline_annotation").map(b=><option key={b.id} value={b.id}>{b.label}</option>)}
+        </select></Field>
+        <Field label="Show which summaries"><select value={block.summaryMode??"both"}
+          onChange={e=>set({summaryMode:e.target.value as Block["summaryMode"]})}>
+          <option value="both">Words and phones</option><option value="words">Words only</option><option value="phones">Phones only</option>
+        </select></Field>
+        <p className="tb-muted">This panel updates instantly when the labeller edits timeline intervals. It does not create its own answer.</p>
+      </>}
       {hasChoiceOptions(block.type) && (
         <div className="tb-field">
           <span>Answer choices</span>
@@ -513,7 +550,7 @@ export default function BlockEditor({
             )}
           </details>
           <div className="tb-block-tools">
-            <span>{canSubmit(block.type) ? "Standard" : "Draft & preview"}</span>
+            <span>{canSubmit(block.type) ? "Supported" : "Preview only"}</span>
             <button
               type="button"
               aria-label={"Move " + block.label + " up"}
@@ -570,11 +607,15 @@ export function Palette({ add }: { add: (type: EditableKind) => void }) {
       <div className="tb-eyebrow">TOOLBOX</div>
       <h2>Block library</h2>
       <p className="tb-muted">Choose a block to add it.</p>
-      {(["Standard fields", "Specialized fields"] as const).map((group, index) => (
+      {(["Answer fields", "Specialized / display fields", "Preview-only fields"] as const).map((group, index) => (
         <div key={group} className="tb-palette-group">
           <h3>{group}</h3>
           {kinds
-            .filter((kind) => canSubmit(kind) === (index === 0))
+            .filter((kind) => index === 0
+              ? ["single_choice","multiple_choice","boolean","number","rating_scale","text","transcript"].includes(kind)
+              : index === 1
+                ? ["section","callout","audio_player","timeline_annotation","transcript_summary"].includes(kind)
+                : !canSubmit(kind))
             .map((kind) => (
               <button
                 type="button"
