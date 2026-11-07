@@ -89,6 +89,16 @@ export const taskInstanceService = {
       );
     }
 
+    if(input.audioAssetIds){
+      if(input.audioAssetIds[0]!==input.assetId || new Set(input.audioAssetIds).size!==input.audioAssetIds.length)
+        throw new TaskInstanceProjectMismatchError("The batch must start with assetId and contain unique assets.");
+      // All recordings, not just the first, must belong to this project.
+      for(const id of input.audioAssetIds){
+        const member=await repo.assetProject(db,id);
+        if(!member||member.projectId!==input.projectId)
+          throw new TaskInstanceProjectMismatchError("Every batch audio must belong to the task project.");
+      }
+    }
     // Publishing is required: never run a labelling task from a mutable draft.
     const published = await repo.publishedExists(
       db, input.definitionId, input.definitionVersion
@@ -98,6 +108,20 @@ export const taskInstanceService = {
         "Requested published definition version not found."
       );
     }
+    // Enforce batch-size feasibility when creating the task. Failing here is
+    // better than assigning an impossible protocol to a labeller and receiving
+    // HTTP 422 only at submission time.
+    const snapshot=await db.prepare(`SELECT definition_json AS json FROM task_definition_versions
+      WHERE definition_id=? AND version=?`)
+      .bind(input.definitionId,input.definitionVersion).first<{json:string}>();
+    const snapshotDefinition = JSON.parse(snapshot!.json) as {blocks:Array<{
+      type:string;numBatch?:number;stimulusSlots?:string[];rankingMode?:string
+    }>};
+    const requiredAssets=Math.max(1,...snapshotDefinition.blocks.map(b=>
+      b.type==="ranking"&&b.rankingMode!=="labels" ? Math.max(1,b.stimulusSlots?.length??0) : b.numBatch??1));
+    const provided=input.audioAssetIds?.length??1;
+    if(requiredAssets>provided)
+      throw new TaskInstanceProjectMismatchError(`Published task requires ${requiredAssets} recordings, only ${provided} provided.`);
 
     let sourceRecordDbId: string | null = null;
     if (input.sourceRecordId !== undefined) {
@@ -123,6 +147,7 @@ export const taskInstanceService = {
       definitionVersion: input.definitionVersion,
       assetId: input.assetId,
       sourceRecordDbId, instanceKey,
+      audioAssetIds:input.audioAssetIds,
     });
 
     if (!inserted) {
@@ -137,7 +162,17 @@ export const taskInstanceService = {
   async get(db: D1Database, id: string) {
     const row = await repo.find(db, id);
     if (!row) throw new TaskInstanceNotFoundError("Task instance not found.");
-    return toPreview(row);
+    const preview=toPreview(row);
+    // Existing tasks created before migration 0008 still have one primary WAV.
+    const assets=await db.prepare(`SELECT asset_id AS id,slot_index AS position
+      FROM task_instance_audio_slots WHERE task_instance_id=? ORDER BY slot_index`)
+      .bind(id).all<{id:string;position:number}>();
+    const audioAssets=(assets.results.length?assets.results:[{id:row.assetId,position:0}])
+      .map(a=>({...a,url:`/api/v1/assets/${a.id}/audio`}));
+    const candidates=await db.prepare(`SELECT id,label,provenance
+      FROM annotation_candidates WHERE asset_id=? ORDER BY created_at,id LIMIT 100`)
+      .bind(row.assetId).all<{id:string;label:string;provenance:string}>();
+    return {...preview,audioAssets,candidates:candidates.results};
   },
 
   /** List compact summaries for the Admin task-management screen. */

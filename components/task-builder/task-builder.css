@@ -868,3 +868,67 @@
   .tb-workbench .tb-tiers-viewport .tb-tier-lane {grid-template-columns:80px minmax(0,1fr);}
   .tb-workbench .tb-bench-header-actions {width:100%;justify-content:space-between;}
 }
+
+/* Task Builder v3: native drag handle, with keyboard alternative (Alt+Arrow). */
+.tb-block-tools .tb-drag-handle{cursor:grab;touch-action:none;min-width:36px;border:1px dashed #9aa8bb;background:#f6f8fc}
+.tb-block-tools .tb-drag-handle:active{cursor:grabbing}
+.tb-block.tb-drop-before{outline:2px dashed #7973d9;outline-offset:3px}
+.tb-conditional-recipe{padding:10px 15px;border-top:1px dashed #d7dce8;background:#f9fbfe}
+.tb-conditional-recipe summary{cursor:pointer;font-weight:600;font-size:13px}
+.tb-conditional-recipe .tb-field{max-width:280px}
+/* The original prototype's timing-table treatment, scoped to this workbench. */
+.tb-prototype-shell .r-prototype-tables{padding:16px 20px;background:#fff;border:1px solid #e1e6f0;border-radius:10px;margin-top:14px}
+.tb-prototype-shell .r-prototype-tables-top{flex-wrap:wrap;margin-bottom:10px}
+.tb-prototype-shell .r-prototype-tables .r-table{width:100%;border-collapse:collapse}
+.tb-prototype-shell .r-prototype-tables .r-table th,.tb-prototype-shell .r-prototype-tables .r-table td{padding:8px;text-align:left;border-bottom:1px solid #dce1e8}
+.tb-prototype-shell .r-prototype-tables .r-table input,.tb-prototype-shell .r-prototype-tables .r-table select{min-width:70px;max-width:165px;border:1px solid #dce1e8;border-radius:5px;padding:7px}
+.tb-prototype-shell .r-prototype-summaries{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:13px 0}
+.tb-prototype-shell .r-prototype-summaries section{background:#f6f8fc;border:1px solid #e1e6f0;border-radius:8px;padding:12px}
+.tb-prototype-shell .r-prototype-summaries p{white-space:pre-wrap;margin-top:8px}
+.tb-prototype-shell .r-prototype-io{margin-top:14px}
+.tb-prototype-shell .r-prototype-io input[type=file]{display:none}
+@media(max-width:780px){.tb-prototype-shell .r-prototype-summaries{grid-template-columns:1fr}}
+
+/* A conditional green check panel matches the original Negation UX. */
+.tb-callout.tb-tone-success + .tb-question.tb-confirmation{
+  background:#edf8f0;border:1px solid #79ba8c;border-top:0;
+  border-radius:0 0 9px 9px;margin-top:-12px;
+}
+.tb-callout.tb-tone-success:has(+ .tb-question.tb-confirmation){border-radius:9px 9px 0 0}
+.tb-prototype-confirm{display:flex;align-items:flex-start;gap:12px;padding:12px 15px;border-radius:7px;
+  background:#ebf6ef;color:#276244;border:1px solid #a1ceb0;cursor:pointer}
+.tb-prototype-confirm input{width:18px;height:18px;accent-color:#248458;flex-shrink:0}
+
+.tb-grounding-full-block{width:100%;min-width:0;padding:0;margin:16px 0;}
+.tb-grounding-full-block>header{padding:10px 0;color:#3c4c67}
+.tb-grounding-full-block>header b{font-size:15px}
+.tb-grounding-full-block .r-workbench{box-shadow:0 3px 10px #182c4c13}
+
+.tb-drop-end{padding:18px;border:2px dashed #7973d9;border-radius:9px;color:#655c9e;text-align:center;margin:10px 0}
+
+/* v4: batch/research controls. Scoped to the Task Builder workbench. */
+.tb-batch-grid,.tb-comparison-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:1rem}
+.tb-batch-card,.tb-comparison-unit {border:1px solid var(--tb-border,#d8dde7);border-radius:14px;padding:1rem;background:var(--tb-panel,#fff)}
+.tb-batch-card h4,.tb-comparison-unit h4 {margin:0 0 .65rem;font-size:.96rem}
+.tb-batch-card audio,.tb-comparison-audio audio,.tb-ranking-sources audio {display:block;width:100%;margin:.45rem 0}
+.tb-comparison-tracks {display:grid;gap:.65rem}
+.tb-comparison-audio {border-radius:10px;background:var(--tb-tint,#f2f4f8);padding:.6rem}
+.tb-comparison-audio small {display:block;overflow-wrap:anywhere}
+.tb-comp-choices {display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.75rem}
+.tb-comp-choices button {cursor:pointer;border:1px solid #b9c3d1;border-radius:9px;padding:.55rem .8rem;background:white}
+.tb-comp-size-sm button {padding:.25rem .45rem;font-size:.78rem}
+.tb-comp-size-lg button {padding:.85rem 1.15rem;font-size:1.05rem;min-width:105px}
+.tb-comp-choices button.selected {background:#eeecff;border-color:#7973d9;color:#4f46b9;box-shadow:0 0 0 1px #7973d9}
+.tb-comparison-below {padding:.4rem .25rem;border-top:1px solid #dce2ec;margin-top:.8rem}
+.tb-ranking-sources {display:grid;gap:.55rem;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.tb-ranking-sources>div {padding:.55rem;border:1px solid #dce2ec;border-radius:10px}
+.tb-ranking-order {list-style:none;padding:0;margin:.9rem 0}
+.tb-ranking-order li {border:1px solid #dce2ec;border-radius:9px;padding:.65rem;margin-bottom:.35rem;background:#fff;display:flex;align-items:center;gap:.75rem}
+.tb-ranking-order li[draggable=true]{cursor:grab}
+.tb-ranking-order .tb-ranking-arrows {margin-left:auto;display:flex;gap:.3rem}
+.tb-inline-followups {display:grid;gap:.6rem;margin:.75rem 0 .25rem 1rem;padding:.8rem;border-left:3px solid #6a9d8c;background:#f5faf8}
+.tb-inline-child {display:grid;gap:.45rem}
+.tb-inline-config {display:grid;gap:.3rem;border:1px dashed #c7ced8;padding:.55rem;border-radius:8px;margin:.5rem 0}
+.tb-followup-settings {grid-column:1/-1}
+.tb-rating-slider input[type=range] {width:100%;accent-color:#7973d9}
+.tb-rating-slider output {font-weight:650;margin-left:.7rem}

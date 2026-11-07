@@ -175,6 +175,14 @@ export type TimelineTier = TimelineTierBase & (
 export type TimelineAnnotationBlock = BaseBlock & {
   type: "timeline_annotation"; 
 
+  /** One block owns the entire original Sound or Speech research workbench. */
+  groundingMode?: "sound" | "speech";
+  precisionSeconds?: number;
+  laneLayout?: "overlap" | "separate";
+  speakers?: string[];
+  soundConcepts?: ChoiceOption[];
+  phoneticSymbols?: string[];
+  aids?: { spectrogram?:boolean; pitch?:boolean; energy?:boolean; formants?:boolean; mfcc?:boolean };
   tiers: TimelineTier[]; // Array of timeline tiers. Each tier defines a set of annotations that can be made on the timeline. The tiers can be hierarchical, with parent-child relationships defined by the parentTierId property in each tier.
 }
 
@@ -214,6 +222,9 @@ export type CandidateVoteBlock = BaseBlock & {
   type: "candidate_vote";
 
   allowCorrection?: boolean;
+  options?: ChoiceOption[];
+  candidatePrompt?: string;
+  correctionOnValue?: string;
 };
 
 // Compare two or more audio stimuli.

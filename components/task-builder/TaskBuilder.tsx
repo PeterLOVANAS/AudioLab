@@ -97,6 +97,11 @@ export default function TaskBuilder({ onDirty }: { onDirty: (dirty: boolean) => 
   const unsupported = limits.length > 0;
   const problems = showIssues ? checkDraft(draft) : [];
   const trialProblems = checked ? checkAnswers(draft.blocks, answers) : [];
+  // One preview can exercise every NUM_BATCH mode without embedding WAV IDs
+  // into the reusable frozen Task Definition.
+  const previewBatchCount=Math.max(1,...draft.blocks.map(b=>
+    b.type==="ranking" && b.rankingMode!=="labels" ?
+      Math.max(b.numBatch??1,b.stimulusSlots?.length??1) : b.numBatch??1));
   const previewSlots = draft.blocks.flatMap(block => [
     ...(block.stimulusSlots ?? []), ...(block.stimulusSlot ? [block.stimulusSlot] : []),
   ]);
@@ -528,7 +533,8 @@ export default function TaskBuilder({ onDirty }: { onDirty: (dirty: boolean) => 
         </div>
       ) : (
         <div className="tb-preview-workspace">
-        <AudioPreviewPicker projectId={projectId} slots={previewSlots} onChange={setSamples}/>
+        <AudioPreviewPicker projectId={projectId} slots={previewSlots}
+          batchCount={previewBatchCount} onChange={setSamples}/>
         <WorkbenchLayout
           name={draft.name}
           instructions={draft.instructions}
@@ -544,15 +550,15 @@ export default function TaskBuilder({ onDirty }: { onDirty: (dirty: boolean) => 
               <small>Sample queue row for this preview.</small>
             </>
           }
-          grounding={
+          grounding={draft.blocks.some(b=>b.type==="timeline_annotation") ? null : (
             <section className="tb-panel tb-preview-player">
               <p className="tb-eyebrow">02 / AUDIO STIMULUS</p>
-              <h3>Recording and workspace</h3>
+              <h3>Primary recording</h3>
               {samples.primaryUrl ? <audio controls src={samples.primaryUrl} preload="metadata" aria-label="Preview recording"/>
                 : <p className="tb-muted">Select a dataset asset above to play the real WAV file.</p>}
-              <p className="tb-inset">Waveform/phonetic editing appears inside a Grounding block below. Spectrogram, F0, formants and MFCC require separate DSP implementations.</p>
+              <p className="tb-inset">Add one Grounding block in Composition for the full original Sound/Speech workbench, including spectrogram and timelines.</p>
             </section>
-          }
+          )}
         >
           <div className="tb-preview-caption">
             <span>Preview answers stay on this screen.</span>
@@ -567,7 +573,7 @@ export default function TaskBuilder({ onDirty }: { onDirty: (dirty: boolean) => 
               answers={answers}
               onChange={setAnswers}
               allowLocalAudio
-              samples={{ ...samples, candidateText: "Example suggestion · A bird calls in this clip." }}
+              samples={samples}
             />
           ) : (
             <div className="tb-empty">

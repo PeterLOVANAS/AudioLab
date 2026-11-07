@@ -7,17 +7,17 @@
  * React, Cloudflare, and D1 are not needed for these specific cases.
  * This intentionally does NOT replace running `tsc --noEmit` or HTTP tests.
  */
-
-
-// TypeScript 7 uses a native compiler and does not expose
-// the traditional JavaScript Compiler API.
-//
-// This regression test needs transpileModule(), ModuleKind,
-// and ScriptTarget to execute individual TypeScript modules.
-//
-// We use the TypeScript 6 compatibility package only here.
-// The application can continue using TypeScript 7 for type-checking.
-const ts = require("@typescript/typescript6");
+// TypeScript 7 has no JS Compiler API; use the compatibility package when
+// available, otherwise fall back to the current compiler on TypeScript <=6.
+const ts = (() => {
+  for (const name of ['@typescript/typescript6', 'typescript']) {
+    try {
+      const candidate=require(name);
+      if (candidate.ModuleKind && candidate.transpileModule) return candidate;
+    } catch { /* Try next option. */ }
+  }
+  throw new Error('Install @typescript/typescript6 as a dev dependency to run this regression script.');
+})();
 const fs=require('node:fs');
 const path=require('node:path');
 const assert=require('node:assert/strict');
@@ -45,6 +45,20 @@ const audio=model.newBlock('audio_player');
 const annotation=model.newBlock('timeline_annotation');
 const summary=model.newBlock('transcript_summary'); summary.sourceTimelineBlockId=annotation.id; summary.summaryMode='both';
 assert.equal(annotation.tiers.length,2);
+const sound=model.newBlock('timeline_annotation');
+sound.groundingMode='sound';
+sound.tiers=[{id:'events',name:'Sound events',kind:'interval',allowOverlap:true,labelMode:'text'}];
+assert.equal(sound.groundingMode,'sound');
+const vote=model.newBlock('candidate_vote');
+vote.options=[{id:'AGREE',label:'Correct'},{id:'DISAGREE',label:'Needs changes'},{id:'UNSURE',label:'Unclear'}];
+vote.allowCorrection=true;
+assert.equal(model.publishLimit(vote),undefined,'Candidate voting is server-validated');
+const voteDefinition={...defs,blocks:[vote]};
+assert.deepEqual(answerCheck.validateAnswers(voteDefinition,{[vote.id]:{value:'AGREE'}},true),[]);
+assert(answerCheck.validateAnswers(voteDefinition,{[vote.id]:{value:'DISAGREE'}},true)
+  .some(x=>x.message.includes('correction')));
+assert.deepEqual(answerCheck.validateAnswers(voteDefinition,
+  {[vote.id]:{value:'DISAGREE',correctedText:'bird is audible'}},true),[]);
 const draft={...model.blankDraft(),name:'Test',instructions:'Listen',blocks:[section,audio,choice,callout,confirmation,annotation,summary]};
 assert.deepEqual(model.checkDraft(draft),[],'Complex definitions must be locally valid');
 assert.equal(model.publishLimit(annotation),undefined,'A validated timeline can publish');
@@ -66,4 +80,4 @@ assert.deepEqual(answerCheck.validateAnswers({...defs,blocks:[annotation,summary
 assert(timeline.validateTimelineAnswer(tiers,{tiers:{words:[{id:'w1',start:1,end:0,text:'bad'}],phones:[]}},true,true).length>0);
 assert(timeline.validateTimelineAnswer(tiers,{tiers:{words:[{id:'w1',start:0,end:1,text:'ok'}],phones:[{id:'p1',start:0,end:.2,text:'p',parentId:'missing'}]}},true,true).length>0);
 assert(timeline.validateTimelineAnswer(tiers,{tiers:{}},true,true).length>0);
-console.log('PASS: display-only blocks, conditional confirmation, timeline answers, preview-only limitations.');
+console.log('PASS: display-only blocks, conditional confirmation, candidate votes, Sound/Speech timelines.');

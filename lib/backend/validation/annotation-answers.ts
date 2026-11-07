@@ -45,14 +45,18 @@ function visible(block: Block, answers: Record<string, unknown>): boolean {
   const record = rule as Record<string, unknown>;
   if (typeof record.blockId !== "string" || !own(answers, record.blockId)) return false;
   // For this pilot the Task Builder's condition is an exact scalar equality.
-  return Object.is(answers[record.blockId], record.equals);
+  const parent=answers[record.blockId];
+  const selected=parent && typeof parent==="object" && !Array.isArray(parent) &&
+      "selection" in parent ? (parent as Record<string,unknown>).selection : parent;
+  return Object.is(selected, record.equals);
 }
 
 /** Return human-readable issues the Labeller frontend can display per block. */
 export function validateAnswers(
   definition: PublishedDefinitionData,
   answers: Record<string, unknown>,
-  submitting: boolean
+  submitting: boolean,
+  context?: {audioAssetCount?:number; candidateIds?:string[]}
 ): AnswerIssue[] {
   const issues: AnswerIssue[] = [];
   const blocks = definition.blocks;
@@ -83,10 +87,70 @@ export function validateAnswers(
       if (hasAnswer) issues.push({ blockId: block.id, message: "Display-only blocks cannot contain an answer." });
       continue;
     }
-    // We do not claim to validate the remaining advanced formats until their schemas exist.
+    /**
+     * NUM_BATCH > 1 repeats one configuration across the ORDERED Task Instance
+     * recordings. Answers live in answers[block.id][audioIndex]. They are NOT
+     * separately assigned tasks and must not be shuffled after submission.
+     * For comparisons, groups = WAV count / comparisonSize instead.
+     */
+    const numBatch=typeof block.numBatch==="number"?block.numBatch:1;
+    if(numBatch>1 && ["single_choice","multiple_choice","boolean","number","text",
+                            "rating_scale","timeline_annotation"].includes(block.type)){
+      if(!Number.isInteger(numBatch)||numBatch>24||
+          (context?.audioAssetCount!==undefined && numBatch>context.audioAssetCount)){
+        issues.push({blockId:block.id,message:"NUM_BATCH exceeds the bound task audio assets (24 max)."});continue;
+      }
+      const vals=answers[block.id];
+      if(!Array.isArray(vals)||vals.length>numBatch||(submitting&&vals.length!==numBatch)){
+        issues.push({blockId:block.id,message:`Expected ${numBatch} per-audio answer entries.`});continue;
+      }
+      // Validate each entry against the SAME immutable block schema.
+      const single={...block,numBatch:1};
+      vals.forEach((entry,index)=>{
+        // A draft can contain untouched audio panels, but a final submit
+        // cannot omit them. React uses null for an untouched array slot.
+        if((!submitting || !block.required) && (entry===null || entry===undefined))return;
+        const nested=validateAnswers({...definition,blocks:[single]},
+          {[block.id]:entry},submitting,context);
+        nested.forEach(issue=>issues.push({blockId:block.id,
+          message:`Audio ${index+1}: ${issue.message}`}));
+      });
+      continue;
+    }
+    if(block.type==="audio_comparison"){
+      const per=typeof block.comparisonSize==="number"?block.comparisonSize:2;
+      const n=typeof block.numBatch==="number"?block.numBatch:2;
+      if(!Number.isInteger(per)||per<2||per>4||!Number.isInteger(n)||n<per||n>24||n%per!==0 ||
+          (context?.audioAssetCount!==undefined && context.audioAssetCount<n)){
+        issues.push({blockId:block.id,message:"Comparison requires 2–4 WAVs per panel and an exactly divisible audio batch (max 24)."});continue;
+      }
+      const options=optionIds(block);
+      const ans=answers[block.id];
+      if(!Array.isArray(ans)||ans.length>n/per||(submitting&&ans.length!==n/per)||!options||
+          ans.some(v=>(v===null||v===undefined)&&!submitting?false:typeof v!=="string"||!options.includes(v))){
+        issues.push({blockId:block.id,message:`Expected ${n/per} valid comparison choices.`});
+      }
+      continue;
+    }
+    if(block.type==="ranking"){
+      const mode=block.rankingMode==="labels"?"labels":"audios";
+      const rankIds=mode==="labels" && Array.isArray(block.rankLabels) ?
+        (block.rankLabels as {id:string}[]).map(o=>o.id) :
+        (Array.isArray(block.stimulusSlots)?block.stimulusSlots:[]).map((_,i)=>`slot-${i}`);
+      if(mode==="audios"&&context?.audioAssetCount!==undefined&&context.audioAssetCount<rankIds.length){
+        issues.push({blockId:block.id,message:"Not enough task audio assets to rank."});continue;
+      }
+      const ans=answers[block.id];
+      if(rankIds.length<2||rankIds.length>12||!Array.isArray(ans)||ans.length!==rankIds.length||
+         new Set(ans).size!==rankIds.length||ans.some(v=>typeof v!=="string"||!rankIds.includes(v))){
+        issues.push({blockId:block.id,message:"Ranking must contain each configured stable ID exactly once, in ranked order."});
+      }
+      continue;
+    }
+    // We do not claim to validate remaining unsupported formats until schemas exist.
     const supported = new Set([
       "single_choice", "multiple_choice", "boolean", "number",
-      "rating_scale", "text", "transcript", "timeline_annotation",
+      "rating_scale", "text", "transcript", "timeline_annotation", "candidate_vote",
     ]);
     if (!supported.has(block.type)) {
       issues.push({
@@ -106,25 +170,28 @@ export function validateAnswers(
     const value = answers[block.id];
     switch (block.type) {
       case "single_choice": {
-        const ids = optionIds(block);
-        if (!ids || typeof value !== "string" || !ids.includes(value)) {
-          issues.push({ blockId: block.id, message: "Choose one valid option ID." });
+        const ids=optionIds(block);
+        const raw=value&&typeof value==="object"&&!Array.isArray(value)?value as Record<string,unknown>:null;
+        const selected=raw?raw.selection:value;
+        if(!ids||typeof selected!=="string"||!ids.includes(selected)){
+          issues.push({blockId:block.id,message:"Choose one valid option ID."});break;
         }
+        validateOptionChildren(block,raw, [selected], submitting, issues);
         break;
       }
       case "multiple_choice": {
-        const ids = optionIds(block);
-        if (!ids || !Array.isArray(value) || !value.every(v => typeof v === "string" && ids.includes(v)) ||
-            new Set(value).size !== value.length) {
-          issues.push({ blockId: block.id, message: "Provide unique valid option IDs in an array." });
-        } else {
-          const minimum = Math.max(typeof block.minSelections === "number" ? block.minSelections : 0,
-                                   submitting && block.required ? 1 : 0);
-          if (submitting && value.length < minimum)
-            issues.push({ blockId: block.id, message: `Select at least ${minimum} option(s).` });
-          if (typeof block.maxSelections === "number" && value.length > block.maxSelections)
-            issues.push({ blockId: block.id, message: "Too many options selected." });
+        const ids=optionIds(block);
+        const raw=value&&typeof value==="object"&&!Array.isArray(value)?value as Record<string,unknown>:null;
+        const selected=raw?raw.selection:value;
+        if(!ids||!Array.isArray(selected)||!selected.every(v=>typeof v==="string"&&ids.includes(v))||
+          new Set(selected).size!==selected.length){
+          issues.push({blockId:block.id,message:"Provide unique valid option IDs in an array."});break;
         }
+        const min=Math.max(typeof block.minSelections==="number"?block.minSelections:0,submitting&&block.required?1:0);
+        if(submitting&&selected.length<min)issues.push({blockId:block.id,message:`Select at least ${min} option(s).`});
+        if(typeof block.maxSelections==="number"&&selected.length>block.maxSelections)
+          issues.push({blockId:block.id,message:"Too many options selected."});
+        validateOptionChildren(block,raw,selected as string[],submitting,issues);
         break;
       }
       case "boolean":
@@ -161,6 +228,30 @@ export function validateAnswers(
           issues.push({ blockId: block.id, message: "Provide valid text (required answers cannot be blank)." });
         }
         break;
+      case "candidate_vote": {
+        /** Client labels are presentation; only the stable option ID persists. */
+        if(!value || typeof value!=="object" || Array.isArray(value)) {
+          issues.push({blockId:block.id,message:"Candidate vote must be an object."}); break;
+        }
+        const vote=value as Record<string,unknown>;
+        const ids=optionIds(block) ?? ["AGREE","DISAGREE","UNSURE"];
+        if(typeof vote.value!=="string" || !ids.includes(vote.value))
+          issues.push({blockId:block.id,message:"Choose a configured candidate vote option."});
+        if(vote.correctedText!==undefined &&
+          (typeof vote.correctedText!=="string" || vote.correctedText.length>20000))
+          issues.push({blockId:block.id,message:"Invalid correction text."});
+        const trigger=typeof block.correctionOnValue==="string"?block.correctionOnValue:"DISAGREE";
+        if(submitting && block.allowCorrection===true && vote.value===trigger &&
+          (typeof vote.correctedText!=="string" || !vote.correctedText.trim()))
+          issues.push({blockId:block.id,message:"A correction is required for this vote option."});
+        if(block.candidateSource!=="example" && submitting){
+          if(typeof vote.candidateId!=="string" || !context?.candidateIds?.includes(vote.candidateId))
+            issues.push({blockId:block.id,message:"Choose a candidate annotation curated for this Task Instance."});
+        }
+        for(const k of Object.keys(vote))if(!["value","correctedText","candidateId"].includes(k))
+          issues.push({blockId:block.id,message:`Unexpected vote field '${k}'.`});
+        break;
+      }
       case "timeline_annotation": {
         const result = validateTimelineAnswer(block.tiers, value, block.required, submitting);
         for (const message of result) issues.push({ blockId: block.id, message });
@@ -169,4 +260,56 @@ export function validateAnswers(
     }
   }
   return issues;
+}
+
+/**
+ * Validate inline controls nested under ONE selected choice without creating
+ * a second top-level answer key. They are only active when their parent option
+ * is selected. This prevents saving a contradictory stale confirmation.
+ *
+ * Legacy choice without any follow-ups remains a string/string[].
+ * With follow-ups its answer is {selection:string|string[],children:{childId:value}}.
+ */
+function validateOptionChildren(block:Block,raw:Record<string,unknown>|null,
+  selected:string[],submitting:boolean,issues:AnswerIssue[]) {
+  const groups=block.optionFollowUps;
+  if(!groups||typeof groups!=="object"){
+    if(raw)issues.push({blockId:block.id,message:"This choice must save a scalar or array, not an object."});
+    return;
+  }
+  const entries=Object.entries(groups as Record<string,unknown>);
+  if(!entries.some(([,items])=>Array.isArray(items)&&items.length)){
+    if(raw)issues.push({blockId:block.id,message:"Unexpected nested choice value."});
+    return;
+  }
+  if(!raw){issues.push({blockId:block.id,message:"Nested choice answers need {selection,children}."});return;}
+  for(const key of Object.keys(raw))if(!["selection","children"].includes(key))
+    issues.push({blockId:block.id,message:`Unexpected nested field ${key}.`});
+  const children=raw.children&&typeof raw.children==="object"&&!Array.isArray(raw.children)?
+    raw.children as Record<string,unknown>:{};
+  const active=new Map<string,Record<string,unknown>>();
+  for(const [optionId,items] of entries){
+    if(!selected.includes(optionId)||!Array.isArray(items))continue;
+    for(const child of items){
+      if(!child||typeof child!=="object"||Array.isArray(child))continue;
+      const c=child as Record<string,unknown>;
+      if(typeof c.id==="string"&&c.type!=="callout")active.set(c.id,c);
+    }
+  }
+  for(const k of Object.keys(children)){
+    if(!active.has(k))issues.push({blockId:block.id,message:`Hidden or unknown conditional child '${k}'.`});
+  }
+  for(const [id,child] of active){
+    const has=Object.prototype.hasOwnProperty.call(children,id);
+    if(!has){if(submitting&&child.required===true)issues.push({blockId:block.id,message:`Required follow-up '${child.label}' is missing.`});continue;}
+    const v=children[id];
+    if(child.type==="boolean" && (typeof v!=="boolean" ||
+       submitting&&child.requiredValue!==undefined&&v!==child.requiredValue))
+      issues.push({blockId:block.id,message:`Invalid Yes/No follow-up '${child.label}'.`});
+    if(child.type==="text" && (typeof v!=="string" ||
+       submitting&&child.required===true&&!v.trim()))
+      issues.push({blockId:block.id,message:`Invalid text follow-up '${child.label}'.`});
+    if(child.type==="number" && (typeof v!=="number" || !Number.isFinite(v)))
+      issues.push({blockId:block.id,message:`Invalid number follow-up '${child.label}'.`});
+  }
 }

@@ -1,6 +1,6 @@
-import { cloneElement, type ReactElement } from "react";
+import { cloneElement, useState, type DragEvent, type ReactElement } from "react";
 import TimelineTierSettings from "./TimelineTierSettings";
-import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
+import { GripVertical, Plus, Trash2 } from "lucide-react";
 import type { AnnotationScope, BlockCondition } from "@/lib/contracts/tasks";
 import {
   canSubmit,
@@ -9,7 +9,6 @@ import {
   editable,
   hasChoiceOptions,
   kinds,
-  moveBlock,
   newBlock,
   title,
   type Block,
@@ -195,12 +194,21 @@ function BlockSettings({
         />
       </Field>
       <Field label="Help text">
-        <input
-          value={block.helpText ?? ""}
-          placeholder="Optional hint for the labeller"
-          onChange={(event) => set({ helpText: event.target.value })}
-        />
+        <input value={block.helpText ?? ""} placeholder="Optional hint for the labeller"
+          onChange={event=>set({helpText:event.target.value})}/>
       </Field>
+      {/* Every question in a batch shares ONE configuration and produces one
+          answer for each recording. Audio comparison groups recordings into
+          sets of `comparisonSize` instead of showing NUM_BATCH separate pairs. */}
+      {(["single_choice","multiple_choice","boolean","number","text","rating_scale",
+          "audio_comparison","audio_player","timeline_annotation"].includes(block.type))&&
+        <div className="tb-field">
+          <Numeric label="NUM_BATCH — recordings in one task (1–24)"
+            value={block.numBatch??1}
+            onChange={n=>set({numBatch:n===undefined?1:Math.round(n)})}/>
+          <small>One answer panel per audio; comparison panels = NUM_BATCH ÷ recordings per comparison.</small>
+        </div>}
+
       {/* Information blocks do not write answer keys. The same setting is
           validated by the server, preventing confusing required markers. */}
       {!(["section", "callout", "audio_player"].includes(block.type)) && <Switch
@@ -277,6 +285,36 @@ function BlockSettings({
                 />
               )}
               </div>
+              {/* Option-specific nested controls. These do NOT enter the
+                  top-level Task Definition block array; they are stored under
+                  optionFollowUps[option.id] and rendered under the selected
+                  choice by the SAME shared Labeller block component. */}
+              {(["single_choice","multiple_choice"].includes(block.type))&&<details className="tb-followup-settings">
+                <summary>Conditional follow-ups for this choice ({block.optionFollowUps?.[option.id]?.length??0})</summary>
+                {(block.optionFollowUps?.[option.id]??[]).map(child=><div key={child.id} className="tb-inline-config">
+                  <select value={child.type} aria-label="Follow-up type"
+                    onChange={e=>set({optionFollowUps:{...block.optionFollowUps,[option.id]:(block.optionFollowUps?.[option.id]??[]).map(c=>c.id===child.id?{...c,type:e.target.value as typeof c.type,required:e.target.value!=="callout"}:c)}})}>
+                    <option value="boolean">Yes / No checkbox</option>
+                    <option value="callout">Information panel</option>
+                    <option value="text">Text</option>
+                    <option value="number">Number</option>
+                  </select>
+                  <input aria-label="Follow-up label" value={child.label}
+                    onChange={e=>set({optionFollowUps:{...block.optionFollowUps,[option.id]:(block.optionFollowUps?.[option.id]??[]).map(c=>c.id===child.id?{...c,label:e.target.value}:c)}})}/>
+                  {child.type==="callout"&&<textarea aria-label="Panel content" value={child.description??""}
+                    onChange={e=>set({optionFollowUps:{...block.optionFollowUps,[option.id]:(block.optionFollowUps?.[option.id]??[]).map(c=>c.id===child.id?{...c,description:e.target.value}:c)}})}/>}
+                  {child.type==="boolean"&&<label className="tb-check"><input type="checkbox"
+                    checked={child.requiredValue===true} onChange={e=>set({optionFollowUps:{...block.optionFollowUps,[option.id]:(block.optionFollowUps?.[option.id]??[]).map(c=>c.id===child.id?{...c,requiredValue:e.target.checked?true:undefined}:c)}})}/>Must be checked</label>}
+                  {child.type!=="callout"&&<label className="tb-check"><input type="checkbox"
+                    checked={child.required} onChange={e=>set({optionFollowUps:{...block.optionFollowUps,[option.id]:(block.optionFollowUps?.[option.id]??[]).map(c=>c.id===child.id?{...c,required:e.target.checked}:c)}})}/>Required</label>}
+                  <button type="button" onClick={()=>set({optionFollowUps:{...block.optionFollowUps,[option.id]:(block.optionFollowUps?.[option.id]??[]).filter(c=>c.id!==child.id)}})}>Delete follow-up</button>
+                </div>)}
+                <button type="button" className="tb-link" onClick={()=>set({optionFollowUps:{...block.optionFollowUps,
+                  [option.id]:[...(block.optionFollowUps?.[option.id]??[]),
+                    {id:crypto.randomUUID(),type:"boolean",label:"I confirm",required:true,requiredValue:true}]}})}>
+                  + Add inline sub-block
+                </button>
+              </details>}
               <button
                 type="button"
                 aria-label={"Remove choice " + (index + 1)}
@@ -349,6 +387,10 @@ function BlockSettings({
       )}
       {block.type === "rating_scale" && (
         <>
+          <Field label="Rating appearance"><select value={block.ratingAppearance??"buttons"}
+            onChange={e=>set({ratingAppearance:e.target.value as Block["ratingAppearance"]})}>
+            <option value="slider">Slider line</option><option value="buttons">Discrete marked buttons</option>
+          </select></Field>
           <Numeric label="Step" value={block.step} onChange={(step) => set({ step })} />
           <div className="tb-grid">
             {(["minLabel", "maxLabel"] as const).map((key, index) => (
@@ -402,16 +444,66 @@ function BlockSettings({
           </Field>
         </div>
       )}
-      {block.type === "candidate_vote" && (
-        <Switch
-          label="Allow a suggested correction"
-          checked={block.allowCorrection}
-          onChange={(allowCorrection) => set({ allowCorrection })}
-        />
-      )}
+      {block.type === "candidate_vote" && <>
+        <Field label="Candidate annotation source"><select
+          value={block.candidateSource??"curated"}
+          onChange={e=>set({candidateSource:e.target.value as Block["candidateSource"]})}>
+          <option value="curated">Task Instance — curated candidate from database</option>
+          <option value="example">Example text (preview only)</option>
+        </select></Field>
+        <p className="tb-muted">Source-record REFERENCE ANSWERS remain private. Candidate votes use separately curated candidate annotations.</p>
+        <Field label="Candidate/question text">
+          <textarea rows={2} value={block.candidatePrompt??""}
+            placeholder="Does this suggested annotation match the recording?"
+            onChange={e=>set({candidatePrompt:e.target.value})}/>
+        </Field>
+        <Switch label="Allow suggested correction" checked={block.allowCorrection}
+          onChange={allowCorrection=>set({allowCorrection})}/>
+        {block.allowCorrection && <Field label="Ask for correction when option is">
+          <select value={block.correctionOnValue??"DISAGREE"}
+            onChange={e=>set({correctionOnValue:e.target.value})}>
+            {(block.options??[]).map(o=><option value={o.id} key={o.id}>{o.label}</option>)}
+          </select>
+        </Field>}
+        <p className="tb-muted">Edit each vote's displayed label below. Stable option IDs are saved to annotation revisions.</p>
+      </>}
       {(block.type === "ranking" || block.type === "audio_comparison") && (
         <>
-          <div className="tb-field">
+          {block.type === "ranking" && <div className="tb-grid">
+            <Field label="Rank what?"><select value={block.rankingMode??"audios"}
+              onChange={e=>set({rankingMode:e.target.value as Block["rankingMode"]})}>
+              <option value="audios">Different audio recordings</option>
+              <option value="labels">Attributes / labels of one recording</option>
+            </select></Field>
+            <Field label="Only one ranking interaction"><select value={block.rankingInput??"drag"}
+              onChange={e=>set({rankingInput:e.target.value as Block["rankingInput"]})}>
+              <option value="drag">Drag to reorder</option>
+              <option value="arrows">Move up/down buttons</option>
+              <option value="comma">Comma-separated position numbers</option>
+            </select></Field>
+          </div>}
+          {block.type==="ranking" && block.rankingMode==="labels" && <div className="tb-field">
+            <span>Labels/attributes to rank</span>
+            {(block.rankLabels??[]).map((o,i)=><div className="tb-option-edit" key={o.id}>
+              <span>{i+1}</span><input aria-label={`Ranking label ${i+1}`} value={o.label}
+                onChange={e=>set({rankLabels:(block.rankLabels??[]).map(a=>a.id===o.id?{...a,label:e.target.value}:a)})}/>
+              <button type="button" onClick={()=>set({rankLabels:(block.rankLabels??[]).filter(a=>a.id!==o.id)})}>Remove</button>
+            </div>)}
+            <button type="button" className="tb-link" onClick={()=>set({rankLabels:[...(block.rankLabels??[]),{id:crypto.randomUUID(),label:""}]})}>+ Add attribute</button>
+          </div>}
+          {block.type==="audio_comparison"&&<div className="tb-grid">
+            <Numeric label="Recordings in each comparison (2–4)" value={block.comparisonSize??2}
+              onChange={n=>set({comparisonSize:n??2})}/>
+            <Field label="Choice button size"><select value={block.comparisonButtonSize??"md"}
+              onChange={e=>set({comparisonButtonSize:e.target.value as Block["comparisonButtonSize"]})}>
+              <option value="sm">Small</option><option value="md">Medium</option><option value="lg">Large</option>
+            </select></Field>
+            <Field label="Choice position"><select value={block.comparisonButtonPosition??"inside"}
+              onChange={e=>set({comparisonButtonPosition:e.target.value as Block["comparisonButtonPosition"]})}>
+              <option value="inside">Inside comparison card</option><option value="outside">Below comparison card</option>
+            </select></Field>
+          </div>}
+          {(block.type!=="ranking" || block.rankingMode!=="labels")&&<div className="tb-field">
             <span>Recording slot names</span>
             {slots.map((slot, index) => (
               <div key={index} className="tb-option-edit">
@@ -445,19 +537,9 @@ function BlockSettings({
             >
               + Add recording slot
             </button>
-          </div>
-          <Switch
-            label="Randomize recording order"
-            checked={block.randomizeOrder}
-            onChange={(randomizeOrder) => set({ randomizeOrder })}
-          />
-          {block.type === "ranking" && (
-            <Switch
-              label="Allow ties"
-              checked={block.allowTies}
-              onChange={(allowTies) => set({ allowTies })}
-            />
-          )}
+          </div>}
+          <p className="tb-muted">The new ranking/comparison renderer uses the displayed audio order.
+            Tie ranking and randomized presentation are disabled until their answer contracts are defined.</p>
         </>
       )}
       {block.type === "repeated_group" && depth === 0 && (
@@ -516,10 +598,37 @@ export default function BlockEditor({
   onChange: (blocks: Block[]) => void;
   depth?: number;
 }) {
+  /**
+   * Browser drag-and-drop changes ONLY the order of the block array; IDs,
+   * answers and condition references remain intact. We purposely do not
+   * assign new IDs or rebuild blocks on reorder, because doing so would
+   * invalidate existing draft answers and published definitions.
+   */
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dropBeforeId, setDropBeforeId] = useState<string | null>(null);
+  function reorder(targetId: string) {
+    if(!draggedId || targetId===draggedId)return;
+    const source=blocks.findIndex(b=>b.id===draggedId);
+    const target=blocks.findIndex(b=>b.id===targetId);
+    if(source<0||target<0)return;
+    const next=[...blocks];
+    const [moving]=next.splice(source,1);
+    next.splice(target,0,moving);
+    onChange(next);
+  }
+  function endDrag(){setDraggedId(null);setDropBeforeId(null);}
   return (
     <div className="tb-list">
       {blocks.map((block, index) => (
-        <section className="tb-block" data-block={block.id} key={block.id}>
+        <section className={"tb-block"+(dropBeforeId===block.id?" tb-drop-before":"")}
+          data-block={block.id} key={block.id}
+          onDragOver={(event:DragEvent<HTMLElement>)=>{
+            if(!draggedId || draggedId===block.id)return;
+            event.preventDefault();event.dataTransfer.dropEffect="move";
+            setDropBeforeId(block.id);
+          }}
+          onDrop={event=>{event.preventDefault();reorder(block.id);endDrag();}}>
+
           <details>
             <summary>
               <span className="tb-index">{String(index + 1).padStart(2, "0")}</span>
@@ -551,22 +660,24 @@ export default function BlockEditor({
           </details>
           <div className="tb-block-tools">
             <span>{canSubmit(block.type) ? "Supported" : "Preview only"}</span>
-            <button
-              type="button"
-              aria-label={"Move " + block.label + " up"}
-              disabled={index === 0}
-              onClick={() => onChange(moveBlock(blocks, index, -1))}
-            >
-              <ArrowUp size={14} />
-            </button>
-            <button
-              type="button"
-              aria-label={"Move " + block.label + " down"}
-              disabled={index === blocks.length - 1}
-              onClick={() => onChange(moveBlock(blocks, index, 1))}
-            >
-              <ArrowDown size={14} />
-            </button>
+            {/* A dedicated drag handle avoids swallowing clicks on the
+                expandable card or dragging while changing an input. */}
+            <button type="button" className="tb-drag-handle" draggable
+              aria-label={`Drag ${block.label} to reorder; Alt+Arrow keys also work`}
+              title="Drag this handle to reorder blocks"
+              onDragStart={event=>{
+                setDraggedId(block.id);event.dataTransfer.effectAllowed="move";
+                event.dataTransfer.setData("text/plain",block.id);
+              }}
+              onDragEnd={endDrag}
+              onKeyDown={event=>{
+                if(!event.altKey || !["ArrowUp","ArrowDown"].includes(event.key))return;
+                event.preventDefault();const next=[...blocks];
+                const dest=index+(event.key==="ArrowUp"?-1:1);
+                if(dest<0||dest>=blocks.length)return;
+                [next[index],next[dest]]=[next[dest],next[index]];
+                onChange(next);
+              }}><GripVertical size={18}/></button>
             {editable(block.type) && (
               <button
                 type="button"
@@ -579,6 +690,15 @@ export default function BlockEditor({
           </div>
         </section>
       ))}
+      {draggedId && <div className="tb-drop-end" role="status"
+        onDragOver={event=>{event.preventDefault();event.dataTransfer.dropEffect="move";}}
+        onDrop={event=>{
+          event.preventDefault();
+          const next=blocks.filter(b=>b.id!==draggedId);
+          const moving=blocks.find(b=>b.id===draggedId);
+          if(moving)onChange([...next,moving]);
+          endDrag();
+        }}>Drop here to move block to the end</div>}
       {depth > 0 && (
         <Field label="Add a question to this group">
           <select
@@ -612,7 +732,7 @@ export function Palette({ add }: { add: (type: EditableKind) => void }) {
           <h3>{group}</h3>
           {kinds
             .filter((kind) => index === 0
-              ? ["single_choice","multiple_choice","boolean","number","rating_scale","text","transcript"].includes(kind)
+              ? ["single_choice","multiple_choice","boolean","number","rating_scale","text","transcript","candidate_vote"].includes(kind)
               : index === 1
                 ? ["section","callout","audio_player","timeline_annotation","transcript_summary"].includes(kind)
                 : !canSubmit(kind))

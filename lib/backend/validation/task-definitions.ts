@@ -152,7 +152,9 @@ export const taskDraftSchema = z.strictObject({
     // A choice question needs at least two answer options.
     // `passthrough` lets `block.options` exist, but it does not validate it:
     // these extra checks enforce basic option shape and uniqueness.
-    if (block.type === "single_choice" || block.type === "multiple_choice") {
+    if (block.type === "single_choice" || block.type === "multiple_choice" ||
+        block.type === "audio_comparison" ||
+        (block.type === "candidate_vote" && block.options !== undefined)) {
       const options = block.options;
       if (!Array.isArray(options) || options.length < 2) {
         ctx.addIssue({
@@ -190,6 +192,60 @@ export const taskDraftSchema = z.strictObject({
       }
     }
 
+    /** v4 — batch, ranking and inline choice conditions are part of the frozen
+     * Task Definition JSON. These checks intentionally occur at publication
+     * and at DRAFT save, not merely in the React preview. */
+    const n=block.numBatch===undefined?1:block.numBatch;
+    if(!Number.isInteger(n)||typeof n!=="number"||n<1||n>24)
+      ctx.addIssue({code:"custom",path:["blocks",index,"numBatch"],message:"NUM_BATCH must be an integer from 1 to 24"});
+    if(block.type==="audio_comparison"){
+      const size=block.comparisonSize===undefined?2:block.comparisonSize;
+      if(typeof size!=="number"||!Number.isInteger(size)||size<2||size>4||
+         typeof n!=="number"||n<size||n%size!==0)
+        ctx.addIssue({code:"custom",path:["blocks",index,"comparisonSize"],
+          message:"Comparison group size must be 2–4 and divide NUM_BATCH exactly"});
+      if(block.comparisonButtonSize!==undefined && !["sm","md","lg"].includes(String(block.comparisonButtonSize)))
+        ctx.addIssue({code:"custom",path:["blocks",index,"comparisonButtonSize"],message:"Invalid button size"});
+      if(block.comparisonButtonPosition!==undefined && !["inside","outside"].includes(String(block.comparisonButtonPosition)))
+        ctx.addIssue({code:"custom",path:["blocks",index,"comparisonButtonPosition"],message:"Invalid button placement"});
+    }
+    if(block.type==="rating_scale" && block.ratingAppearance!==undefined &&
+        !["buttons","slider"].includes(String(block.ratingAppearance)))
+      ctx.addIssue({code:"custom",path:["blocks",index,"ratingAppearance"],message:"Invalid rating display mode"});
+    if(block.type==="ranking"){
+      if(block.rankingMode!==undefined && !["audios","labels"].includes(String(block.rankingMode)))
+        ctx.addIssue({code:"custom",path:["blocks",index,"rankingMode"],message:"Invalid ranking mode"});
+      if(block.rankingInput!==undefined && !["drag","arrows","comma"].includes(String(block.rankingInput)))
+        ctx.addIssue({code:"custom",path:["blocks",index,"rankingInput"],message:"Invalid ranking interaction"});
+      const list=block.rankingMode==="labels"?block.rankLabels:block.stimulusSlots;
+      if(!Array.isArray(list)||list.length<2||list.length>12)
+        ctx.addIssue({code:"custom",path:["blocks",index,"rankLabels"],message:"Ranking needs 2–12 distinct items"});
+    }
+    if(block.optionFollowUps!==undefined){
+      if((block.type!=="single_choice"&&block.type!=="multiple_choice")||
+         block.optionFollowUps===null || typeof block.optionFollowUps!=="object" || Array.isArray(block.optionFollowUps)){
+        ctx.addIssue({code:"custom",path:["blocks",index,"optionFollowUps"],message:"Only choice blocks may contain option-specific follow-ups"});
+      } else {
+        const options=new Set(Array.isArray(block.options)?
+          (block.options as {id:string}[]).map(o=>o.id):[]);
+        const all=new Set<string>();
+        for(const [optionId,children] of Object.entries(block.optionFollowUps as Record<string,unknown>)){
+          if(!options.has(optionId)||!Array.isArray(children)||children.length>8){
+            ctx.addIssue({code:"custom",path:["blocks",index,"optionFollowUps",optionId],message:"Unknown option or too many children"});continue;
+          }
+          children.forEach((child,j)=>{
+            const c=child as Record<string,unknown>;
+            if(!c||typeof c!=="object"||typeof c.id!=="string"||!c.id||all.has(c.id)||
+              !["boolean","number","text","callout"].includes(String(c.type))||
+              typeof c.label!=="string"||!c.label.trim()||typeof c.required!=="boolean")
+              ctx.addIssue({code:"custom",path:["blocks",index,"optionFollowUps",optionId,j],message:"Invalid or duplicate conditional child"});
+            if(c?.type==="callout"&&c.required===true)
+              ctx.addIssue({code:"custom",path:["blocks",index,"optionFollowUps",optionId,j],message:"A display-only callout cannot be required"});
+            if(typeof c?.id==="string")all.add(c.id);
+          });
+        }
+      }
+    }
     /**
      * A display-only block has no answer. `required=true` would falsely imply
      * that the server expects a key in annotation_revisions.answers.
@@ -223,7 +279,30 @@ export const taskDraftSchema = z.strictObject({
      * exists. We check the tier topology here and *answers* separately on
      * submission. A parent means semantic association, not forced timing.
      */
+    if (block.type === "candidate_vote") {
+      if(block.candidateSource!==undefined && !["curated","example"].includes(String(block.candidateSource)))
+        ctx.addIssue({code:"custom",path:["blocks",index,"candidateSource"],message:"Unknown candidate source"});
+      if(block.correctionOnValue !== undefined &&
+          (!Array.isArray(block.options) || !(block.options as {id:string}[]).some(o=>o.id===block.correctionOnValue)))
+        ctx.addIssue({code:"custom",path:["blocks",index,"correctionOnValue"],
+          message:"Correction trigger must be one of the configured vote options"});
+      if(block.candidatePrompt !== undefined && (typeof block.candidatePrompt!=="string" || block.candidatePrompt.length>4000))
+        ctx.addIssue({code:"custom",path:["blocks",index,"candidatePrompt"],
+          message:"Candidate text must be a string under 4,000 characters"});
+    }
     if (block.type === "timeline_annotation") {
+      // The prototype's original Sound/Speech layout is one block, not
+      // individually reorderable waveform/spectrogram/tier subblocks.
+      if(block.groundingMode !== undefined && !["sound","speech"].includes(String(block.groundingMode)))
+        ctx.addIssue({code:"custom",path:["blocks",index,"groundingMode"],message:"Choose Sound or Speech"});
+      if(block.precisionSeconds !== undefined &&
+          (typeof block.precisionSeconds!=="number" || block.precisionSeconds<0.00001 || block.precisionSeconds>1))
+        ctx.addIssue({code:"custom",path:["blocks",index,"precisionSeconds"],message:"Invalid timing precision"});
+      if(block.aids !== undefined &&
+          (!block.aids || typeof block.aids!=="object" || Array.isArray(block.aids) ||
+          Object.values(block.aids as Record<string,unknown>).some(v=>typeof v!=="boolean")))
+        ctx.addIssue({code:"custom",path:["blocks",index,"aids"],message:"Aids must contain boolean flags"});
+
       const tiers = block.tiers;
       if (!Array.isArray(tiers) || tiers.length < 1 || tiers.length > 10) {
         ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers"],
