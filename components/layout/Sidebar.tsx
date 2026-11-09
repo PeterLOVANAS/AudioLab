@@ -21,6 +21,7 @@ import type { ProjectMember, UserRole } from "@/lib/contracts/auth";
 export type PageId = 
   | "labeller"
   | "overview"
+  | "task-builder"
   | "negation"
   | "grounding"
   | "caption"
@@ -75,6 +76,7 @@ const groups: NavigationGroup[] = [
     {
       heading: "RESEARCH OPERATIONS", 
       items: [
+        { id: "task-builder", label: "Task Builder", icon: Layers },
         { id: "review", label: "Review & adjudication", icon: ShieldCheck },
         { id: "assets", label: "Assets & import", icon: Database },
         { id: "settings", label: "Project configuration", icon: SlidersHorizontal },
@@ -97,6 +99,7 @@ type SidebarProps = {
 // PageId[] means it could be omit right?: Yes, it can be omitted if the array is not required.
 const allowedPagesByRole: Record<UserRole, PageId[]> = {
   admin: [
+    "task-builder",
     "overview",
     "review",
     "assets",

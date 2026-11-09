@@ -16,6 +16,8 @@ export const createTaskInstanceSchema = z.strictObject({
   definitionId: z.uuid(),
   definitionVersion: z.number().int().min(1),
   assetId: z.uuid(),
+  /** Optional ORDERED batch, first element must equal assetId; 24 max. */
+  audioAssetIds: z.array(z.uuid()).min(2).max(24).optional(),
   // Original MMAU source_record_id, not its AudioLab internal D1 row ID.
   // Omit this to create a new task based only on the audio recording.
   sourceRecordId: z.string().trim().min(1).max(200).optional(),

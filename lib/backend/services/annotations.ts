@@ -76,7 +76,10 @@ export const annotationService = {
     // Pull the actual published SNAPSHOT from Lesson 7, never the mutable
     // Task Definition draft. Later edits/publishes cannot change old labels.
     const task = await taskInstanceService.get(db, assignment.taskInstanceId);
-    const issues = validateAnswers(task.definition, input.answers, status === "submitted");
+    const issues = validateAnswers(task.definition, input.answers, status === "submitted", {
+      audioAssetCount:task.audioAssets?.length ?? 1,
+      candidateIds:task.candidates?.map(candidate=>candidate.id)??[],
+    });
     if (issues.length) throw new AnnotationAnswerError(issues);
 
     // This read is helpful for a clear 409 response, but is NOT the concurrency

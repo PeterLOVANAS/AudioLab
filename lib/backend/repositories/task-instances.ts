@@ -100,8 +100,9 @@ export const taskInstanceRepository = {
     id: string; projectId: string; definitionId: string;
     definitionVersion: number; assetId: string;
     sourceRecordDbId: string | null; instanceKey: string;
+    audioAssetIds?:string[];
   }): Promise<boolean> {
-    const result = await db.prepare(`
+    const statement = db.prepare(`
       INSERT INTO task_instances
         (id, project_id, definition_id, definition_version,
          asset_id, source_record_db_id, instance_key)
@@ -111,8 +112,20 @@ export const taskInstanceRepository = {
     `).bind(
       input.id, input.projectId, input.definitionId, input.definitionVersion,
       input.assetId, input.sourceRecordDbId, input.instanceKey,
-    ).run();
-    return result.meta.changes === 1;
+    );
+    if(!input.audioAssetIds){
+      const result=await statement.run();
+      return result.meta.changes===1;
+    }
+    // D1 batch executes SQL statements transactionally. Slot inserts can only
+    // happen for the newly generated task UUID: if the primary INSERT was a
+    // uniqueness collision, WHERE EXISTS prevents orphaned slot rows.
+    const slots=input.audioAssetIds.map((assetId,index)=>db.prepare(`
+      INSERT INTO task_instance_audio_slots(task_instance_id,slot_index,asset_id)
+      SELECT ?,?,? WHERE EXISTS(SELECT 1 FROM task_instances WHERE id=?)`)
+      .bind(input.id,index,assetId,input.id));
+    const result=await db.batch([statement,...slots]);
+    return result[0].meta.changes===1;
   },
 
   /** One resolved task with audio path and the frozen definition JSON. */
