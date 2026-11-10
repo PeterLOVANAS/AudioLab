@@ -18,7 +18,8 @@ export type ProjectMemberRecord = {
   createdAt: string;
 };
 
-export type AssignmentStatus = "assigned" | "in_progress" | "submitted" | "reviewed";
+export type AssignmentStatus =
+  "assigned" | "in_progress" | "submitted" | "reviewed";
 
 /** Lightweight row displayed in an Admin table or Labeller queue. */
 export type AssignmentSummary = {

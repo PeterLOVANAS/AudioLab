@@ -23,7 +23,9 @@ export default function WorkbenchLayout({
         <section className="tb-panel tb-workbench-instructions">
           <p className="tb-eyebrow">01 / TASK INSTRUCTIONS</p>
           <h2>{name || "Untitled task"}</h2>
-          <p className="tb-instructions">{instructions || "Instructions will appear here."}</p>
+          <p className="tb-instructions">
+            {instructions || "Instructions will appear here."}
+          </p>
         </section>
         {grounding}
         <section className="tb-panel">

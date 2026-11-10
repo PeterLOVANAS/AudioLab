@@ -1,4 +1,3 @@
-
 /*
  * AudioLab 2.0 — Audio Playback API
  *
@@ -21,9 +20,8 @@ import {
 // Parse a single HTTP byte range.
 function parseRange(
   header: string,
-  total: number
+  total: number,
 ): { start: number; end: number } | null {
-
   const match = /^bytes=(\d*)-(\d*)$/.exec(header);
   if (!match || total <= 0) return null;
 
@@ -43,9 +41,7 @@ function parseRange(
   } else {
     start = Number(match[1]);
 
-    end = match[2] === ""
-      ? total - 1
-      : Math.min(Number(match[2]), total - 1);
+    end = match[2] === "" ? total - 1 : Math.min(Number(match[2]), total - 1);
   }
 
   if (
@@ -63,23 +59,20 @@ function parseRange(
 
 export async function GET(
   request: Request,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ) {
   // Temporary development restriction.
   if (!import.meta.env.DEV) {
     return Response.json(
       { error: "Authentication not configured." },
-      { status: 403 }
+      { status: 403 },
     );
   }
 
   const { id } = await context.params;
 
   if (!z.uuid().safeParse(id).success) {
-    return Response.json(
-      { error: "Invalid audio asset ID." },
-      { status: 400 }
-    );
+    return Response.json({ error: "Invalid audio asset ID." }, { status: 400 });
   }
 
   try {
@@ -89,7 +82,7 @@ export async function GET(
     if (asset.storage.provider !== "r2") {
       return Response.json(
         { error: "Storage provider not yet supported." },
-        { status: 501 }
+        { status: 501 },
       );
     }
 
@@ -99,16 +92,14 @@ export async function GET(
     if (!head) {
       return Response.json(
         { error: "Audio object is missing from storage." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     // 3. Interpret an optional byte-range request.
     const rangeHeader = request.headers.get("range");
 
-    const range = rangeHeader
-      ? parseRange(rangeHeader, head.size)
-      : null; // Mean that if rangeHeader is not null, then parseRange() will be called to parse the rangeHeader and determine the requested byte range. If rangeHeader is null, then range will be set to null, indicating that no specific byte range was requested.
+    const range = rangeHeader ? parseRange(rangeHeader, head.size) : null; // Mean that if rangeHeader is not null, then parseRange() will be called to parse the rangeHeader and determine the requested byte range. If rangeHeader is null, then range will be set to null, indicating that no specific byte range was requested.
 
     if (rangeHeader && !range) {
       return new Response(null, {
@@ -130,13 +121,13 @@ export async function GET(
               length: range.end - range.start + 1,
             },
           }
-        : undefined
+        : undefined,
     );
 
     if (!object || !("body" in object)) {
       return Response.json(
         { error: "Audio content unavailable." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -151,13 +142,10 @@ export async function GET(
     if (range) {
       headers.set(
         "Content-Range",
-        `bytes ${range.start}-${range.end}/${head.size}`
+        `bytes ${range.start}-${range.end}/${head.size}`,
       );
 
-      headers.set(
-        "Content-Length",
-        String(range.end - range.start + 1)
-      );
+      headers.set("Content-Length", String(range.end - range.start + 1));
     } else {
       headers.set("Content-Length", String(head.size));
     }
@@ -166,21 +154,17 @@ export async function GET(
     return new Response(object.body, {
       status: range ? 206 : 200,
       headers,
-    }); // stream instead of converting audio into JSON 
-
+    }); // stream instead of converting audio into JSON
   } catch (error) {
     if (error instanceof AssetNotFoundError) {
-      return Response.json(
-        { error: error.message },
-        { status: 404 }
-      );
+      return Response.json({ error: error.message }, { status: 404 });
     }
 
     console.error("Audio playback failed:", error);
 
     return Response.json(
       { error: "Unable to retrieve audio." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

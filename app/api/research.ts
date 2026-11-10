@@ -1,4 +1,3 @@
-
 /*
  * AudioLab 2.0 — Shared research API interface
  *
@@ -11,10 +10,7 @@
 
 import type { ProjectMember } from "@/lib/contracts/auth";
 
-import type {
-  Dataset,
-  AudioAsset,
-} from "@/lib/contracts/datasets";
+import type { Dataset, AudioAsset } from "@/lib/contracts/datasets";
 
 import type {
   TaskDefinition,
@@ -33,7 +29,6 @@ import type {
   SaveAnnotationInput,
 } from "@/lib/contracts/annotations";
 
-
 // Asynchronous functions the frontend can call to access research data.
 export type ResearchApi = {
   // Project members.
@@ -47,41 +42,32 @@ export type ResearchApi = {
 
   // Admin Task Builder.
   listTaskDefinitions(): Promise<TaskDefinition[]>;
-  createTaskDefinition(
-    definition: TaskDefinition
-  ): Promise<TaskDefinition>;
+  createTaskDefinition(definition: TaskDefinition): Promise<TaskDefinition>;
 
   listTaskInstances(): Promise<TaskInstance[]>;
-  createTaskInstances(
-    instances: TaskInstance[]
-  ): Promise<TaskInstance[]>;
+  createTaskInstances(instances: TaskInstance[]): Promise<TaskInstance[]>;
 
   // Admin Assignment Manager.
   listAssignments(): Promise<Assignment[]>;
-  createAssignment(
-    input: CreateAssignmentInput
-  ): Promise<Assignment>;
+  createAssignment(input: CreateAssignmentInput): Promise<Assignment>;
 
   // Labeller task access.
   getMyTaskQueue(userId: string): Promise<TaskQueueItem[]>;
-  getLabellerTask(
-    assignmentId: string,
-    userId: string
-  ): Promise<LabellerTask>;
+  getLabellerTask(assignmentId: string, userId: string): Promise<LabellerTask>;
 
   // Labeller annotation revisions.
   getLatestAnnotation(
     assignmentId: string,
-    userId: string
+    userId: string,
   ): Promise<AnnotationRevision | null>;
 
   saveDraft(
     input: SaveAnnotationInput,
-    userId: string
+    userId: string,
   ): Promise<AnnotationRevision>;
 
   submitAnnotation(
     input: SaveAnnotationInput,
-    userId: string
+    userId: string,
   ): Promise<AnnotationRevision>;
 };

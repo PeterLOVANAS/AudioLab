@@ -17,14 +17,24 @@ import {
 
 export async function GET(request: Request) {
   if (!import.meta.env.DEV) {
-    return Response.json({ error: "Authentication is not configured." }, { status: 403 });
+    return Response.json(
+      { error: "Authentication is not configured." },
+      { status: 403 },
+    );
   }
   const params = new URL(request.url).searchParams;
   const projectId = params.get("projectId");
   const labellerId = params.get("labellerId");
-  if (!z.uuid().safeParse(projectId).success || !labellerId ||
-      labellerId.trim().length < 1 || labellerId.length > 128) {
-    return Response.json({ error: "Valid projectId and labellerId required." }, { status: 400 });
+  if (
+    !z.uuid().safeParse(projectId).success ||
+    !labellerId ||
+    labellerId.trim().length < 1 ||
+    labellerId.length > 128
+  ) {
+    return Response.json(
+      { error: "Valid projectId and labellerId required." },
+      { status: 400 },
+    );
   }
   try {
     const assignments = await service.queue(env.DB, projectId!, labellerId);

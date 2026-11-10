@@ -17,16 +17,23 @@ import {
 
 // Every handler is explicitly disabled outside development until auth exists.
 function devOnly(): Response | null {
-  return import.meta.env.DEV ? null : Response.json(
-    { error: "Authentication is not configured." }, { status: 403 }
-  );
+  return import.meta.env.DEV
+    ? null
+    : Response.json(
+        { error: "Authentication is not configured." },
+        { status: 403 },
+      );
 }
 
 export async function GET(request: Request) {
-  const denied = devOnly(); if (denied) return denied;
+  const denied = devOnly();
+  if (denied) return denied;
   const projectId = new URL(request.url).searchParams.get("projectId");
   if (!z.uuid().safeParse(projectId).success) {
-    return Response.json({ error: "Valid projectId required." }, { status: 400 });
+    return Response.json(
+      { error: "Valid projectId required." },
+      { status: 400 },
+    );
   }
   try {
     const members = await service.listMembers(env.DB, projectId!);
@@ -36,18 +43,28 @@ export async function GET(request: Request) {
       return Response.json({ error: error.message }, { status: 404 });
     }
     console.error("GET project members failed:", error);
-    return Response.json({ error: "Unable to list project members." }, { status: 500 });
+    return Response.json(
+      { error: "Unable to list project members." },
+      { status: 500 },
+    );
   }
 }
 
 export async function POST(request: Request) {
-  const denied = devOnly(); if (denied) return denied;
+  const denied = devOnly();
+  if (denied) return denied;
   let body: unknown;
-  try { body = await request.json(); }
-  catch { return Response.json({ error: "Expected JSON body." }, { status: 400 }); }
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "Expected JSON body." }, { status: 400 });
+  }
   const parsed = createMemberSchema.safeParse(body);
   if (!parsed.success) {
-    return Response.json({ error: "Invalid member data.", issues: parsed.error.issues }, { status: 400 });
+    return Response.json(
+      { error: "Invalid member data.", issues: parsed.error.issues },
+      { status: 400 },
+    );
   }
   try {
     const member = await service.addMember(env.DB, parsed.data);
@@ -60,6 +77,9 @@ export async function POST(request: Request) {
       return Response.json({ error: error.message }, { status: 409 });
     }
     console.error("POST project member failed:", error);
-    return Response.json({ error: "Unable to create project member." }, { status: 500 });
+    return Response.json(
+      { error: "Unable to create project member." },
+      { status: 500 },
+    );
   }
 }

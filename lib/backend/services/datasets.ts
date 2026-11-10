@@ -12,23 +12,21 @@ import type { Dataset } from "@/lib/contracts/datasets";
 
 import { datasetRepository } from "@/lib/backend/repositories/datasets";
 
-
 // Frontend provides thes fields, backend generated datasetID.
 export type CreateDatasetInput = Omit<Dataset, "id">; // Omit id when constructing a new dataset because The backend generates the id.
 
-
 export class ProjectNotFoundError extends Error {
-    constructor(projectId: string) {
-        super(`Project not found: ${projectId}`);
-        this.name = "ProjectNotFoundError";
-    }
+  constructor(projectId: string) {
+    super(`Project not found: ${projectId}`);
+    this.name = "ProjectNotFoundError";
+  }
 }
 
 export class DatasetAlreadyExistsError extends Error {
   constructor() {
     super(
       "A dataset with this name and version " +
-      "already exists in this project."
+        "already exists in this project.",
     );
 
     this.name = "DatasetAlreadyExistsError";
@@ -40,7 +38,6 @@ export class DatasetAlreadyExistsError extends Error {
 // ------------------------------------------
 
 export const datasetService = {
-
   async list(db: D1Database, projectId: string): Promise<Dataset[]> {
     const exists = await datasetRepository.ProjectExists(db, projectId);
 
@@ -49,7 +46,7 @@ export const datasetService = {
     }
 
     return datasetRepository.findByProject(db, projectId);
-  } ,
+  },
 
   async create(db: D1Database, input: CreateDatasetInput): Promise<Dataset> {
     const exists = await datasetRepository.ProjectExists(db, input.projectId);
@@ -59,10 +56,10 @@ export const datasetService = {
     }
 
     const dataset: Dataset = {
-        id: crypto.randomUUID(), // ID Create by backend. 
-        // Generate a unique identifier for the new dataset using the crypto.randomUUID() method. 
-        ...input, // What is ...input?: The ...input syntax is the spread operator in JavaScript/TypeScript. It takes all the properties from the input object and copies them into the new dataset object. This allows us to create a new dataset object that includes all the properties provided by the frontend (name, version, description, projectId) while also adding a newly generated id.
-    }; 
+      id: crypto.randomUUID(), // ID Create by backend.
+      // Generate a unique identifier for the new dataset using the crypto.randomUUID() method.
+      ...input, // What is ...input?: The ...input syntax is the spread operator in JavaScript/TypeScript. It takes all the properties from the input object and copies them into the new dataset object. This allows us to create a new dataset object that includes all the properties provided by the frontend (name, version, description, projectId) while also adding a newly generated id.
+    };
 
     const inserted = await datasetRepository.insert(db, dataset);
 
@@ -71,7 +68,5 @@ export const datasetService = {
     }
 
     return dataset;
-  }
-
-
-}
+  },
+};

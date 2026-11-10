@@ -8,7 +8,10 @@
  * HTTP route -> validation -> this service -> repository -> D1.
  */
 import type { CreateTaskInstanceInput } from "@/lib/backend/validation/task-instances";
-import type { TaskInstancePreview, PublishedDefinitionData } from "@/lib/contracts/task-instances";
+import type {
+  TaskInstancePreview,
+  PublishedDefinitionData,
+} from "@/lib/contracts/task-instances";
 import {
   taskInstanceRepository as repo,
   type TaskInstanceRow,
@@ -29,7 +32,10 @@ export class TaskInstanceConflictError extends Error {}
  * imported early annotation cannot leak through this response.
  */
 function toPreview(row: TaskInstanceRow): TaskInstancePreview {
-  const draft = JSON.parse(row.definitionJson) as Omit<PublishedDefinitionData, "id" | "version">;
+  const draft = JSON.parse(row.definitionJson) as Omit<
+    PublishedDefinitionData,
+    "id" | "version"
+  >;
   return {
     id: row.id,
     projectId: row.projectId,
@@ -46,13 +52,17 @@ function toPreview(row: TaskInstanceRow): TaskInstancePreview {
       ...draft,
     },
     // Null means this task was created as audio-only, not from MMAU QA.
-    sourceRecord: row.sourceRecordId === null ? null : {
-      sourceRecordId: row.sourceRecordId,
-      question: row.sourceQuestion,
-      choices: row.sourceChoicesJson === null
+    sourceRecord:
+      row.sourceRecordId === null
         ? null
-        : JSON.parse(row.sourceChoicesJson) as string[],
-    },
+        : {
+            sourceRecordId: row.sourceRecordId,
+            question: row.sourceQuestion,
+            choices:
+              row.sourceChoicesJson === null
+                ? null
+                : (JSON.parse(row.sourceChoicesJson) as string[]),
+          },
     createdAt: row.createdAt,
   };
 }
@@ -85,50 +95,80 @@ export const taskInstanceService = {
       asset.projectId !== input.projectId
     ) {
       throw new TaskInstanceProjectMismatchError(
-        "The definition and audio asset must belong to the same project."
+        "The definition and audio asset must belong to the same project.",
       );
     }
 
-    if(input.audioAssetIds){
-      if(input.audioAssetIds[0]!==input.assetId || new Set(input.audioAssetIds).size!==input.audioAssetIds.length)
-        throw new TaskInstanceProjectMismatchError("The batch must start with assetId and contain unique assets.");
+    if (input.audioAssetIds) {
+      if (
+        input.audioAssetIds[0] !== input.assetId ||
+        new Set(input.audioAssetIds).size !== input.audioAssetIds.length
+      )
+        throw new TaskInstanceProjectMismatchError(
+          "The batch must start with assetId and contain unique assets.",
+        );
       // All recordings, not just the first, must belong to this project.
-      for(const id of input.audioAssetIds){
-        const member=await repo.assetProject(db,id);
-        if(!member||member.projectId!==input.projectId)
-          throw new TaskInstanceProjectMismatchError("Every batch audio must belong to the task project.");
+      for (const id of input.audioAssetIds) {
+        const member = await repo.assetProject(db, id);
+        if (!member || member.projectId !== input.projectId)
+          throw new TaskInstanceProjectMismatchError(
+            "Every batch audio must belong to the task project.",
+          );
       }
     }
     // Publishing is required: never run a labelling task from a mutable draft.
     const published = await repo.publishedExists(
-      db, input.definitionId, input.definitionVersion
+      db,
+      input.definitionId,
+      input.definitionVersion,
     );
     if (!published) {
       throw new TaskInstanceRelatedNotFoundError(
-        "Requested published definition version not found."
+        "Requested published definition version not found.",
       );
     }
     // Enforce batch-size feasibility when creating the task. Failing here is
     // better than assigning an impossible protocol to a labeller and receiving
     // HTTP 422 only at submission time.
-    const snapshot=await db.prepare(`SELECT definition_json AS json FROM task_definition_versions
-      WHERE definition_id=? AND version=?`)
-      .bind(input.definitionId,input.definitionVersion).first<{json:string}>();
-    const snapshotDefinition = JSON.parse(snapshot!.json) as {blocks:Array<{
-      type:string;numBatch?:number;stimulusSlots?:string[];rankingMode?:string
-    }>};
-    const requiredAssets=Math.max(1,...snapshotDefinition.blocks.map(b=>
-      b.type==="ranking"&&b.rankingMode!=="labels" ? Math.max(1,b.stimulusSlots?.length??0) : b.numBatch??1));
-    const provided=input.audioAssetIds?.length??1;
-    if(requiredAssets>provided)
-      throw new TaskInstanceProjectMismatchError(`Published task requires ${requiredAssets} recordings, only ${provided} provided.`);
+    const snapshot = await db
+      .prepare(
+        `SELECT definition_json AS json FROM task_definition_versions
+      WHERE definition_id=? AND version=?`,
+      )
+      .bind(input.definitionId, input.definitionVersion)
+      .first<{ json: string }>();
+    const snapshotDefinition = JSON.parse(snapshot!.json) as {
+      blocks: Array<{
+        type: string;
+        numBatch?: number;
+        stimulusSlots?: string[];
+        rankingMode?: string;
+      }>;
+    };
+    const requiredAssets = Math.max(
+      1,
+      ...snapshotDefinition.blocks.map((b) =>
+        b.type === "ranking" && b.rankingMode !== "labels"
+          ? Math.max(1, b.stimulusSlots?.length ?? 0)
+          : (b.numBatch ?? 1),
+      ),
+    );
+    const provided = input.audioAssetIds?.length ?? 1;
+    if (requiredAssets > provided)
+      throw new TaskInstanceProjectMismatchError(
+        `Published task requires ${requiredAssets} recordings, only ${provided} provided.`,
+      );
 
     let sourceRecordDbId: string | null = null;
     if (input.sourceRecordId !== undefined) {
-      const source = await repo.sourceRow(db, input.assetId, input.sourceRecordId);
+      const source = await repo.sourceRow(
+        db,
+        input.assetId,
+        input.sourceRecordId,
+      );
       if (!source) {
         throw new TaskInstanceRelatedNotFoundError(
-          "The source question does not belong to this audio asset."
+          "The source question does not belong to this audio asset.",
         );
       }
       sourceRecordDbId = source.id;
@@ -136,23 +176,26 @@ export const taskInstanceService = {
 
     // Two independent source questions attached to ONE recording may be
     // different tasks. A stable key makes retried creation detectable.
-    const instanceKey = input.sourceRecordId === undefined
-      ? "audio"
-      : `source:${input.sourceRecordId}`;
+    const instanceKey =
+      input.sourceRecordId === undefined
+        ? "audio"
+        : `source:${input.sourceRecordId}`;
 
     const id = crypto.randomUUID();
     const inserted = await repo.insert(db, {
-      id, projectId: input.projectId,
+      id,
+      projectId: input.projectId,
       definitionId: input.definitionId,
       definitionVersion: input.definitionVersion,
       assetId: input.assetId,
-      sourceRecordDbId, instanceKey,
-      audioAssetIds:input.audioAssetIds,
+      sourceRecordDbId,
+      instanceKey,
+      audioAssetIds: input.audioAssetIds,
     });
 
     if (!inserted) {
       throw new TaskInstanceConflictError(
-        "This definition/version/audio/source combination already has a task instance."
+        "This definition/version/audio/source combination already has a task instance.",
       );
     }
     return this.get(db, id);
@@ -162,17 +205,28 @@ export const taskInstanceService = {
   async get(db: D1Database, id: string) {
     const row = await repo.find(db, id);
     if (!row) throw new TaskInstanceNotFoundError("Task instance not found.");
-    const preview=toPreview(row);
+    const preview = toPreview(row);
     // Existing tasks created before migration 0008 still have one primary WAV.
-    const assets=await db.prepare(`SELECT asset_id AS id,slot_index AS position
-      FROM task_instance_audio_slots WHERE task_instance_id=? ORDER BY slot_index`)
-      .bind(id).all<{id:string;position:number}>();
-    const audioAssets=(assets.results.length?assets.results:[{id:row.assetId,position:0}])
-      .map(a=>({...a,url:`/api/v1/assets/${a.id}/audio`}));
-    const candidates=await db.prepare(`SELECT id,label,provenance
-      FROM annotation_candidates WHERE asset_id=? ORDER BY created_at,id LIMIT 100`)
-      .bind(row.assetId).all<{id:string;label:string;provenance:string}>();
-    return {...preview,audioAssets,candidates:candidates.results};
+    const assets = await db
+      .prepare(
+        `SELECT asset_id AS id,slot_index AS position
+      FROM task_instance_audio_slots WHERE task_instance_id=? ORDER BY slot_index`,
+      )
+      .bind(id)
+      .all<{ id: string; position: number }>();
+    const audioAssets = (
+      assets.results.length
+        ? assets.results
+        : [{ id: row.assetId, position: 0 }]
+    ).map((a) => ({ ...a, url: `/api/v1/assets/${a.id}/audio` }));
+    const candidates = await db
+      .prepare(
+        `SELECT id,label,provenance
+      FROM annotation_candidates WHERE asset_id=? ORDER BY created_at,id LIMIT 100`,
+      )
+      .bind(row.assetId)
+      .all<{ id: string; label: string; provenance: string }>();
+    return { ...preview, audioAssets, candidates: candidates.results };
   },
 
   /** List compact summaries for the Admin task-management screen. */
@@ -182,12 +236,16 @@ export const taskInstanceService = {
     }
     // For a dataset filter, check ownership even if no task instances exist.
     if (datasetId) {
-      const dataset = await db.prepare(
-        "SELECT project_id AS projectId FROM datasets WHERE id = ?"
-      ).bind(datasetId).first<{ projectId: string }>();
-      if (!dataset) throw new TaskInstanceRelatedNotFoundError("Dataset not found.");
+      const dataset = await db
+        .prepare("SELECT project_id AS projectId FROM datasets WHERE id = ?")
+        .bind(datasetId)
+        .first<{ projectId: string }>();
+      if (!dataset)
+        throw new TaskInstanceRelatedNotFoundError("Dataset not found.");
       if (dataset.projectId !== projectId) {
-        throw new TaskInstanceProjectMismatchError("Dataset belongs to another project.");
+        throw new TaskInstanceProjectMismatchError(
+          "Dataset belongs to another project.",
+        );
       }
     }
     return repo.list(db, projectId, datasetId);

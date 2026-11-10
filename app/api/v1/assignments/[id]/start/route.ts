@@ -22,18 +22,30 @@ type Ctx = { params: Promise<{ id: string }> };
 
 export async function POST(request: Request, context: Ctx) {
   if (!import.meta.env.DEV) {
-    return Response.json({ error: "Authentication is not configured." }, { status: 403 });
+    return Response.json(
+      { error: "Authentication is not configured." },
+      { status: 403 },
+    );
   }
   const { id } = await context.params;
   if (!z.uuid().safeParse(id).success) {
-    return Response.json({ error: "Valid assignment ID required." }, { status: 400 });
+    return Response.json(
+      { error: "Valid assignment ID required." },
+      { status: 400 },
+    );
   }
   let body: unknown;
-  try { body = await request.json(); }
-  catch { return Response.json({ error: "Expected JSON body." }, { status: 400 }); }
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "Expected JSON body." }, { status: 400 });
+  }
   const parsed = startAssignmentSchema.safeParse(body);
   if (!parsed.success) {
-    return Response.json({ error: "Invalid start request.", issues: parsed.error.issues }, { status: 400 });
+    return Response.json(
+      { error: "Invalid start request.", issues: parsed.error.issues },
+      { status: 400 },
+    );
   }
   try {
     const assignment = await service.start(env.DB, id, parsed.data.labellerId);
@@ -46,6 +58,9 @@ export async function POST(request: Request, context: Ctx) {
       return Response.json({ error: error.message }, { status: 409 });
     }
     console.error("POST assignment start failed:", error);
-    return Response.json({ error: "Unable to start assignment." }, { status: 500 });
+    return Response.json(
+      { error: "Unable to start assignment." },
+      { status: 500 },
+    );
   }
 }

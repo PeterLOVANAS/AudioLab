@@ -19,11 +19,17 @@ type Ctx = { params: Promise<{ id: string }> };
 
 export async function GET(_request: Request, context: Ctx) {
   if (!import.meta.env.DEV) {
-    return Response.json({ error: "Authentication is not configured." }, { status: 403 });
+    return Response.json(
+      { error: "Authentication is not configured." },
+      { status: 403 },
+    );
   }
   const { id } = await context.params;
   if (!z.uuid().safeParse(id).success) {
-    return Response.json({ error: "Valid task instance ID required." }, { status: 400 });
+    return Response.json(
+      { error: "Valid task instance ID required." },
+      { status: 400 },
+    );
   }
   try {
     const taskInstance = await service.get(env.DB, id);
@@ -33,6 +39,9 @@ export async function GET(_request: Request, context: Ctx) {
       return Response.json({ error: error.message }, { status: 404 });
     }
     console.error("GET task instance failed", error);
-    return Response.json({ error: "Unable to retrieve task instance." }, { status: 500 });
+    return Response.json(
+      { error: "Unable to retrieve task instance." },
+      { status: 500 },
+    );
   }
 }

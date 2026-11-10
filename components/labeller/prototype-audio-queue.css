@@ -1,0 +1,129 @@
+/* Prototype-style audio queue. Namespaced: no sidebar or Builder styles replaced.
+   This file is imported ONLY by IntegratedLabellerWorkspace.tsx. */
+.alw4-audio-workspace .alw4-queue {
+  display: grid;
+  gap: 0.65rem;
+  min-width: 0;
+}
+.alw4-audio-workspace .alw4-queue-head {
+  display: grid;
+  gap: 0.1rem;
+}
+.alw4-audio-workspace .alw4-queue-head h2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.02rem;
+  margin: 0.15rem 0;
+}
+.alw4-audio-workspace .alw4-counter {
+  background: #e5f0f6;
+  color: #2a6386;
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.75rem;
+}
+.alw4-audio-workspace .alw4-field {
+  display: grid;
+  gap: 0.3rem;
+  color: #52667a;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.alw4-audio-workspace .alw4-field select,
+.alw4-audio-workspace .alw4-filter,
+.alw4-audio-workspace .alw4-search {
+  border: 1px solid #d4dfeb;
+  background: #fff;
+  border-radius: 8px;
+  color: #263d56;
+  min-width: 0;
+  width: 100%;
+}
+.alw4-audio-workspace .alw4-field select,
+.alw4-audio-workspace .alw4-filter {
+  padding: 0.52rem 0.55rem;
+  font: inherit;
+  font-size: 0.85rem;
+}
+.alw4-audio-workspace .alw4-batch-note {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.55rem;
+  border: 1px solid #cfe3de;
+  background: #edf8f5;
+  border-radius: 8px;
+  color: #28675a;
+  font-size: 0.82rem;
+}
+.alw4-audio-workspace .alw4-search {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0 0.55rem;
+}
+.alw4-audio-workspace .alw4-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.55rem 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.85rem;
+  color: inherit;
+}
+.alw4-audio-workspace .alw4-queue-list {
+  display: grid;
+  align-content: start;
+  gap: 0.25rem;
+  max-height: min(62vh, 660px);
+  overflow-y: auto;
+  padding-right: 0.15rem;
+}
+.alw4-audio-workspace .alw4-audio-row {
+  display: flex;
+  width: 100%;
+  border: 1px solid #e3e9f0;
+  padding: 0.6rem 0.48rem;
+  margin: 0;
+  background: #fff;
+  min-height: 70px;
+}
+.alw4-audio-workspace .alw4-audio-row:hover:not(:disabled) {
+  border-color: #9accc4;
+  background: #f0f9f6;
+}
+.alw4-audio-workspace .alw4-audio-row.active {
+  border-color: #67baa9;
+  background: #e7f4f0;
+  box-shadow: inset 3px 0 #267961;
+}
+.alw4-audio-workspace .alw4-audio-row .alw3-status {
+  font-size: 0.67rem;
+  max-width: 70px;
+  white-space: normal;
+  text-align: center;
+}
+.alw4-audio-workspace .alw4-audio-row .alw3-queue-text strong {
+  font-size: 0.82rem;
+}
+.alw4-audio-workspace .alw4-privacy {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  padding: 0.65rem 0;
+  border-top: 1px solid #e5eaf0;
+  font-size: 0.76rem;
+  color: #637b8d;
+}
+.alw4-audio-workspace .alw4-privacy svg {
+  flex: none;
+}
+@media (max-width: 680px) {
+  .alw4-audio-workspace .alw4-queue-list {
+    max-height: 38vh;
+  }
+}

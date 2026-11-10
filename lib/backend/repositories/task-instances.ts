@@ -48,22 +48,37 @@ const selectTask = `
 export const taskInstanceRepository = {
   /** Project existence: differentiates an unknown project from empty results. */
   async projectExists(db: D1Database, id: string): Promise<boolean> {
-    return (await db.prepare("SELECT id FROM projects WHERE id = ? LIMIT 1")
-      .bind(id).first<{ id: string }>()) !== null;
+    return (
+      (await db
+        .prepare("SELECT id FROM projects WHERE id = ? LIMIT 1")
+        .bind(id)
+        .first<{ id: string }>()) !== null
+    );
   },
 
   /** Read a Task Definition's owning project. A draft alone isn't executable. */
   async definitionProject(db: D1Database, definitionId: string) {
-    return db.prepare("SELECT project_id AS projectId FROM task_definitions WHERE id = ?")
-      .bind(definitionId).first<{ projectId: string }>();
+    return db
+      .prepare(
+        "SELECT project_id AS projectId FROM task_definitions WHERE id = ?",
+      )
+      .bind(definitionId)
+      .first<{ projectId: string }>();
   },
 
   /** Ensure the specifically requested frozen version exists. */
   async publishedExists(db: D1Database, definitionId: string, version: number) {
-    return (await db.prepare(`
+    return (
+      (await db
+        .prepare(
+          `
       SELECT version FROM task_definition_versions
       WHERE definition_id = ? AND version = ?
-    `).bind(definitionId, version).first<{ version: number }>()) !== null;
+    `,
+        )
+        .bind(definitionId, version)
+        .first<{ version: number }>()) !== null
+    );
   },
 
   /**
@@ -72,12 +87,17 @@ export const taskInstanceRepository = {
    * mixing of Project A's recordings with Project B's definitions.
    */
   async assetProject(db: D1Database, assetId: string) {
-    return db.prepare(`
+    return db
+      .prepare(
+        `
       SELECT d.project_id AS projectId
       FROM audio_assets AS a
       JOIN datasets AS d ON d.id = a.dataset_id
       WHERE a.id = ?
-    `).bind(assetId).first<{ projectId: string }>();
+    `,
+      )
+      .bind(assetId)
+      .first<{ projectId: string }>();
   },
 
   /**
@@ -85,10 +105,15 @@ export const taskInstanceRepository = {
    * within its asset, and is resolved to source_records.id for the FK.
    */
   async sourceRow(db: D1Database, assetId: string, sourceRecordId: string) {
-    return db.prepare(`
+    return db
+      .prepare(
+        `
       SELECT id FROM source_records
       WHERE asset_id = ? AND source_record_id = ?
-    `).bind(assetId, sourceRecordId).first<{ id: string }>();
+    `,
+      )
+      .bind(assetId, sourceRecordId)
+      .first<{ id: string }>();
   },
 
   /**
@@ -96,42 +121,65 @@ export const taskInstanceRepository = {
    * Unlike REPLACE, IGNORE won't delete an existing task or overwrite it.
    * A zero-row result becomes HTTP 409 via the service.
    */
-  async insert(db: D1Database, input: {
-    id: string; projectId: string; definitionId: string;
-    definitionVersion: number; assetId: string;
-    sourceRecordDbId: string | null; instanceKey: string;
-    audioAssetIds?:string[];
-  }): Promise<boolean> {
-    const statement = db.prepare(`
+  async insert(
+    db: D1Database,
+    input: {
+      id: string;
+      projectId: string;
+      definitionId: string;
+      definitionVersion: number;
+      assetId: string;
+      sourceRecordDbId: string | null;
+      instanceKey: string;
+      audioAssetIds?: string[];
+    },
+  ): Promise<boolean> {
+    const statement = db
+      .prepare(
+        `
       INSERT INTO task_instances
         (id, project_id, definition_id, definition_version,
          asset_id, source_record_db_id, instance_key)
       VALUES (?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT (definition_id, definition_version, asset_id, instance_key)
       DO NOTHING
-    `).bind(
-      input.id, input.projectId, input.definitionId, input.definitionVersion,
-      input.assetId, input.sourceRecordDbId, input.instanceKey,
-    );
-    if(!input.audioAssetIds){
-      const result=await statement.run();
-      return result.meta.changes===1;
+    `,
+      )
+      .bind(
+        input.id,
+        input.projectId,
+        input.definitionId,
+        input.definitionVersion,
+        input.assetId,
+        input.sourceRecordDbId,
+        input.instanceKey,
+      );
+    if (!input.audioAssetIds) {
+      const result = await statement.run();
+      return result.meta.changes === 1;
     }
     // D1 batch executes SQL statements transactionally. Slot inserts can only
     // happen for the newly generated task UUID: if the primary INSERT was a
     // uniqueness collision, WHERE EXISTS prevents orphaned slot rows.
-    const slots=input.audioAssetIds.map((assetId,index)=>db.prepare(`
+    const slots = input.audioAssetIds.map((assetId, index) =>
+      db
+        .prepare(
+          `
       INSERT INTO task_instance_audio_slots(task_instance_id,slot_index,asset_id)
-      SELECT ?,?,? WHERE EXISTS(SELECT 1 FROM task_instances WHERE id=?)`)
-      .bind(input.id,index,assetId,input.id));
-    const result=await db.batch([statement,...slots]);
-    return result[0].meta.changes===1;
+      SELECT ?,?,? WHERE EXISTS(SELECT 1 FROM task_instances WHERE id=?)`,
+        )
+        .bind(input.id, index, assetId, input.id),
+    );
+    const result = await db.batch([statement, ...slots]);
+    return result[0].meta.changes === 1;
   },
 
   /** One resolved task with audio path and the frozen definition JSON. */
   async find(db: D1Database, id: string): Promise<TaskInstanceRow | null> {
-    return db.prepare(`${selectTask} WHERE t.id = ?`)
-      .bind(id).first<TaskInstanceRow>();
+    return db
+      .prepare(`${selectTask} WHERE t.id = ?`)
+      .bind(id)
+      .first<TaskInstanceRow>();
   },
 
   /**
@@ -160,14 +208,24 @@ export const taskInstanceRepository = {
     const stmt = db.prepare(sql);
     const result = datasetId
       ? await stmt.bind(projectId, datasetId).all<{
-          id: string; projectId: string; assetId: string; originalPath: string;
-          definitionId: string; definitionVersion: number;
-          definitionName: string; createdAt: string;
+          id: string;
+          projectId: string;
+          assetId: string;
+          originalPath: string;
+          definitionId: string;
+          definitionVersion: number;
+          definitionName: string;
+          createdAt: string;
         }>()
       : await stmt.bind(projectId).all<{
-          id: string; projectId: string; assetId: string; originalPath: string;
-          definitionId: string; definitionVersion: number;
-          definitionName: string; createdAt: string;
+          id: string;
+          projectId: string;
+          assetId: string;
+          originalPath: string;
+          definitionId: string;
+          definitionVersion: number;
+          definitionName: string;
+          createdAt: string;
         }>();
     return result.results;
   },

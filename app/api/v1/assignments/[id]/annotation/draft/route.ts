@@ -8,7 +8,8 @@
  * Body: { labellerId, expectedRevision, answers: {blockId: value} }
  */
 import {
-  handleAnnotationWrite, type AnnotationRouteContext,
+  handleAnnotationWrite,
+  type AnnotationRouteContext,
 } from "@/lib/backend/http/annotation-routes";
 
 export async function POST(request: Request, context: AnnotationRouteContext) {

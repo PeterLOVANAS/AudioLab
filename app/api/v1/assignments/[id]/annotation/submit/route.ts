@@ -8,7 +8,8 @@
  * Submitted revisions are IMMUTABLE. Any later save returns HTTP 409.
  */
 import {
-  handleAnnotationWrite, type AnnotationRouteContext,
+  handleAnnotationWrite,
+  type AnnotationRouteContext,
 } from "@/lib/backend/http/annotation-routes";
 
 export async function POST(request: Request, context: AnnotationRouteContext) {

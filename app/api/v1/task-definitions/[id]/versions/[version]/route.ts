@@ -20,7 +20,10 @@ type Ctx = { params: Promise<{ id: string; version: string }> };
 
 export async function GET(_request: Request, context: Ctx) {
   if (!import.meta.env.DEV) {
-    return Response.json({ error: "Authentication not configured." }, { status: 403 });
+    return Response.json(
+      { error: "Authentication not configured." },
+      { status: 403 },
+    );
   }
 
   const { id, version: versionText } = await context.params;
@@ -37,7 +40,7 @@ export async function GET(_request: Request, context: Ctx) {
   ) {
     return Response.json(
       { error: "Invalid definition ID or version." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -51,7 +54,7 @@ export async function GET(_request: Request, context: Ctx) {
     console.error("GET published task definition failed", error);
     return Response.json(
       { error: "Unable to retrieve published version." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -6,7 +6,8 @@
  * Unlike an imported MMAU answer, an assignment is new platform state.
  */
 import type {
-  CreateAssignmentInput, CreateMemberInput,
+  CreateAssignmentInput,
+  CreateMemberInput,
 } from "@/lib/backend/validation/assignments";
 import { assignmentRepository as repo } from "@/lib/backend/repositories/assignments";
 import { taskInstanceService } from "@/lib/backend/services/task-instances";
@@ -30,7 +31,9 @@ export const assignmentService = {
     }
     const inserted = await repo.insertMember(db, input);
     if (!inserted) {
-      throw new AssignmentConflictError("This user is already registered in this project.");
+      throw new AssignmentConflictError(
+        "This user is already registered in this project.",
+      );
     }
     // Read back the canonical database representation including createdAt.
     return repo.member(db, input.projectId, input.userId);
@@ -58,15 +61,19 @@ export const assignmentService = {
     }
     if (instance.projectId !== input.projectId) {
       throw new AssignmentProjectMismatchError(
-        "Task instance belongs to another project."
+        "Task instance belongs to another project.",
       );
     }
     const member = await repo.member(db, input.projectId, input.labellerId);
     if (!member) {
-      throw new AssignmentRelatedNotFoundError("Labeller is not a member of this project.");
+      throw new AssignmentRelatedNotFoundError(
+        "Labeller is not a member of this project.",
+      );
     }
     if (member.role !== "labeller") {
-      throw new AssignmentRoleError("Only a member with the labeller role can be assigned.");
+      throw new AssignmentRoleError(
+        "Only a member with the labeller role can be assigned.",
+      );
     }
     const id = crypto.randomUUID();
     const inserted = await repo.insertAssignment(db, {
@@ -77,7 +84,7 @@ export const assignmentService = {
     });
     if (!inserted) {
       throw new AssignmentConflictError(
-        "This task instance has already been assigned to that labeller."
+        "This task instance has already been assigned to that labeller.",
       );
     }
     return this.getSummary(db, id);
@@ -96,7 +103,10 @@ export const assignmentService = {
    */
   async detail(db: D1Database, id: string) {
     const assignment = await this.getSummary(db, id);
-    const taskInstance = await taskInstanceService.get(db, assignment.taskInstanceId);
+    const taskInstance = await taskInstanceService.get(
+      db,
+      assignment.taskInstanceId,
+    );
     return { assignment, taskInstance };
   },
 
@@ -113,10 +123,14 @@ export const assignmentService = {
   async queue(db: D1Database, projectId: string, labellerId: string) {
     const member = await repo.member(db, projectId, labellerId);
     if (!member) {
-      throw new AssignmentRelatedNotFoundError("Labeller not found in this project.");
+      throw new AssignmentRelatedNotFoundError(
+        "Labeller not found in this project.",
+      );
     }
     if (member.role !== "labeller") {
-      throw new AssignmentRoleError("This member does not have the labeller role.");
+      throw new AssignmentRoleError(
+        "This member does not have the labeller role.",
+      );
     }
     return repo.queue(db, projectId, labellerId);
   },
@@ -129,12 +143,14 @@ export const assignmentService = {
   async start(db: D1Database, id: string, labellerId: string) {
     const current = await this.getSummary(db, id);
     if (current.labellerId !== labellerId) {
-      throw new AssignmentConflictError("Assignment belongs to a different labeller.");
+      throw new AssignmentConflictError(
+        "Assignment belongs to a different labeller.",
+      );
     }
     const changed = await repo.start(db, id, labellerId);
     if (!changed) {
       throw new AssignmentConflictError(
-        `Cannot start assignment in state '${current.status}'.`
+        `Cannot start assignment in state '${current.status}'.`,
       );
     }
     return this.getSummary(db, id);

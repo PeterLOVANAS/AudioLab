@@ -1,4 +1,3 @@
-
 /*
  * AudioLab 2.0 — Annotation response contracts
  *
@@ -104,9 +103,7 @@ export type TimelinePoint = {
 };
 
 // A timeline may contain intervals and points.
-export type TimelineMark =
-  | TimelineInterval
-  | TimelinePoint;
+export type TimelineMark = TimelineInterval | TimelinePoint;
 
 // All timeline annotations belonging to one block.
 export type TimelineAnnotationAnswer = BaseAnswer & {
@@ -216,9 +213,7 @@ export type RepeatedGroupAnswer = BaseAnswer & {
  * ==========================================
  */
 
-export type AnnotationAnswer =
-  | FieldAnswer
-  | RepeatedGroupAnswer;
+export type AnnotationAnswer = FieldAnswer | RepeatedGroupAnswer;
 
 /*
  * ==========================================
@@ -249,9 +244,7 @@ export type SaveAnnotationInput = {
  * This represents a revision persisted by the backend.
  */
 
-export type AnnotationStatus =
-  | "draft"
-  | "submitted";
+export type AnnotationStatus = "draft" | "submitted";
 
 export type AnnotationRevision = {
   id: string;

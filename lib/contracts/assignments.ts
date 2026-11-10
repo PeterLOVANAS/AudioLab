@@ -1,4 +1,3 @@
-
 /*
  * AudioLab 2.0 — Assignment contracts
  *
@@ -11,10 +10,7 @@
 
 // The possible states of an individual assignment.
 export type AssignmentStatus =
-  | "assigned"
-  | "in_progress"
-  | "submitted"
-  | "reviewed";
+  "assigned" | "in_progress" | "submitted" | "reviewed";
 
 // One task assigned to one Labeller.
 export type Assignment = {

@@ -18,40 +18,64 @@ import {
 } from "@/lib/backend/services/assignments";
 
 function devOnly(): Response | null {
-  return import.meta.env.DEV ? null : Response.json(
-    { error: "Authentication is not configured." }, { status: 403 }
-  );
+  return import.meta.env.DEV
+    ? null
+    : Response.json(
+        { error: "Authentication is not configured." },
+        { status: 403 },
+      );
 }
 
 export async function GET(request: Request) {
-  const denied = devOnly(); if (denied) return denied;
+  const denied = devOnly();
+  if (denied) return denied;
   const params = new URL(request.url).searchParams;
   const projectId = params.get("projectId");
   const labellerId = params.get("labellerId");
-  if (!z.uuid().safeParse(projectId).success ||
-    (labellerId !== null && (labellerId.trim().length < 1 || labellerId.length > 128))) {
-    return Response.json({ error: "Valid projectId and optional labellerId required." }, { status: 400 });
+  if (
+    !z.uuid().safeParse(projectId).success ||
+    (labellerId !== null &&
+      (labellerId.trim().length < 1 || labellerId.length > 128))
+  ) {
+    return Response.json(
+      { error: "Valid projectId and optional labellerId required." },
+      { status: 400 },
+    );
   }
   try {
-    const assignments = await service.list(env.DB, projectId!, labellerId ?? undefined);
+    const assignments = await service.list(
+      env.DB,
+      projectId!,
+      labellerId ?? undefined,
+    );
     return Response.json({ assignments });
   } catch (error) {
     if (error instanceof AssignmentRelatedNotFoundError) {
       return Response.json({ error: error.message }, { status: 404 });
     }
     console.error("GET assignments failed:", error);
-    return Response.json({ error: "Unable to list assignments." }, { status: 500 });
+    return Response.json(
+      { error: "Unable to list assignments." },
+      { status: 500 },
+    );
   }
 }
 
 export async function POST(request: Request) {
-  const denied = devOnly(); if (denied) return denied;
+  const denied = devOnly();
+  if (denied) return denied;
   let body: unknown;
-  try { body = await request.json(); }
-  catch { return Response.json({ error: "Expected JSON body." }, { status: 400 }); }
+  try {
+    body = await request.json();
+  } catch {
+    return Response.json({ error: "Expected JSON body." }, { status: 400 });
+  }
   const parsed = createAssignmentSchema.safeParse(body);
   if (!parsed.success) {
-    return Response.json({ error: "Invalid assignment.", issues: parsed.error.issues }, { status: 400 });
+    return Response.json(
+      { error: "Invalid assignment.", issues: parsed.error.issues },
+      { status: 400 },
+    );
   }
   try {
     const assignment = await service.create(env.DB, parsed.data);
@@ -60,11 +84,17 @@ export async function POST(request: Request) {
     if (error instanceof AssignmentRelatedNotFoundError) {
       return Response.json({ error: error.message }, { status: 404 });
     }
-    if (error instanceof AssignmentProjectMismatchError ||
-      error instanceof AssignmentRoleError || error instanceof AssignmentConflictError) {
+    if (
+      error instanceof AssignmentProjectMismatchError ||
+      error instanceof AssignmentRoleError ||
+      error instanceof AssignmentConflictError
+    ) {
       return Response.json({ error: error.message }, { status: 409 });
     }
     console.error("POST assignment failed:", error);
-    return Response.json({ error: "Unable to create assignment." }, { status: 500 });
+    return Response.json(
+      { error: "Unable to create assignment." },
+      { status: 500 },
+    );
   }
 }
