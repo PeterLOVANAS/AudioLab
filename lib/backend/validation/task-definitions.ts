@@ -34,7 +34,10 @@ const blockTypeSchema = z.enum([
   "ranking",
   "repeated_group",
   // Purely presentational blocks: their IDs never occur in human answers.
-  "section", "callout", "audio_player", "transcript_summary",
+  "section",
+  "callout",
+  "audio_player",
+  "transcript_summary",
 ]);
 
 /**
@@ -51,12 +54,14 @@ const blockTypeSchema = z.enum([
  * fields also pass: full discriminated-union validation is still required
  * before using advanced blocks in production annotations.
  */
-const blockSchema = z.object({
-  id: z.string().trim().min(1).max(80),
-  type: blockTypeSchema,
-  label: z.string().trim().min(1).max(300),
-  required: z.boolean(),
-}).passthrough();
+const blockSchema = z
+  .object({
+    id: z.string().trim().min(1).max(80),
+    type: blockTypeSchema,
+    label: z.string().trim().min(1).max(300),
+    required: z.boolean(),
+  })
+  .passthrough();
 
 /**
  * Annotation policy is part of the definition, NOT a vote or annotation yet.
@@ -78,14 +83,16 @@ const policySchema = z.strictObject({
  * For example, `spectrogram: true` is a UI configuration request, not an
  * instruction to the backend to generate spectrogram pixels.
  */
-const workspaceSchema = z.object({
-  waveform: z.boolean().optional(),
-  spectrogram: z.boolean().optional(),
-  pitch: z.boolean().optional(),
-  formants: z.boolean().optional(),
-  mfcc: z.boolean().optional(),
-  allowTextGridImport: z.boolean().optional(),
-}).passthrough();
+const workspaceSchema = z
+  .object({
+    waveform: z.boolean().optional(),
+    spectrogram: z.boolean().optional(),
+    pitch: z.boolean().optional(),
+    formants: z.boolean().optional(),
+    mfcc: z.boolean().optional(),
+    allowTextGridImport: z.boolean().optional(),
+  })
+  .passthrough();
 
 /**
  * A DRAFT is the editable description of one annotation protocol.
@@ -96,255 +103,493 @@ const workspaceSchema = z.object({
  * per-field validation above cannot detect duplicate IDs or references to
  * blocks that appear later in the form.
  */
-export const taskDraftSchema = z.strictObject({
-  name: z.string().trim().min(1).max(160),
-  description: z.string().max(4000),
-  domain: z.enum(["sound", "speech", "general"]),
-  instructions: z.string().trim().min(1).max(20000),
-  blocks: z.array(blockSchema).min(1).max(100),
-  policy: policySchema,
-  workspace: workspaceSchema.optional(),
-}).superRefine((definition, ctx) => {
-  // `seen` contains IDs of PREVIOUS blocks as we iterate left-to-right.
-  // It serves two roles: detecting duplicate block IDs and checking that
-  // a conditional block only references a question already encountered.
-  const seen = new Set<string>();
+export const taskDraftSchema = z
+  .strictObject({
+    name: z.string().trim().min(1).max(160),
+    description: z.string().max(4000),
+    domain: z.enum(["sound", "speech", "general"]),
+    instructions: z.string().trim().min(1).max(20000),
+    blocks: z.array(blockSchema).min(1).max(100),
+    policy: policySchema,
+    workspace: workspaceSchema.optional(),
+  })
+  .superRefine((definition, ctx) => {
+    // `seen` contains IDs of PREVIOUS blocks as we iterate left-to-right.
+    // It serves two roles: detecting duplicate block IDs and checking that
+    // a conditional block only references a question already encountered.
+    const seen = new Set<string>();
 
-  for (let index = 0; index < definition.blocks.length; index++) {
-    const block = definition.blocks[index];
+    for (let index = 0; index < definition.blocks.length; index++) {
+      const block = definition.blocks[index];
 
-    // Two answers must not share the same block ID. Otherwise the future
-    // annotation payload would not be able to identify its intended block.
-    if (seen.has(block.id)) {
-      ctx.addIssue({
-        code: "custom",
-        message: `Duplicate block id: ${block.id}`,
-        // Zod attaches this error directly to blocks[index].id, so a form
-        // builder can highlight the specific offending input.
-        path: ["blocks", index, "id"],
-      });
-    }
-
-    // `showWhen` is an optional rule, e.g.:
-    // { blockId: "audible", equals: "yes" }
-    // If a block depends on a later block, the form could become cyclic.
-    // We therefore require it to refer to a PREVIOUS block in `seen`.
-    const condition = block.showWhen;
-    if (condition !== undefined) {
-      if (!condition || typeof condition !== "object" || Array.isArray(condition)) {
+      // Two answers must not share the same block ID. Otherwise the future
+      // annotation payload would not be able to identify its intended block.
+      if (seen.has(block.id)) {
         ctx.addIssue({
           code: "custom",
-          message: "showWhen must be an object",
-          path: ["blocks", index, "showWhen"],
+          message: `Duplicate block id: ${block.id}`,
+          // Zod attaches this error directly to blocks[index].id, so a form
+          // builder can highlight the specific offending input.
+          path: ["blocks", index, "id"],
         });
-      } else {
-        const c = condition as Record<string, unknown>;
-        if (typeof c.blockId !== "string" || !seen.has(c.blockId) || !("equals" in c)) {
+      }
+
+      // `showWhen` is an optional rule, e.g.:
+      // { blockId: "audible", equals: "yes" }
+      // If a block depends on a later block, the form could become cyclic.
+      // We therefore require it to refer to a PREVIOUS block in `seen`.
+      const condition = block.showWhen;
+      if (condition !== undefined) {
+        if (
+          !condition ||
+          typeof condition !== "object" ||
+          Array.isArray(condition)
+        ) {
           ctx.addIssue({
             code: "custom",
-            message: "showWhen must reference an earlier block and include equals",
+            message: "showWhen must be an object",
             path: ["blocks", index, "showWhen"],
           });
-        }
-      }
-    }
-
-    // A choice question needs at least two answer options.
-    // `passthrough` lets `block.options` exist, but it does not validate it:
-    // these extra checks enforce basic option shape and uniqueness.
-    if (block.type === "single_choice" || block.type === "multiple_choice" ||
-        block.type === "audio_comparison" ||
-        (block.type === "candidate_vote" && block.options !== undefined)) {
-      const options = block.options;
-      if (!Array.isArray(options) || options.length < 2) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Choice blocks need at least two options",
-          path: ["blocks", index, "options"],
-        });
-      } else {
-        const ids = new Set<string>();
-        for (let j = 0; j < options.length; j++) {
-          const option = options[j];
-          if (!option || typeof option !== "object" || Array.isArray(option)) {
-            ctx.addIssue({
-              code: "custom",
-              message: "Option must be an object",
-              path: ["blocks", index, "options", j],
-            });
-            continue; // Skip property checks when this option isn't an object.
-          }
-
-          const o = option as Record<string, unknown>;
+        } else {
+          const c = condition as Record<string, unknown>;
           if (
-            typeof o.id !== "string" || !o.id.trim() ||
-            typeof o.label !== "string" || !o.label.trim() ||
-            ids.has(o.id)
+            typeof c.blockId !== "string" ||
+            !seen.has(c.blockId) ||
+            !("equals" in c)
           ) {
             ctx.addIssue({
               code: "custom",
-              message: "Each option needs a unique id and nonempty label",
-              path: ["blocks", index, "options", j],
+              message:
+                "showWhen must reference an earlier block and include equals",
+              path: ["blocks", index, "showWhen"],
             });
           }
-          if (typeof o.id === "string") ids.add(o.id);
         }
       }
-    }
 
-    /** v4 — batch, ranking and inline choice conditions are part of the frozen
-     * Task Definition JSON. These checks intentionally occur at publication
-     * and at DRAFT save, not merely in the React preview. */
-    const n=block.numBatch===undefined?1:block.numBatch;
-    if(!Number.isInteger(n)||typeof n!=="number"||n<1||n>24)
-      ctx.addIssue({code:"custom",path:["blocks",index,"numBatch"],message:"NUM_BATCH must be an integer from 1 to 24"});
-    if(block.type==="audio_comparison"){
-      const size=block.comparisonSize===undefined?2:block.comparisonSize;
-      if(typeof size!=="number"||!Number.isInteger(size)||size<2||size>4||
-         typeof n!=="number"||n<size||n%size!==0)
-        ctx.addIssue({code:"custom",path:["blocks",index,"comparisonSize"],
-          message:"Comparison group size must be 2–4 and divide NUM_BATCH exactly"});
-      if(block.comparisonButtonSize!==undefined && !["sm","md","lg"].includes(String(block.comparisonButtonSize)))
-        ctx.addIssue({code:"custom",path:["blocks",index,"comparisonButtonSize"],message:"Invalid button size"});
-      if(block.comparisonButtonPosition!==undefined && !["inside","outside"].includes(String(block.comparisonButtonPosition)))
-        ctx.addIssue({code:"custom",path:["blocks",index,"comparisonButtonPosition"],message:"Invalid button placement"});
-    }
-    if(block.type==="rating_scale" && block.ratingAppearance!==undefined &&
-        !["buttons","slider"].includes(String(block.ratingAppearance)))
-      ctx.addIssue({code:"custom",path:["blocks",index,"ratingAppearance"],message:"Invalid rating display mode"});
-    if(block.type==="ranking"){
-      if(block.rankingMode!==undefined && !["audios","labels"].includes(String(block.rankingMode)))
-        ctx.addIssue({code:"custom",path:["blocks",index,"rankingMode"],message:"Invalid ranking mode"});
-      if(block.rankingInput!==undefined && !["drag","arrows","comma"].includes(String(block.rankingInput)))
-        ctx.addIssue({code:"custom",path:["blocks",index,"rankingInput"],message:"Invalid ranking interaction"});
-      const list=block.rankingMode==="labels"?block.rankLabels:block.stimulusSlots;
-      if(!Array.isArray(list)||list.length<2||list.length>12)
-        ctx.addIssue({code:"custom",path:["blocks",index,"rankLabels"],message:"Ranking needs 2–12 distinct items"});
-    }
-    if(block.optionFollowUps!==undefined){
-      if((block.type!=="single_choice"&&block.type!=="multiple_choice")||
-         block.optionFollowUps===null || typeof block.optionFollowUps!=="object" || Array.isArray(block.optionFollowUps)){
-        ctx.addIssue({code:"custom",path:["blocks",index,"optionFollowUps"],message:"Only choice blocks may contain option-specific follow-ups"});
-      } else {
-        const options=new Set(Array.isArray(block.options)?
-          (block.options as {id:string}[]).map(o=>o.id):[]);
-        const all=new Set<string>();
-        for(const [optionId,children] of Object.entries(block.optionFollowUps as Record<string,unknown>)){
-          if(!options.has(optionId)||!Array.isArray(children)||children.length>8){
-            ctx.addIssue({code:"custom",path:["blocks",index,"optionFollowUps",optionId],message:"Unknown option or too many children"});continue;
+      // A choice question needs at least two answer options.
+      // `passthrough` lets `block.options` exist, but it does not validate it:
+      // these extra checks enforce basic option shape and uniqueness.
+      if (
+        block.type === "single_choice" ||
+        block.type === "multiple_choice" ||
+        block.type === "audio_comparison" ||
+        (block.type === "candidate_vote" && block.options !== undefined)
+      ) {
+        const options = block.options;
+        if (!Array.isArray(options) || options.length < 2) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Choice blocks need at least two options",
+            path: ["blocks", index, "options"],
+          });
+        } else {
+          const ids = new Set<string>();
+          for (let j = 0; j < options.length; j++) {
+            const option = options[j];
+            if (
+              !option ||
+              typeof option !== "object" ||
+              Array.isArray(option)
+            ) {
+              ctx.addIssue({
+                code: "custom",
+                message: "Option must be an object",
+                path: ["blocks", index, "options", j],
+              });
+              continue; // Skip property checks when this option isn't an object.
+            }
+
+            const o = option as Record<string, unknown>;
+            if (
+              typeof o.id !== "string" ||
+              !o.id.trim() ||
+              typeof o.label !== "string" ||
+              !o.label.trim() ||
+              ids.has(o.id)
+            ) {
+              ctx.addIssue({
+                code: "custom",
+                message: "Each option needs a unique id and nonempty label",
+                path: ["blocks", index, "options", j],
+              });
+            }
+            if (typeof o.id === "string") ids.add(o.id);
           }
-          children.forEach((child,j)=>{
-            const c=child as Record<string,unknown>;
-            if(!c||typeof c!=="object"||typeof c.id!=="string"||!c.id||all.has(c.id)||
-              !["boolean","number","text","callout"].includes(String(c.type))||
-              typeof c.label!=="string"||!c.label.trim()||typeof c.required!=="boolean")
-              ctx.addIssue({code:"custom",path:["blocks",index,"optionFollowUps",optionId,j],message:"Invalid or duplicate conditional child"});
-            if(c?.type==="callout"&&c.required===true)
-              ctx.addIssue({code:"custom",path:["blocks",index,"optionFollowUps",optionId,j],message:"A display-only callout cannot be required"});
-            if(typeof c?.id==="string")all.add(c.id);
+        }
+      }
+
+      /** v4 — batch, ranking and inline choice conditions are part of the frozen
+       * Task Definition JSON. These checks intentionally occur at publication
+       * and at DRAFT save, not merely in the React preview. */
+      const n = block.numBatch === undefined ? 1 : block.numBatch;
+      if (!Number.isInteger(n) || typeof n !== "number" || n < 1 || n > 24)
+        ctx.addIssue({
+          code: "custom",
+          path: ["blocks", index, "numBatch"],
+          message: "NUM_BATCH must be an integer from 1 to 24",
+        });
+      if (block.type === "audio_comparison") {
+        const size =
+          block.comparisonSize === undefined ? 2 : block.comparisonSize;
+        if (
+          typeof size !== "number" ||
+          !Number.isInteger(size) ||
+          size < 2 ||
+          size > 4 ||
+          typeof n !== "number" ||
+          n < size ||
+          n % size !== 0
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "comparisonSize"],
+            message:
+              "Comparison group size must be 2–4 and divide NUM_BATCH exactly",
+          });
+        if (
+          block.comparisonButtonSize !== undefined &&
+          !["sm", "md", "lg"].includes(String(block.comparisonButtonSize))
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "comparisonButtonSize"],
+            message: "Invalid button size",
+          });
+        if (
+          block.comparisonButtonPosition !== undefined &&
+          !["inside", "outside"].includes(
+            String(block.comparisonButtonPosition),
+          )
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "comparisonButtonPosition"],
+            message: "Invalid button placement",
+          });
+      }
+      if (
+        block.type === "rating_scale" &&
+        block.ratingAppearance !== undefined &&
+        !["buttons", "slider"].includes(String(block.ratingAppearance))
+      )
+        ctx.addIssue({
+          code: "custom",
+          path: ["blocks", index, "ratingAppearance"],
+          message: "Invalid rating display mode",
+        });
+      if (block.type === "ranking") {
+        if (
+          block.rankingMode !== undefined &&
+          !["audios", "labels"].includes(String(block.rankingMode))
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "rankingMode"],
+            message: "Invalid ranking mode",
+          });
+        if (
+          block.rankingInput !== undefined &&
+          !["drag", "arrows", "comma"].includes(String(block.rankingInput))
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "rankingInput"],
+            message: "Invalid ranking interaction",
+          });
+        const list =
+          block.rankingMode === "labels"
+            ? block.rankLabels
+            : block.stimulusSlots;
+        if (!Array.isArray(list) || list.length < 2 || list.length > 12)
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "rankLabels"],
+            message: "Ranking needs 2–12 distinct items",
+          });
+      }
+      if (block.optionFollowUps !== undefined) {
+        if (
+          (block.type !== "single_choice" &&
+            block.type !== "multiple_choice") ||
+          block.optionFollowUps === null ||
+          typeof block.optionFollowUps !== "object" ||
+          Array.isArray(block.optionFollowUps)
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "optionFollowUps"],
+            message:
+              "Only choice blocks may contain option-specific follow-ups",
+          });
+        } else {
+          const options = new Set(
+            Array.isArray(block.options)
+              ? (block.options as { id: string }[]).map((o) => o.id)
+              : [],
+          );
+          const all = new Set<string>();
+          for (const [optionId, children] of Object.entries(
+            block.optionFollowUps as Record<string, unknown>,
+          )) {
+            if (
+              !options.has(optionId) ||
+              !Array.isArray(children) ||
+              children.length > 8
+            ) {
+              ctx.addIssue({
+                code: "custom",
+                path: ["blocks", index, "optionFollowUps", optionId],
+                message: "Unknown option or too many children",
+              });
+              continue;
+            }
+            children.forEach((child, j) => {
+              const c = child as Record<string, unknown>;
+              if (
+                !c ||
+                typeof c !== "object" ||
+                typeof c.id !== "string" ||
+                !c.id ||
+                all.has(c.id) ||
+                !["boolean", "number", "text", "callout"].includes(
+                  String(c.type),
+                ) ||
+                typeof c.label !== "string" ||
+                !c.label.trim() ||
+                typeof c.required !== "boolean"
+              )
+                ctx.addIssue({
+                  code: "custom",
+                  path: ["blocks", index, "optionFollowUps", optionId, j],
+                  message: "Invalid or duplicate conditional child",
+                });
+              if (c?.type === "callout" && c.required === true)
+                ctx.addIssue({
+                  code: "custom",
+                  path: ["blocks", index, "optionFollowUps", optionId, j],
+                  message: "A display-only callout cannot be required",
+                });
+              if (typeof c?.id === "string") all.add(c.id);
+            });
+          }
+        }
+      }
+      /**
+       * A display-only block has no answer. `required=true` would falsely imply
+       * that the server expects a key in annotation_revisions.answers.
+       */
+      if (
+        ["section", "callout", "audio_player", "transcript_summary"].includes(
+          block.type,
+        )
+      ) {
+        if (block.required)
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "required"],
+            message: "Display-only blocks must have required=false",
+          });
+        if (
+          (block.type === "section" || block.type === "callout") &&
+          block.tone !== undefined &&
+          !["neutral", "success", "warning", "info"].includes(
+            String(block.tone),
+          )
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "tone"],
+            message: "Invalid display tone",
+          });
+        if (
+          block.description !== undefined &&
+          (typeof block.description !== "string" ||
+            block.description.length > 10000)
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "description"],
+            message: "Display description must be text, max 10,000 characters",
+          });
+      }
+      if (block.type === "transcript_summary") {
+        const source = definition.blocks
+          .slice(0, index)
+          .find(
+            (b) =>
+              b.id === block.sourceTimelineBlockId &&
+              b.type === "timeline_annotation",
+          );
+        if (!source)
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "sourceTimelineBlockId"],
+            message:
+              "Summary must reference an earlier Timeline Grounding block",
+          });
+        if (
+          block.summaryMode !== undefined &&
+          !["words", "phones", "both"].includes(String(block.summaryMode))
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "summaryMode"],
+            message: "Invalid summary mode",
+          });
+      }
+      /**
+       * Timeline data needs a reliable schema even before a single segment
+       * exists. We check the tier topology here and *answers* separately on
+       * submission. A parent means semantic association, not forced timing.
+       */
+      if (block.type === "candidate_vote") {
+        if (
+          block.candidateSource !== undefined &&
+          !["curated", "example"].includes(String(block.candidateSource))
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "candidateSource"],
+            message: "Unknown candidate source",
+          });
+        if (
+          block.correctionOnValue !== undefined &&
+          (!Array.isArray(block.options) ||
+            !(block.options as { id: string }[]).some(
+              (o) => o.id === block.correctionOnValue,
+            ))
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "correctionOnValue"],
+            message:
+              "Correction trigger must be one of the configured vote options",
+          });
+        if (
+          block.candidatePrompt !== undefined &&
+          (typeof block.candidatePrompt !== "string" ||
+            block.candidatePrompt.length > 4000)
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "candidatePrompt"],
+            message: "Candidate text must be a string under 4,000 characters",
+          });
+      }
+      if (block.type === "timeline_annotation") {
+        // The prototype's original Sound/Speech layout is one block, not
+        // individually reorderable waveform/spectrogram/tier subblocks.
+        if (
+          block.groundingMode !== undefined &&
+          !["sound", "speech"].includes(String(block.groundingMode))
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "groundingMode"],
+            message: "Choose Sound or Speech",
+          });
+        if (
+          block.precisionSeconds !== undefined &&
+          (typeof block.precisionSeconds !== "number" ||
+            block.precisionSeconds < 0.00001 ||
+            block.precisionSeconds > 1)
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "precisionSeconds"],
+            message: "Invalid timing precision",
+          });
+        if (
+          block.aids !== undefined &&
+          (!block.aids ||
+            typeof block.aids !== "object" ||
+            Array.isArray(block.aids) ||
+            Object.values(block.aids as Record<string, unknown>).some(
+              (v) => typeof v !== "boolean",
+            ))
+        )
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "aids"],
+            message: "Aids must contain boolean flags",
+          });
+
+        const tiers = block.tiers;
+        if (!Array.isArray(tiers) || tiers.length < 1 || tiers.length > 10) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["blocks", index, "tiers"],
+            message: "Timeline needs between 1 and 10 tiers",
+          });
+        } else {
+          const tierIds = new Set<string>();
+          tiers.forEach((tier, j) => {
+            if (!tier || typeof tier !== "object" || Array.isArray(tier)) {
+              ctx.addIssue({
+                code: "custom",
+                path: ["blocks", index, "tiers", j],
+                message: "Tier must be an object",
+              });
+              return;
+            }
+            const t = tier as Record<string, unknown>;
+            if (
+              typeof t.id !== "string" ||
+              !t.id.trim() ||
+              tierIds.has(t.id) ||
+              typeof t.name !== "string" ||
+              !t.name.trim() ||
+              t.kind !== "interval"
+            )
+              ctx.addIssue({
+                code: "custom",
+                path: ["blocks", index, "tiers", j],
+                message:
+                  "Each tier requires a unique ID, a name, and interval kind",
+              });
+            if (typeof t.id === "string") tierIds.add(t.id);
+            if (typeof t.allowOverlap !== "boolean")
+              ctx.addIssue({
+                code: "custom",
+                path: ["blocks", index, "tiers", j, "allowOverlap"],
+                message: "Tier allowOverlap must be a boolean",
+              });
+            if (
+              !["text", "choice", "ipa", "speaker_id"].includes(
+                String(t.labelMode),
+              )
+            )
+              ctx.addIssue({
+                code: "custom",
+                path: ["blocks", index, "tiers", j, "labelMode"],
+                message: "Invalid tier label mode",
+              });
+          });
+          tiers.forEach((tier, j) => {
+            if (tier && typeof tier === "object" && !Array.isArray(tier)) {
+              const t = tier as Record<string, unknown>;
+              if (
+                t.parentTierId !== undefined &&
+                (typeof t.parentTierId !== "string" ||
+                  !tierIds.has(t.parentTierId) ||
+                  t.id === t.parentTierId)
+              )
+                ctx.addIssue({
+                  code: "custom",
+                  path: ["blocks", index, "tiers", j, "parentTierId"],
+                  message: "Parent tier must be another tier in this block",
+                });
+            }
           });
         }
       }
-    }
-    /**
-     * A display-only block has no answer. `required=true` would falsely imply
-     * that the server expects a key in annotation_revisions.answers.
-     */
-    if (["section", "callout", "audio_player", "transcript_summary"].includes(block.type)) {
-      if (block.required) ctx.addIssue({
-        code: "custom", path: ["blocks", index, "required"],
-        message: "Display-only blocks must have required=false",
-      });
-      if ((block.type === "section" || block.type === "callout") &&
-          block.tone !== undefined &&
-          !["neutral", "success", "warning", "info"].includes(String(block.tone)))
-        ctx.addIssue({ code: "custom", path: ["blocks", index, "tone"], message: "Invalid display tone" });
-      if (block.description !== undefined &&
-          (typeof block.description !== "string" || block.description.length > 10000))
-        ctx.addIssue({ code: "custom", path: ["blocks", index, "description"],
-          message: "Display description must be text, max 10,000 characters" });
-    }
-    if (block.type === "transcript_summary") {
-      const source = definition.blocks.slice(0, index).find(
-        b => b.id === block.sourceTimelineBlockId && b.type === "timeline_annotation");
-      if (!source) ctx.addIssue({ code:"custom", path:["blocks",index,"sourceTimelineBlockId"],
-        message:"Summary must reference an earlier Timeline Grounding block" });
-      if (block.summaryMode !== undefined &&
-          !["words", "phones", "both"].includes(String(block.summaryMode)))
-        ctx.addIssue({ code:"custom", path:["blocks",index,"summaryMode"],
-          message:"Invalid summary mode" });
-    }
-    /**
-     * Timeline data needs a reliable schema even before a single segment
-     * exists. We check the tier topology here and *answers* separately on
-     * submission. A parent means semantic association, not forced timing.
-     */
-    if (block.type === "candidate_vote") {
-      if(block.candidateSource!==undefined && !["curated","example"].includes(String(block.candidateSource)))
-        ctx.addIssue({code:"custom",path:["blocks",index,"candidateSource"],message:"Unknown candidate source"});
-      if(block.correctionOnValue !== undefined &&
-          (!Array.isArray(block.options) || !(block.options as {id:string}[]).some(o=>o.id===block.correctionOnValue)))
-        ctx.addIssue({code:"custom",path:["blocks",index,"correctionOnValue"],
-          message:"Correction trigger must be one of the configured vote options"});
-      if(block.candidatePrompt !== undefined && (typeof block.candidatePrompt!=="string" || block.candidatePrompt.length>4000))
-        ctx.addIssue({code:"custom",path:["blocks",index,"candidatePrompt"],
-          message:"Candidate text must be a string under 4,000 characters"});
-    }
-    if (block.type === "timeline_annotation") {
-      // The prototype's original Sound/Speech layout is one block, not
-      // individually reorderable waveform/spectrogram/tier subblocks.
-      if(block.groundingMode !== undefined && !["sound","speech"].includes(String(block.groundingMode)))
-        ctx.addIssue({code:"custom",path:["blocks",index,"groundingMode"],message:"Choose Sound or Speech"});
-      if(block.precisionSeconds !== undefined &&
-          (typeof block.precisionSeconds!=="number" || block.precisionSeconds<0.00001 || block.precisionSeconds>1))
-        ctx.addIssue({code:"custom",path:["blocks",index,"precisionSeconds"],message:"Invalid timing precision"});
-      if(block.aids !== undefined &&
-          (!block.aids || typeof block.aids!=="object" || Array.isArray(block.aids) ||
-          Object.values(block.aids as Record<string,unknown>).some(v=>typeof v!=="boolean")))
-        ctx.addIssue({code:"custom",path:["blocks",index,"aids"],message:"Aids must contain boolean flags"});
 
-      const tiers = block.tiers;
-      if (!Array.isArray(tiers) || tiers.length < 1 || tiers.length > 10) {
-        ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers"],
-          message: "Timeline needs between 1 and 10 tiers" });
-      } else {
-        const tierIds = new Set<string>();
-        tiers.forEach((tier, j) => {
-          if (!tier || typeof tier !== "object" || Array.isArray(tier)) {
-            ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers", j],
-              message: "Tier must be an object" });
-            return;
-          }
-          const t = tier as Record<string, unknown>;
-          if (typeof t.id !== "string" || !t.id.trim() || tierIds.has(t.id) ||
-              typeof t.name !== "string" || !t.name.trim() || t.kind !== "interval")
-            ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers", j],
-              message: "Each tier requires a unique ID, a name, and interval kind" });
-          if (typeof t.id === "string") tierIds.add(t.id);
-          if (typeof t.allowOverlap !== "boolean")
-            ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers", j, "allowOverlap"],
-              message: "Tier allowOverlap must be a boolean" });
-          if (!["text", "choice", "ipa", "speaker_id"].includes(String(t.labelMode)))
-            ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers", j, "labelMode"],
-              message: "Invalid tier label mode" });
-        });
-        tiers.forEach((tier, j) => {
-          if (tier && typeof tier === "object" && !Array.isArray(tier)) {
-            const t = tier as Record<string, unknown>;
-            if (t.parentTierId !== undefined &&
-                (typeof t.parentTierId !== "string" || !tierIds.has(t.parentTierId) || t.id === t.parentTierId))
-              ctx.addIssue({ code: "custom", path: ["blocks", index, "tiers", j, "parentTierId"],
-                message: "Parent tier must be another tier in this block" });
-          }
-        });
-      }
+      // Add the current block only AFTER checking its conditional reference.
+      // This makes self-references invalid, as intended.
+      seen.add(block.id);
     }
-
-    // Add the current block only AFTER checking its conditional reference.
-    // This makes self-references invalid, as intended.
-    seen.add(block.id);
-  }
-});
+  });
 
 /**
  * `z.infer` produces a TypeScript type from the runtime validator, keeping

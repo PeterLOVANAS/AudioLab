@@ -1,4 +1,3 @@
-
 /*
  * AudioLab 2.0 — Audio Asset Service
  *
@@ -10,9 +9,7 @@
 
 import type { AudioAsset } from "@/lib/contracts/datasets";
 
-import {
-  assetRepository,
-} from "@/lib/backend/repositories/assets";
+import { assetRepository } from "@/lib/backend/repositories/assets";
 
 // Maximum file size for this initial upload method.
 export const MAX_AUDIO_BYTES = 10 * 1024 * 1024;
@@ -37,15 +34,12 @@ function isWave(bytes: Uint8Array): boolean {
   const text = (start: number, end: number) =>
     String.fromCharCode(...bytes.subarray(start, end));
 
-  return (
-    text(0, 4) === "RIFF" &&
-    text(8, 12) === "WAVE"
-  );
+  return text(0, 4) === "RIFF" && text(8, 12) === "WAVE";
 }
 
 // Compute a SHA-256 digest for provenance and integrity.
 async function calculateSHA256(
-  bytes: Uint8Array<ArrayBuffer>
+  bytes: Uint8Array<ArrayBuffer>,
 ): Promise<string> {
   const digest = await crypto.subtle.digest("SHA-256", bytes);
 
@@ -55,19 +49,12 @@ async function calculateSHA256(
 }
 
 export const assetService = {
-
   // ------------------------------------------
   // LIST: Read dataset metadata from D1
   // ------------------------------------------
 
-  async list(
-    db: D1Database,
-    datasetId: string
-  ): Promise<AudioAsset[]> {
-    const exists = await assetRepository.datasetExists(
-      db,
-      datasetId
-    );
+  async list(db: D1Database, datasetId: string): Promise<AudioAsset[]> {
+    const exists = await assetRepository.datasetExists(db, datasetId);
 
     if (!exists) {
       throw new DatasetNotFoundError("Dataset not found.");
@@ -83,14 +70,10 @@ export const assetService = {
   async upload(
     db: D1Database,
     bucket: R2Bucket,
-    input: UploadAudioInput
+    input: UploadAudioInput,
   ): Promise<AudioAsset> {
-
     // 1. Verify the parent dataset.
-    if (!(await assetRepository.datasetExists(
-      db,
-      input.datasetId
-    ))) {
+    if (!(await assetRepository.datasetExists(db, input.datasetId))) {
       throw new DatasetNotFoundError("Dataset not found.");
     }
 
@@ -101,18 +84,16 @@ export const assetService = {
       input.audio.size > MAX_AUDIO_BYTES
     ) {
       throw new InvalidAudioError(
-        "Provide a non-empty WAV file smaller than 10 MiB."
+        "Provide a non-empty WAV file smaller than 10 MiB.",
       );
     }
 
     // 3. Read the file and verify its basic signature.
-    const bytes = new Uint8Array(
-      await input.audio.arrayBuffer()
-    );
+    const bytes = new Uint8Array(await input.audio.arrayBuffer());
 
     if (!isWave(bytes)) {
       throw new InvalidAudioError(
-        "The file is not a supported RIFF/WAVE recording."
+        "The file is not a supported RIFF/WAVE recording.",
       );
     }
 
@@ -120,12 +101,10 @@ export const assetService = {
     const id = crypto.randomUUID();
 
     // Never use an untrusted upload filename as an R2 key.
-    const storageKey =
-      `datasets/${input.datasetId}/assets/${id}.wav`;
+    const storageKey = `datasets/${input.datasetId}/assets/${id}.wav`;
 
     // Preserve the original path only as metadata.
-    const originalPath =
-      input.originalPath ?? input.audio.name;
+    const originalPath = input.originalPath ?? input.audio.name;
 
     const sha256 = await calculateSHA256(bytes);
 
@@ -154,12 +133,10 @@ export const assetService = {
 
       if (!inserted) {
         throw new DuplicateAssetError(
-          "This original audio path is already registered."
+          "This original audio path is already registered.",
         );
       }
-
     } catch (error) {
-
       // Best-effort compensation:
       // If the SQL insert fails, remove the new R2 object.
       try {
@@ -190,14 +167,8 @@ export const assetService = {
   // LOOKUP: Resolve one asset
   // ------------------------------------------
 
-  async get(
-    db: D1Database,
-    assetId: string
-  ): Promise<AudioAsset> {
-    const asset = await assetRepository.findById(
-      db,
-      assetId
-    );
+  async get(db: D1Database, assetId: string): Promise<AudioAsset> {
+    const asset = await assetRepository.findById(db, assetId);
 
     if (!asset) {
       throw new AssetNotFoundError("Audio asset not found.");

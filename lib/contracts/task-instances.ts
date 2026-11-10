@@ -16,7 +16,10 @@ export type PublishedDefinitionData = {
   domain: "sound" | "speech" | "general";
   instructions: string;
   blocks: Array<{
-    id: string; type: string; label: string; required: boolean;
+    id: string;
+    type: string;
+    label: string;
+    required: boolean;
     [field: string]: unknown;
   }>;
   policy: {
@@ -44,9 +47,9 @@ export type TaskInstancePreview = TaskInstanceSummary & {
   audioUrl: string;
   definition: PublishedDefinitionData;
   /** Fixed ordered audio list; legacy one-audio tasks return a singleton. */
-  audioAssets?: Array<{id:string;url:string;position:number}>;
+  audioAssets?: Array<{ id: string; url: string; position: number }>;
   /** Curated candidate labels only; private source_labels are never returned. */
-  candidates?: Array<{id:string;label:string;provenance:string}>;
+  candidates?: Array<{ id: string; label: string; provenance: string }>;
   sourceRecord: null | {
     sourceRecordId: string;
     question: string | null;

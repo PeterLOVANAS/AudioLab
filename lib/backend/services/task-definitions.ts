@@ -90,14 +90,14 @@ export const taskDefinitionService = {
     db: D1Database,
     id: string,
     expectedRevision: number,
-    draft: TaskDraft
+    draft: TaskDraft,
   ) {
     if (!(await repo.find(db, id))) {
       throw new TaskDefinitionNotFoundError("Task definition not found.");
     }
     if (!(await repo.replaceDraft(db, id, expectedRevision, draft))) {
       throw new TaskDefinitionConflictError(
-        "Draft revision changed. Reload before editing."
+        "Draft revision changed. Reload before editing.",
       );
     }
     return this.get(db, id);
@@ -112,18 +112,21 @@ export const taskDefinitionService = {
     db: D1Database,
     id: string,
     expectedRevision: number,
-    expectedPublishedVersion: number
+    expectedPublishedVersion: number,
   ) {
     if (!(await repo.find(db, id))) {
       throw new TaskDefinitionNotFoundError("Task definition not found.");
     }
 
     const published = await repo.publish(
-      db, id, expectedRevision, expectedPublishedVersion
+      db,
+      id,
+      expectedRevision,
+      expectedPublishedVersion,
     );
     if (!published) {
       throw new TaskDefinitionConflictError(
-        "Draft or published version changed. Reload before publishing."
+        "Draft or published version changed. Reload before publishing.",
       );
     }
 

@@ -1,4 +1,3 @@
-
 /*
  * AudioLab 2.0 — Audio Asset Repository
  *
@@ -70,15 +69,12 @@ const ASSET_SELECT = `
 `;
 
 export const assetRepository = {
-
   // Check whether a dataset exists.
-  async datasetExists(
-    db: D1Database,
-    datasetId: string
-  ): Promise<boolean> {
-    const row = await db.prepare(
-      `SELECT id FROM datasets WHERE id = ?`
-    ).bind(datasetId).first<{ id: string }>();
+  async datasetExists(db: D1Database, datasetId: string): Promise<boolean> {
+    const row = await db
+      .prepare(`SELECT id FROM datasets WHERE id = ?`)
+      .bind(datasetId)
+      .first<{ id: string }>();
 
     return row !== null;
   },
@@ -86,37 +82,38 @@ export const assetRepository = {
   // List assets belonging to one dataset.
   async findByDataset(
     db: D1Database,
-    datasetId: string
+    datasetId: string,
   ): Promise<AudioAsset[]> {
-    const result = await db.prepare(
-      `${ASSET_SELECT}
+    const result = await db
+      .prepare(
+        `${ASSET_SELECT}
        WHERE dataset_id = ?
-       ORDER BY original_path ASC`
-    ).bind(datasetId).all<AssetRow>();
+       ORDER BY original_path ASC`,
+      )
+      .bind(datasetId)
+      .all<AssetRow>();
 
     return result.results.map(toAudioAsset);
   },
 
   // Retrieve one asset by ID.
-  async findById(
-    db: D1Database,
-    assetId: string
-  ): Promise<AudioAsset | null> {
-    const row = await db.prepare(
-      `${ASSET_SELECT}
-       WHERE id = ?`
-    ).bind(assetId).first<AssetRow>();
+  async findById(db: D1Database, assetId: string): Promise<AudioAsset | null> {
+    const row = await db
+      .prepare(
+        `${ASSET_SELECT}
+       WHERE id = ?`,
+      )
+      .bind(assetId)
+      .first<AssetRow>();
 
     return row ? toAudioAsset(row) : null;
   },
 
   // Insert metadata after the audio has been stored.
-  async insert(
-    db: D1Database,
-    asset: NewStoredAsset
-  ): Promise<boolean> {
-    const result = await db.prepare(
-      `INSERT INTO audio_assets (
+  async insert(db: D1Database, asset: NewStoredAsset): Promise<boolean> {
+    const result = await db
+      .prepare(
+        `INSERT INTO audio_assets (
         id,
         dataset_id,
         original_path,
@@ -127,16 +124,18 @@ export const assetRepository = {
         sha256
       )
       VALUES (?, ?, ?, 'r2', ?, ?, ?, ?)
-      ON CONFLICT(dataset_id, original_path) DO NOTHING`
-    ).bind(
-      asset.id,
-      asset.datasetId,
-      asset.originalPath,
-      asset.storageKey,
-      asset.mimeType,
-      asset.sizeBytes,
-      asset.sha256
-    ).run();
+      ON CONFLICT(dataset_id, original_path) DO NOTHING`,
+      )
+      .bind(
+        asset.id,
+        asset.datasetId,
+        asset.originalPath,
+        asset.storageKey,
+        asset.mimeType,
+        asset.sizeBytes,
+        asset.sha256,
+      )
+      .run();
 
     return result.meta.changes === 1;
   },

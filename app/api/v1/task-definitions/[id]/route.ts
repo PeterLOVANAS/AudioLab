@@ -27,12 +27,18 @@ type Ctx = { params: Promise<{ id: string }> };
 export async function GET(_request: Request, context: Ctx) {
   // `_request` starts with an underscore because this GET doesn't use it.
   if (!import.meta.env.DEV) {
-    return Response.json({ error: "Authentication not configured." }, { status: 403 });
+    return Response.json(
+      { error: "Authentication not configured." },
+      { status: 403 },
+    );
   }
 
   const { id } = await context.params;
   if (!z.uuid().safeParse(id).success) {
-    return Response.json({ error: "Invalid task definition ID." }, { status: 400 });
+    return Response.json(
+      { error: "Invalid task definition ID." },
+      { status: 400 },
+    );
   }
 
   try {
@@ -45,7 +51,7 @@ export async function GET(_request: Request, context: Ctx) {
     console.error("GET task definition failed", error);
     return Response.json(
       { error: "Unable to retrieve task definition." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -60,12 +66,18 @@ export async function GET(_request: Request, context: Ctx) {
  */
 export async function PUT(request: Request, context: Ctx) {
   if (!import.meta.env.DEV) {
-    return Response.json({ error: "Authentication not configured." }, { status: 403 });
+    return Response.json(
+      { error: "Authentication not configured." },
+      { status: 403 },
+    );
   }
 
   const { id } = await context.params;
   if (!z.uuid().safeParse(id).success) {
-    return Response.json({ error: "Invalid task definition ID." }, { status: 400 });
+    return Response.json(
+      { error: "Invalid task definition ID." },
+      { status: 400 },
+    );
   }
 
   let body: unknown;
@@ -79,7 +91,7 @@ export async function PUT(request: Request, context: Ctx) {
   if (!parsed.success) {
     return Response.json(
       { error: "Invalid update.", issues: parsed.error.issues },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -88,7 +100,7 @@ export async function PUT(request: Request, context: Ctx) {
       env.DB,
       id,
       parsed.data.expectedRevision,
-      parsed.data.draft
+      parsed.data.draft,
     );
     return Response.json({ taskDefinition }); // 200 OK; revision increased.
   } catch (error) {
@@ -102,7 +114,7 @@ export async function PUT(request: Request, context: Ctx) {
     console.error("PUT task definition failed", error);
     return Response.json(
       { error: "Unable to update task definition." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

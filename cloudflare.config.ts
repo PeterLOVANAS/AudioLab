@@ -17,16 +17,14 @@ export default defineConfig({
 
       DB: bindings.d1({
         name: "audiolab-dev",
-        id: "11111111-1111-4111-8111-111111111111" // local-dev identifier
-      }), 
+        id: "11111111-1111-4111-8111-111111111111", // local-dev identifier
+      }),
 
       // Audio file storage.
       // Cloudflare simulates this bucket locally during development.
       AUDIO_BUCKET: bindings.r2({
         name: "audiolab-audio-dev",
       }),
-
-
     },
   }),
 });

@@ -62,9 +62,10 @@ export const taskDefinitionRepository = {
    * The LIMIT 1 makes our intent explicit: existence, not a full listing.
    */
   async projectExists(db: D1Database, projectId: string): Promise<boolean> {
-    const row = await db.prepare(
-      "SELECT id FROM projects WHERE id = ? LIMIT 1"
-    ).bind(projectId).first<{ id: string }>();
+    const row = await db
+      .prepare("SELECT id FROM projects WHERE id = ? LIMIT 1")
+      .bind(projectId)
+      .first<{ id: string }>();
 
     return row !== null;
   },
@@ -77,9 +78,11 @@ export const taskDefinitionRepository = {
    */
   async list(
     db: D1Database,
-    projectId: string
+    projectId: string,
   ): Promise<TaskDefinitionSummaryRow[]> {
-    const result = await db.prepare(`
+    const result = await db
+      .prepare(
+        `
       SELECT id, project_id AS projectId,
         json_extract(draft_json, '$.name') AS name,
         json_extract(draft_json, '$.domain') AS domain,
@@ -89,7 +92,10 @@ export const taskDefinitionRepository = {
       FROM task_definitions
       WHERE project_id = ?
       ORDER BY updated_at DESC, id DESC
-    `).bind(projectId).all<TaskDefinitionSummaryRow>();
+    `,
+      )
+      .bind(projectId)
+      .all<TaskDefinitionSummaryRow>();
 
     return result.results;
   },
@@ -100,8 +106,10 @@ export const taskDefinitionRepository = {
    * knowing a UUID alone must NOT grant access in shared deployment.
    */
   async find(db: D1Database, id: string): Promise<TaskDefinitionRow | null> {
-    return await db.prepare(`${baseSelect} WHERE id = ?`)
-      .bind(id).first<TaskDefinitionRow>();
+    return await db
+      .prepare(`${baseSelect} WHERE id = ?`)
+      .bind(id)
+      .first<TaskDefinitionRow>();
   },
 
   /**
@@ -114,12 +122,17 @@ export const taskDefinitionRepository = {
     db: D1Database,
     id: string,
     projectId: string,
-    draft: TaskDraft
+    draft: TaskDraft,
   ): Promise<void> {
-    await db.prepare(`
+    await db
+      .prepare(
+        `
       INSERT INTO task_definitions (id, project_id, draft_json)
       VALUES (?, ?, ?)
-    `).bind(id, projectId, JSON.stringify(draft)).run();
+    `,
+      )
+      .bind(id, projectId, JSON.stringify(draft))
+      .run();
   },
 
   /**
@@ -138,15 +151,20 @@ export const taskDefinitionRepository = {
     db: D1Database,
     id: string,
     expectedRevision: number,
-    draft: TaskDraft
+    draft: TaskDraft,
   ): Promise<boolean> {
-    const result = await db.prepare(`
+    const result = await db
+      .prepare(
+        `
       UPDATE task_definitions
       SET draft_json = ?,
           draft_revision = draft_revision + 1,
           updated_at = CURRENT_TIMESTAMP
       WHERE id = ? AND draft_revision = ?
-    `).bind(JSON.stringify(draft), id, expectedRevision).run();
+    `,
+      )
+      .bind(JSON.stringify(draft), id, expectedRevision)
+      .run();
 
     // `meta.changes` is the count of rows actually changed by the query.
     return result.meta.changes === 1;
@@ -176,29 +194,37 @@ export const taskDefinitionRepository = {
     db: D1Database,
     id: string,
     expectedRevision: number,
-    expectedPublishedVersion: number
+    expectedPublishedVersion: number,
   ): Promise<boolean> {
     const nextVersion = expectedPublishedVersion + 1;
 
     const result = await db.batch([
       // Statement 1: bump the number stored on the editable parent record.
-      db.prepare(`
+      db
+        .prepare(
+          `
         UPDATE task_definitions
         SET published_version = published_version + 1,
             updated_at = CURRENT_TIMESTAMP
         WHERE id = ? AND draft_revision = ? AND published_version = ?
-      `).bind(id, expectedRevision, expectedPublishedVersion),
+      `,
+        )
+        .bind(id, expectedRevision, expectedPublishedVersion),
 
       // Statement 2: create a historical snapshot for version N.
       // ON CONFLICT prevents another row with the same (definition,version).
-      db.prepare(`
+      db
+        .prepare(
+          `
         INSERT INTO task_definition_versions
           (definition_id, version, definition_json)
         SELECT id, published_version, draft_json
         FROM task_definitions
         WHERE id = ? AND draft_revision = ? AND published_version = ?
         ON CONFLICT(definition_id, version) DO NOTHING
-      `).bind(id, expectedRevision, nextVersion),
+      `,
+        )
+        .bind(id, expectedRevision, nextVersion),
     ]);
 
     return result[0].meta.changes === 1 && result[1].meta.changes === 1;
@@ -211,16 +237,21 @@ export const taskDefinitionRepository = {
   async publishedVersion(
     db: D1Database,
     id: string,
-    version: number
+    version: number,
   ): Promise<{ definitionJson: string; publishedAt: string } | null> {
-    return await db.prepare(`
+    return await db
+      .prepare(
+        `
       SELECT definition_json AS definitionJson,
              published_at AS publishedAt
       FROM task_definition_versions
       WHERE definition_id = ? AND version = ?
-    `).bind(id, version).first<{
-      definitionJson: string;
-      publishedAt: string;
-    }>();
+    `,
+      )
+      .bind(id, version)
+      .first<{
+        definitionJson: string;
+        publishedAt: string;
+      }>();
   },
 };

@@ -13,7 +13,10 @@
  */
 import type { AnnotationWriteInput } from "@/lib/backend/validation/annotations";
 import type { AnnotationRevision } from "@/lib/contracts/annotation-api";
-import { validateAnswers, type AnswerIssue } from "@/lib/backend/validation/annotation-answers";
+import {
+  validateAnswers,
+  type AnswerIssue,
+} from "@/lib/backend/validation/annotation-answers";
 import { annotationRepository as repo } from "@/lib/backend/repositories/annotations";
 import { assignmentRepository } from "@/lib/backend/repositories/assignments";
 import { taskInstanceService } from "@/lib/backend/services/task-instances";
@@ -33,20 +36,33 @@ export class AnnotationAnswerError extends Error {
  */
 function normalizeDbWriteError(error: unknown): never {
   const message = error instanceof Error ? error.message : String(error);
-  if (message.includes("ANNOTATION_REVISION_CONFLICT") ||
-      message.includes("ANNOTATION_NOT_WRITABLE") ||
-      message.includes("ANNOTATION_BAD_REVISION_SEQUENCE") ||
-      message.includes("UNIQUE constraint failed: annotation_revisions.assignment_id")) {
-    throw new AnnotationConflictError("Revision is stale or this assignment is no longer writable. Reload the annotation.");
+  if (
+    message.includes("ANNOTATION_REVISION_CONFLICT") ||
+    message.includes("ANNOTATION_NOT_WRITABLE") ||
+    message.includes("ANNOTATION_BAD_REVISION_SEQUENCE") ||
+    message.includes(
+      "UNIQUE constraint failed: annotation_revisions.assignment_id",
+    )
+  ) {
+    throw new AnnotationConflictError(
+      "Revision is stale or this assignment is no longer writable. Reload the annotation.",
+    );
   }
   throw error;
 }
 
-async function ensureOwner(db: D1Database, assignmentId: string, labellerId: string) {
+async function ensureOwner(
+  db: D1Database,
+  assignmentId: string,
+  labellerId: string,
+) {
   const assignment = await assignmentRepository.find(db, assignmentId);
-  if (!assignment) throw new AnnotationAssignmentNotFoundError("Assignment not found.");
+  if (!assignment)
+    throw new AnnotationAssignmentNotFoundError("Assignment not found.");
   if (assignment.labellerId !== labellerId) {
-    throw new AnnotationLabellerMismatchError("This assignment belongs to another labeller.");
+    throw new AnnotationLabellerMismatchError(
+      "This assignment belongs to another labeller.",
+    );
   }
   return assignment;
 }
@@ -66,27 +82,36 @@ export const annotationService = {
     db: D1Database,
     assignmentId: string,
     input: AnnotationWriteInput,
-    status: "draft" | "submitted"
+    status: "draft" | "submitted",
   ): Promise<AnnotationRevision> {
     const assignment = await ensureOwner(db, assignmentId, input.labellerId);
     if (assignment.status === "submitted" || assignment.status === "reviewed") {
-      throw new AnnotationConflictError("Submitted assignments cannot be modified.");
+      throw new AnnotationConflictError(
+        "Submitted assignments cannot be modified.",
+      );
     }
 
     // Pull the actual published SNAPSHOT from Lesson 7, never the mutable
     // Task Definition draft. Later edits/publishes cannot change old labels.
     const task = await taskInstanceService.get(db, assignment.taskInstanceId);
-    const issues = validateAnswers(task.definition, input.answers, status === "submitted", {
-      audioAssetCount:task.audioAssets?.length ?? 1,
-      candidateIds:task.candidates?.map(candidate=>candidate.id)??[],
-    });
+    const issues = validateAnswers(
+      task.definition,
+      input.answers,
+      status === "submitted",
+      {
+        audioAssetCount: task.audioAssets?.length ?? 1,
+        candidateIds: task.candidates?.map((candidate) => candidate.id) ?? [],
+      },
+    );
     if (issues.length) throw new AnnotationAnswerError(issues);
 
     // This read is helpful for a clear 409 response, but is NOT the concurrency
     // boundary: the SQL trigger re-checks it at the instant of INSERT.
     const current = await repo.current(db, assignmentId);
     if ((current?.revision ?? 0) !== input.expectedRevision) {
-      throw new AnnotationConflictError("Outdated expectedRevision. Reload before saving.");
+      throw new AnnotationConflictError(
+        "Outdated expectedRevision. Reload before saving.",
+      );
     }
 
     try {

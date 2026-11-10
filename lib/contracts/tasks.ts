@@ -2,36 +2,30 @@
 export type TaskDomain = "sound" | "speech" | "general";
 
 export type ChoiceOption = {
-      id: string;
-      value?: string;  // value of whether it is male or female, or yes or no, etc.  This is the value that will be stored in the database when the user selects this option.
-      label: string; // e.g. male and female for speaker gender, or yes and no for boolean question
-}
+  id: string;
+  value?: string; // value of whether it is male or female, or yes or no, etc.  This is the value that will be stored in the database when the user selects this option.
+  label: string; // e.g. male and female for speaker gender, or yes and no for boolean question
+};
 
 export type BlockCondition = {
-      blockId: string; 
-      equals: string | boolean | number;
-}
+  blockId: string;
+  equals: string | boolean | number;
+};
 
-export type AnnotationScope = 
-  | "clip"
-  | "interval"
-  | "speaker"
-  | "event"
-  | "audio_pair"
-  | "candidate";
+export type AnnotationScope =
+  "clip" | "interval" | "speaker" | "event" | "audio_pair" | "candidate";
 
 export type BaseBlock = {
-      id: string; 
-      label: string; 
-      helpText?: string; 
-      required: boolean; 
+  id: string;
+  label: string;
+  helpText?: string;
+  required: boolean;
 
-      scope?: AnnotationScope; // annotation scope default to clip level
+  scope?: AnnotationScope; // annotation scope default to clip level
 
-      showWhen?: BlockCondition; // Canonical persisted conditional visibility.
-      showwhen?: BlockCondition; // Legacy spelling retained only for reading old definitions.
-}
-
+  showWhen?: BlockCondition; // Canonical persisted conditional visibility.
+  showwhen?: BlockCondition; // Legacy spelling retained only for reading old definitions.
+};
 
 /**
  * These three blocks ONLY render information. They never create an answer key.
@@ -62,45 +56,41 @@ export type AudioPlayerBlock = BaseBlock & {
 
 // ==== Basic Annotation Blocks ====
 
-
 // Choose exactly one option (e.g. MMAU qa)
 export type SingleChoiceBlock = BaseBlock & {
-    type: "single_choice"; 
-    options: ChoiceOption[];
-} // The use & is to combine the properties of BaseBlock and SingleChoiceBlock into a single type. This means that a SingleChoiceBlock will have all the properties of BaseBlock (id, label, helpText, required, scope, showwhen) as well as its own properties (type and options).
+  type: "single_choice";
+  options: ChoiceOption[];
+}; // The use & is to combine the properties of BaseBlock and SingleChoiceBlock into a single type. This means that a SingleChoiceBlock will have all the properties of BaseBlock (id, label, helpText, required, scope, showwhen) as well as its own properties (type and options).
 // Similar to inheritance in object-oriented programming, where a subclass inherits properties and methods from a superclass. In this case, SingleChoiceBlock "inherits" from BaseBlock, meaning it has all the properties of BaseBlock plus its own unique properties.
-
 
 // Choose several options: e.g. select all audible sound sources.
 export type MultipleChoiceBlock = BaseBlock & {
-    type: "multiple_choice";
-    options: ChoiceOption[];
+  type: "multiple_choice";
+  options: ChoiceOption[];
 
-    minSelections?: number; // Optional minimum number of selections required. If not specified, there is no minimum.
-    maxSelections?: number; // Optional maximum number of selections allowed. If not specified, there is no maximum.
-}
-
+  minSelections?: number; // Optional minimum number of selections required. If not specified, there is no minimum.
+  maxSelections?: number; // Optional maximum number of selections allowed. If not specified, there is no maximum.
+};
 
 // Answer a Yes/No question  (e.g. full listining confirmation must be true)
 export type BooleanBlock = BaseBlock & {
-  type: "boolean" ;
-  requiredValue?: boolean; 
-}
-
+  type: "boolean";
+  requiredValue?: boolean;
+};
 
 // Enter numeric value (e.g. number of speakers, number of audible sound sources)
 export type NumberBlock = BaseBlock & {
-  type: "number" ; 
+  type: "number";
 
-  min?: number; 
+  min?: number;
   max?: number;
   integerOnly?: boolean;
   unit?: string;
-}
+};
 
 // Rate something on defined scale (e.g. Audio quality, sadness scale)
 export type RatingScaleBlock = BaseBlock & {
-  type: "rating_scale" ;
+  type: "rating_scale";
 
   min: number;
   max: number;
@@ -108,72 +98,63 @@ export type RatingScaleBlock = BaseBlock & {
 
   minLabel?: string;
   maxLabel?: string;
-}
+};
 
 // Enter free-form text:  e.g. audio captioning, annotation explanation , percievied acoustic artifact
 
 // *** Question: Should there be customization about extraction behind this block.  For example: pass audio that you have listen in comma format.
 export type TextBlock = BaseBlock & {
-  type: "text" ; 
+  type: "text";
 
   multiline?: boolean;
   placeholder?: string;
   maxLength?: number;
-}
+};
 
 // Transcribe speech in to text (Untimed transcription)
 export type TranscriptBlock = BaseBlock & {
-  type: "transcript" ; 
+  type: "transcript";
 
-  language?: string; 
-  notation?: "orthographic" | "ipa"
-}
-
+  language?: string;
+  notation?: "orthographic" | "ipa";
+};
 
 // === Temporal Annotation Block ===
 
-export type TimelineTierLabelMode = 
-  | "text" 
-  | "choice"
-  | "ipa" 
-  | "speaker_id"
+export type TimelineTierLabelMode = "text" | "choice" | "ipa" | "speaker_id";
 
 // properties share by all timeline tiers
 export type TimelineTierBase = {
-  id: string; 
-  name: string; 
+  id: string;
+  name: string;
 
   labelMode: TimelineTierLabelMode;
 
   options?: ChoiceOption[]; // Only required if labelMode is "choice"
 
   parentTierId?: string; // Optional parent tier ID for hierarchical tiers. If specified, this tier is a child of the parent tier and will be displayed below it in the timeline.
-} 
-
-
+};
 
 // A tier stores either:
 // - Time intervals (start and end), or
 // - Time points (a single timestamp)
 
 // ( | {...}) means that the TimelineTier type can be one of two possible shapes. It can either be an object with the properties defined in the first block (kind: "interval" and allowOverlap: boolean) or an object with the properties defined in the second block (kind: "point"). This allows for flexibility in defining different types of timeline tiers, while still enforcing a consistent structure for each type.
-export type TimelineTier = TimelineTierBase & (
-  | {
-    kind: "interval";
-    allowOverlap: boolean;
-  }
-
-  | {
-    kind: "point"; 
-  }
-)
-
-
+export type TimelineTier = TimelineTierBase &
+  (
+    | {
+        kind: "interval";
+        allowOverlap: boolean;
+      }
+    | {
+        kind: "point";
+      }
+  );
 
 // Advanced annotations workspace with MULTIPLE tiers.
-// e,g. Speech intervals, IPA Phones, etc. 
+// e,g. Speech intervals, IPA Phones, etc.
 export type TimelineAnnotationBlock = BaseBlock & {
-  type: "timeline_annotation"; 
+  type: "timeline_annotation";
 
   /** One block owns the entire original Sound or Speech research workbench. */
   groundingMode?: "sound" | "speech";
@@ -182,25 +163,27 @@ export type TimelineAnnotationBlock = BaseBlock & {
   speakers?: string[];
   soundConcepts?: ChoiceOption[];
   phoneticSymbols?: string[];
-  aids?: { spectrogram?:boolean; pitch?:boolean; energy?:boolean; formants?:boolean; mfcc?:boolean };
+  aids?: {
+    spectrogram?: boolean;
+    pitch?: boolean;
+    energy?: boolean;
+    formants?: boolean;
+    mfcc?: boolean;
+  };
   tiers: TimelineTier[]; // Array of timeline tiers. Each tier defines a set of annotations that can be made on the timeline. The tiers can be hierarchical, with parent-child relationships defined by the parentTierId property in each tier.
-}
-
-
+};
 
 // This block record ratings change over time
 export type ContinuousRatingBlock = BaseBlock & {
-    type: "continuous_rating"; 
+  type: "continuous_rating";
 
-    min: number; 
-    max: number; 
-    step: number;
+  min: number;
+  max: number;
+  step: number;
 
-    // Suggested time sampling interval
-    sampleIntervalSeconds?: number; 
-}
-
-
+  // Suggested time sampling interval
+  sampleIntervalSeconds?: number;
+};
 
 /*
  * ==========================================
@@ -490,5 +473,3 @@ export type LabellerTask = {
 
   workspace?: AudioWorkspaceConfig;
 };
-
-

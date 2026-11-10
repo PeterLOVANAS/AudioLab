@@ -1,12 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  
-    --background: #f5f7fb; 
-    --foreground: #202c43; /* What is foreground? Foreground is the color of the text and other elements that are in front of the background. */
-    --card: #ffffff; 
-    --border: #e1e6f0; 
-    --primary: #5454df99; 
+  --background: #f5f7fb;
+  --foreground: #202c43; /* What is foreground? Foreground is the color of the text and other elements that are in front of the background. */
+  --card: #ffffff;
+  --border: #e1e6f0;
+  --primary: #5454df99;
 }
 
 * {
@@ -14,19 +13,25 @@
 }
 /*What is the purpose of the * selector in CSS? It is a universal selector that targets all elements on the page. */
 
-
 body {
   margin: 0; /*margin=0 means no margin around the body */
-  background: var(--background); 
-  color: var(--foreground) ;
-  font-family: 
-      Inter, "Noto Sans Thai", -apple-system, 
-      BlinkMacSystemFont, "Segoe UI", sans-sarif; 
-  font-size: 16px; 
+  background: var(--background);
+  color: var(--foreground);
+  font-family:
+    Inter,
+    "Noto Sans Thai",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-sarif;
+  font-size: 16px;
 }
 
-h1, h2, h3, p {
-   margin:0 ; 
+h1,
+h2,
+h3,
+p {
+  margin: 0;
 }
 
 button {
@@ -35,13 +40,13 @@ button {
   cursor: pointer;
 }
 
-button:focus-visible , select:focus-visible {
+button:focus-visible,
+select:focus-visible {
   outline: 3px solid #a4a2ff; /*Outline is a visual indicator that shows the current focus of the user. */
   outline-offset: 2px; /* Move it sligtly away from the element */
 }
 
 /*focus-visible is a CSS pseudo-class that matches an element when it is focused and the user is using a keyboard or other non-pointing device. */
-
 
 .al-app {
   min-height: 100vh; /*What is min-height? It is a CSS property that sets the minimum height of an element. In this case, it is set to 100% of the viewport height (vh). */
@@ -56,194 +61,180 @@ button:focus-visible , select:focus-visible {
   flex: 1; /* flex=1 means the element will grow to fill the available space */
 }
 
-
-
 /* *** SIDEBAR *** */
 .al-sidebar {
   position: fixed; /*What is position fixed? It is a CSS property that sets the position of an element to be fixed relative to the viewport. This means that the element will stay in the same position even when the user scrolls the page. */
 
-  inset: 0 auto 0 0 ; /* What is inset? It is a CSS property that sets the position of an element relative to its containing block. In this case, it is set to 0 for the top, right, and bottom, and auto for the left. This means that the element will be positioned at the top left corner of the viewport. */
+  inset: 0 auto 0 0; /* What is inset? It is a CSS property that sets the position of an element relative to its containing block. In this case, it is set to 0 for the top, right, and bottom, and auto for the left. This means that the element will be positioned at the top left corner of the viewport. */
   z-index: 30; /*What is z-index? It is a CSS property that sets the stack order of an element. An element with a higher z-index will be displayed in front of an element with a lower z-index. In this case, the sidebar has a z-index of 30, which means it will be displayed in front of other elements with a lower z-index. */
 
   width: 238px; /*What is width? It is a CSS property that sets the width of an element. In this case, it is set to 238 pixels. */
-  display: flex;  /*Use flexbox to arrange its childeren*/
+  display: flex; /*Use flexbox to arrange its childeren*/
   flex-direction: column; /* sets the direction of the flex items in a flex container. In this case, it is set to column, which means the flex items will be arranged vertically. Consume entire space horizontally */
   overflow-y: auto; /*sets how the content of an element is displayed when it overflows the element's box. In this case, it is set to auto, which means that a scrollbar will be added if the content overflows the element's box. */
 
-  background: #152139; 
-  color: #c1cce0 ; 
+  background: #152139;
+  color: #c1cce0;
 }
-
 
 /*AudioLab name and logo*/
 .al-brand {
+  display: flex; /*Arranges contents in a row (Occupy full vertical space)*/
+  align-items: center;
+  gap: 12px;
 
-    display: flex; /*Arranges contents in a row (Occupy full vertical space)*/
-    align-items: center; 
-    gap: 12px; 
+  padding: 30px 22px 25px; /*30px top, 22px left and right, 25px bottom*/
+  border: 0;
+  background: transparent;
 
-    padding: 30px 22px 25px; /*30px top, 22px left and right, 25px bottom*/
-    border: 0 ; 
-    background: transparent; 
-
-    color: #ffffff; 
-    font-size: 25px; 
-    font-weight: 600; 
-    letter-spacing: -0.8px; /*Why -0.8px? Because it makes the text look more compact and visually appealing.*/
-    /*- in letter spacing means negative spacing, which reduces the space between characters.*/
-    text-align: left; 
-
+  color: #ffffff;
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: -0.8px; /*Why -0.8px? Because it makes the text look more compact and visually appealing.*/
+  /*- in letter spacing means negative spacing, which reduces the space between characters.*/
+  text-align: left;
 }
-
 
 /*Icon container*/
 .al-brand-icon {
-    width: 40px; 
-    height: 40px; 
-    flex-shrink: 0; /* Prevent the icon container from shrinking when horizontal space becomes contrained. */ 
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0; /* Prevent the icon container from shrinking when horizontal space becomes contrained. */
 
-    display: grid; 
-    place-items: center; /* centers the icon horizontally and vertically within 40*40px box */ 
+  display: grid;
+  place-items: center; /* centers the icon horizontally and vertically within 40*40px box */
 
-    background: #6763de; 
-    border: 1px solid #9691ff60; 
-    border-radius: 11px; 
+  background: #6763de;
+  border: 1px solid #9691ff60;
+  border-radius: 11px;
 }
 
 /* Subtitle near icon */
 .al-brand small {
-    display: block;  /*Make the subtitle occupy its own line beneath the AudioLab title*/
-    margin-top: 3px; 
-    color: #93a4c4; 
-    font-size: 9px; 
-    font-weight: 600; 
-    letter-spacing: 1.7px; 
+  display: block; /*Make the subtitle occupy its own line beneath the AudioLab title*/
+  margin-top: 3px;
+  color: #93a4c4;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.7px;
 }
-
 
 /*Project selection outer container*/
 .al-project {
-  margin: 0 17px 20px; 
-  padding: 12px; 
-  background: #1e2c46; 
-  border: 1px solid #34415a; 
+  margin: 0 17px 20px;
+  padding: 12px;
+  background: #1e2c46;
+  border: 1px solid #34415a;
   border-radius: 9px;
-
 }
 
-
 .al-project label {
-  
-  color: #94a5c3; 
-  font-size: 9px; 
-  letter-spacing: 1.5px; 
+  color: #94a5c3;
+  font-size: 9px;
+  letter-spacing: 1.5px;
 } /*Make the word "PROJECT" small, muted, and space out */
-
 
 .al-project select {
   display: block;
   width: 100%; /*Fill the total width of its parent container: al-project*/
   margin: 8px 0 10px; /*Top 8px, Bottom 10px, Left and Right 0px*/
-  background: transparent; 
+  background: transparent;
   border: 0;
-  color: #edf1fa; 
-  font-size: 13px; 
+  color: #edf1fa;
+  font-size: 13px;
 }
 
 .al-project option {
-  background: #1e2c46; 
+  background: #1e2c46;
 } /*Style the dropdown option*/
 
 .al-project small {
-  color: #bbc8e6; 
-  font-size: 10px; 
+  color: #bbc8e6;
+  font-size: 10px;
 } /*Style the descriptive text under dropdown: */
-
 
 /*All navigation groups*/
 .al-navigation {
-  padding: 0 12px 20px; 
+  padding: 0 12px 20px;
 }
 
 /*Section heading e.g. SOUND ANNOTATION*/
 .al-nav-label {
-  margin: 25px 13px 9px; 
-  color: #8193b3; 
+  margin: 25px 13px 9px;
+  color: #8193b3;
   font-size: 9px;
-  font-weight: 600; 
-  letter-spacing: 1.3px; 
+  font-weight: 600;
+  letter-spacing: 1.3px;
 }
 
 .al-nav-item {
-  display: flex; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
   gap: 11px; /*gap with the icon */
 
-  width: 100%;  /*fill the navigation container*/
-  margin: 3px 0; 
-  padding: 11px 13px; 
-  border: 0; 
-  border-radius: 7px; 
-  background: transparent; 
+  width: 100%; /*fill the navigation container*/
+  margin: 3px 0;
+  padding: 11px 13px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
 
-  color: #a6b4ce; 
-  text-align: left; 
-  font-size: 12px; 
+  color: #a6b4ce;
+  text-align: left;
+  font-size: 12px;
 
   transition: background 0.15s; /*Animate background changes for 0.14s*/
 }
 
 .al-nav-item:hover {
-  background: #273653; 
-  color: #ffffff; 
+  background: #273653;
+  color: #ffffff;
 }
-
 
 /*Connect to Sidebar.tsx !!!!*/
 /*This selector means the element has to contain BOTH class: al-nav-item and active*/
 .al-nav-item.active {
-  background: #343e65; 
+  background: #343e65;
   color: #ffffff;
-  box-shadow: inset 3px 0 #a4a0ff; /*Create inward shadow a along the left edge*/ 
+  box-shadow: inset 3px 0 #a4a0ff; /*Create inward shadow a along the left edge*/
 }
 
 /* ROLE SELECTOR */
 .al-role-preview {
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .al-role-preview label {
-  color: #64748b; 
-  font-size: 11px; 
+  color: #64748b;
+  font-size: 11px;
 }
 
 .al-role-preview select {
-    padding: 7px 10px; 
+  padding: 7px 10px;
 
-    background: #f5f7fb; 
-    border: 1px solid #e1e6f0;
-    border-radius: 7px;
+  background: #f5f7fb;
+  border: 1px solid #e1e6f0;
+  border-radius: 7px;
 
-    color: #202c43;
-    font-size: 12px; 
+  color: #202c43;
+  font-size: 12px;
 }
 
 /* Footer and account information*/
 
 .al-topbar {
-  height: 65px; 
-  display: flex; 
+  height: 65px;
+  display: flex;
   align-items: center; /*Align child element vertically in the container*/
   justify-content: space-between; /*breadcrumb toward the left and status toward the right*/
-  gap: 12px; 
+  gap: 12px;
 
-  padding: 0 30px; 
-  background: #ffffff; 
+  padding: 0 30px;
+  background: #ffffff;
   border-bottom: 1px solid var(--border); /*Seperator between topbar and main content*/
 }
-
 
 /* =========================================
    SIDEBAR — ACCOUNT FOOTER
@@ -303,73 +294,64 @@ button:focus-visible , select:focus-visible {
   font-size: 9px;
 }
 
-
-
-
 /*Breadcrumb is the navigation trail that shows the user's location within the application*/
 .al-breadcrumb {
-  display: flex; 
+  display: flex;
   align-items: center;
-  gap: 9px; 
-  color: #8a94a7; 
-  font-size: 12px; 
+  gap: 9px;
+  color: #8a94a7;
+  font-size: 12px;
 }
 
 /*Target strong tag which used to displayed {titles[page]} */
 .al-breadcrumb strong {
-  color: #4e5e78; 
-  font-weight: 500; 
+  color: #4e5e78;
+  font-weight: 500;
 }
 
 .al-status {
-  color: #64748b ;
-  font-size: 11px; 
+  color: #64748b;
+  font-size: 11px;
 }
-
 
 /*Main content container*/
 .al-content {
-  width: 100%; 
-  max-width: 1680px; 
+  width: 100%;
+  max-width: 1680px;
   margin: 0 auto; /*Center the content horizontally*/
-  padding: 30px; 
+  padding: 30px;
 }
-
 
 /*Style small label: AUDIO NEGATION STUDY*/
 .al-eyebrow {
-  color: #8c96ac; 
-  font-size: 10px; 
-  font-weight: 600; 
-  letter-spacing: 1.35px
+  color: #8c96ac;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.35px;
 }
 
-
 .al-page-heading h1 {
-  margin-top: 7px; 
+  margin-top: 7px;
   color: #202c43;
-  font-size: 27px; 
-  font-weight: 670; 
-  letter-spacing: -0.8px; 
+  font-size: 27px;
+  font-weight: 670;
+  letter-spacing: -0.8px;
 }
 
 .al-page-heading p {
-  margin-top: 7px; 
-  color: #7d899f; 
+  margin-top: 7px;
+  color: #7d899f;
   font-size: 13px;
-  line-height: 1.7;  /*Means 1.7 times the font size of the text giving more vertical breathing room*/
+  line-height: 1.7; /*Means 1.7 times the font size of the text giving more vertical breathing room*/
 }
-
-
-
 
 /*IMPORTANT: Style the placeholder text in the selected workspace (unimplemented)*/
 .al-panel {
   margin-top: 26px;
-  padding: 24px; 
-  background: var(--card); 
+  padding: 24px;
+  background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 11px; 
+  border-radius: 11px;
 }
 
 .al-panel h2 {
@@ -382,67 +364,63 @@ button:focus-visible , select:focus-visible {
   color: #7d899f;
 }
 
-
-
 /* Stat Card*/
 .al-stat-grid {
-  display: grid; 
-  grid-template-columns: repeat(4, minmax(0, 1fr)); /*Create 4 equal columns that can shrink to 0 and grow to fill the available space*/
-  gap: 17px; 
-  margin-top: 26px; 
-  margin-bottom: 23px; 
+  display: grid;
+  grid-template-columns: repeat(
+    4,
+    minmax(0, 1fr)
+  ); /*Create 4 equal columns that can shrink to 0 and grow to fill the available space*/
+  gap: 17px;
+  margin-top: 26px;
+  margin-bottom: 23px;
 } /*Normal screen is displayed four columns (all card line on a single horizontal line)*/
 
 .al-stat-card {
-  min-width: 0; 
-  padding: 21px; 
+  min-width: 0;
+  padding: 21px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 11px;
-  box-shadow: 0 2px 5px #23365a06
+  box-shadow: 0 2px 5px #23365a06;
 }
 
 .al-stat-top {
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between;
-    gap: 10px; 
-    color: #79869d; 
-    font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #79869d;
+  font-size: 11px;
 } /*Inherit background color from var(--card) for it is inside the stat card*/
-
-
 
 /* Because lucide icons render as SVG element in the browser */
 .al-stat-top svg {
-   color: #9b99c3; 
-   flex-shrink: 0; /*Prevent the icon from shrinking when horizontal space becomes contrained*/
+  color: #9b99c3;
+  flex-shrink: 0; /*Prevent the icon from shrinking when horizontal space becomes contrained*/
 }
 
-
-
-.al-stat-value { 
-  display: block;  /*Occupy seperate line*/
-  margin: 15px 0 8px; 
-  color: #293754; 
-  font-size: 32px; 
-  font-weight: 620; 
-  letter-spacing: -1px; 
+.al-stat-value {
+  display: block; /*Occupy seperate line*/
+  margin: 15px 0 8px;
+  color: #293754;
+  font-size: 32px;
+  font-weight: 620;
+  letter-spacing: -1px;
 }
 
 .al-stat-note {
-  display:block; 
-  color: #8e98aa; 
+  display: block;
+  color: #8e98aa;
   font-size: 10px;
-  line-height: 1.5; 
+  line-height: 1.5;
 }
 
 .al-preview-note {
-  margin-top: 10px; 
-  color: #8e98aa; 
-  font-size: 11px; 
+  margin-top: 10px;
+  color: #8e98aa;
+  font-size: 11px;
 }
-
 
 /* Responsive CSS */
 @media (max-width: 1240px) and (min-width: 768px) {
@@ -451,7 +429,7 @@ button:focus-visible , select:focus-visible {
   }
 
   .al-main {
-    margin-left: 214px; 
+    margin-left: 214px;
   }
 
   .al-topbar {
@@ -459,30 +437,30 @@ button:focus-visible , select:focus-visible {
   }
 
   .al-content {
-    padding: 25px 23px; 
+    padding: 25px 23px;
   }
 }
 
 @media (max-width: 1050px) {
   .al-stat-gird {
-    grid-template-columns: repeat(2, minmax(0, 1fr)); /*Create 2 equal columns that can shrink to 0 and grow to fill the available space*/
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    ); /*Create 2 equal columns that can shrink to 0 and grow to fill the available space*/
   }
 } /*For example in computer screen that is 1050px or less*/
-
-
 
 /*Hidden mobile controls on desktop*/
 .al-menu-button {
   display: none; /*Hide the menu button on desktop*/
-  border: 0; 
+  border: 0;
   background: transparent;
-  color: #4e5e78; 
+  color: #4e5e78;
 }
 
 .al-sidebar-scrim {
-  display: none; 
+  display: none;
 }
-
 
 /*Mobile scrren with 767px and lower*/
 @media (max-width: 767px) {
@@ -492,7 +470,9 @@ button:focus-visible , select:focus-visible {
   }
 
   .al-sidebar.open {
-    transform: translateX(0); /*When React add Open class, overides the transform*/
+    transform: translateX(
+      0
+    ); /*When React add Open class, overides the transform*/
   }
 
   .al-main {
@@ -529,12 +509,12 @@ button:focus-visible , select:focus-visible {
   }
 }
 
-
 @media (max-width: 550px) {
-  .al-role-preview label , .al-role-preview .al-status {
-    display: none; 
+  .al-role-preview label,
+  .al-role-preview .al-status {
+    display: none;
   }
-}  /*Save horizontal space in smaller phones*/
+} /*Save horizontal space in smaller phones*/
 
 /*Small phones: 550px or more narrow*/
 @media (max-width: 550px) {

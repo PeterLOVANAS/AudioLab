@@ -9,15 +9,13 @@
  * and project-level authorization.
  */
 
-
-import { env } from "cloudflare:workers"; 
+import { env } from "cloudflare:workers";
 import { z } from "zod";
 
 import {
   projectService,
   ProjectSlugTakenError,
 } from "@/lib/backend/services/projects";
-
 
 // ==========================================
 // 1. REQUEST VALIDATION
@@ -26,10 +24,13 @@ import {
 const CreateProjectSchema = z.strictObject({
   name: z.string().trim().min(1).max(128), // Project name must be between 1 and 128 characters.
 
-  slug: z.string().trim().max(80).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), // Explain regex: The regex pattern /^[a-z0-9]+(?:-[a-z0-9]+)*$/ is used to validate the slug format. It ensures that the slug consists of lowercase letters (a-z), digits (0-9), and hyphens (-). The slug must start with a lowercase letter or digit, followed by zero or more groups of a hyphen and one or more lowercase letters or digits. This pattern allows for slugs like "my-project", "project123", or "example-slug", but disallows slugs that start or end with a hyphen, contain uppercase letters, or have consecutive hyphens.
-});  // What is zod?: Zod is a TypeScript-first schema declaration and validation library. It allows developers to define the shape and constraints of data structures, such as objects, arrays, and primitives, and provides runtime validation to ensure that the data conforms to the specified schema. Zod is particularly useful for validating user input, API requests, and responses, helping to catch errors early and maintain type safety in TypeScript projects.
+  slug: z
+    .string()
+    .trim()
+    .max(80)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), // Explain regex: The regex pattern /^[a-z0-9]+(?:-[a-z0-9]+)*$/ is used to validate the slug format. It ensures that the slug consists of lowercase letters (a-z), digits (0-9), and hyphens (-). The slug must start with a lowercase letter or digit, followed by zero or more groups of a hyphen and one or more lowercase letters or digits. This pattern allows for slugs like "my-project", "project123", or "example-slug", but disallows slugs that start or end with a hyphen, contain uppercase letters, or have consecutive hyphens.
+}); // What is zod?: Zod is a TypeScript-first schema declaration and validation library. It allows developers to define the shape and constraints of data structures, such as objects, arrays, and primitives, and provides runtime validation to ensure that the data conforms to the specified schema. Zod is particularly useful for validating user input, API requests, and responses, helping to catch errors early and maintain type safety in TypeScript projects.
 // What is z.strictObject(): z.strictObject() is a method provided by the Zod library that creates a schema for validating objects with strict property requirements. It ensures that the object being validated has exactly the properties defined in the schema, and no additional properties are allowed. If the object contains any extra properties not specified in the schema, the validation will fail. This is useful for enforcing strict data structures and preventing unexpected or unwanted properties from being present in the validated object.
-
 
 // ==========================================
 // 2. TEMPORARY DEVELOPMENT RESTRICTION
@@ -39,7 +40,7 @@ function requireLocalDevelopment(): Response | null {
   if (!import.meta.env.DEV) {
     return Response.json(
       { error: "Authentication is not configured." },
-      { status: 403 }
+      { status: 403 },
     );
   }
 
@@ -51,33 +52,28 @@ function requireLocalDevelopment(): Response | null {
 // ==========================================
 
 export async function GET() {
-    const denied = requireLocalDevelopment();
-    if (denied) return denied;
+  const denied = requireLocalDevelopment();
+  if (denied) return denied;
 
-    try {
-      const projects = await projectService.list(env.DB); 
+  try {
+    const projects = await projectService.list(env.DB);
 
-      return Response.json(
-          { projects },
-          { status: 200 }
-      ); 
-    } catch (error) {
-      console.error("GET projects failed:", error); 
+    return Response.json({ projects }, { status: 200 });
+  } catch (error) {
+    console.error("GET projects failed:", error);
 
-      return Response.json(
-          { error: "Failed to retrieve projects." },
-          { status: 500 }
-      )
-    }
+    return Response.json(
+      { error: "Failed to retrieve projects." },
+      { status: 500 },
+    );
+  }
 }
-
 
 // ==========================================
 // 4. POST /api/v1/projects
 // ==========================================
 
 export async function POST(request: Request) {
-
   const denied = requireLocalDevelopment();
   if (denied) return denied;
 
@@ -85,17 +81,16 @@ export async function POST(request: Request) {
   let body: unknown;
 
   try {
-    body = await request.json();  // Why use await in this case?: Because request.json() is an asynchronous operation that returns a Promise. Using await allows us to wait for the Promise to resolve and get the parsed JSON body before proceeding with the rest of the function.
-    
+    body = await request.json(); // Why use await in this case?: Because request.json() is an asynchronous operation that returns a Promise. Using await allows us to wait for the Promise to resolve and get the parsed JSON body before proceeding with the rest of the function.
   } catch (error) {
     return Response.json(
       { error: "Invalid JSON request body." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   // Valide the request body against the schema
-  // Ex. { "name": "My Project", "slug": "my-project" } 
+  // Ex. { "name": "My Project", "slug": "my-project" }
   const parsed = CreateProjectSchema.safeParse(body);
 
   if (!parsed.success) {
@@ -107,37 +102,26 @@ export async function POST(request: Request) {
           message: issue.message,
         })),
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   try {
     // Call the service; do not execute SQL here.
-    const project = await projectService.create(
-      env.DB,
-      parsed.data
-    );
+    const project = await projectService.create(env.DB, parsed.data);
 
-    return Response.json(
-      { project },
-      { status: 201 }
-    );
+    return Response.json({ project }, { status: 201 });
   } catch (error) {
-
     // Map a known business conflict to HTTP 409.
     if (error instanceof ProjectSlugTakenError) {
-      return Response.json(
-        { error: error.message },
-        { status: 409 }
-      );
+      return Response.json({ error: error.message }, { status: 409 });
     }
 
     console.error("POST projects failed:", error);
 
     return Response.json(
       { error: "Unable to create project." },
-      { status: 500 }
+      { status: 500 },
     );
   }
-
 }

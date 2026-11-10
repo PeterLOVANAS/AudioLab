@@ -35,7 +35,7 @@ export async function GET(request: Request) {
   if (!import.meta.env.DEV) {
     return Response.json(
       { error: "Authentication not configured." },
-      { status: 403 }
+      { status: 403 },
     );
   }
 
@@ -44,7 +44,10 @@ export async function GET(request: Request) {
 
   // A UUID can be syntactically valid but absent from D1 (which becomes 404).
   if (!z.uuid().safeParse(projectId).success) {
-    return Response.json({ error: "Valid projectId required." }, { status: 400 });
+    return Response.json(
+      { error: "Valid projectId required." },
+      { status: 400 },
+    );
   }
 
   try {
@@ -62,7 +65,7 @@ export async function GET(request: Request) {
     console.error("GET task definitions failed", error);
     return Response.json(
       { error: "Unable to list task definitions." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -78,7 +81,7 @@ export async function POST(request: Request) {
   if (!import.meta.env.DEV) {
     return Response.json(
       { error: "Authentication not configured." },
-      { status: 403 }
+      { status: 403 },
     );
   }
 
@@ -97,7 +100,7 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return Response.json(
       { error: "Invalid task definition.", issues: parsed.error.issues },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -105,7 +108,7 @@ export async function POST(request: Request) {
     const taskDefinition = await service.create(
       env.DB,
       parsed.data.projectId,
-      parsed.data.draft
+      parsed.data.draft,
     );
     return Response.json({ taskDefinition }, { status: 201 });
   } catch (error) {
@@ -116,7 +119,7 @@ export async function POST(request: Request) {
     console.error("POST task definitions failed", error);
     return Response.json(
       { error: "Unable to create task definition." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
