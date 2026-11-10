@@ -32,6 +32,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "start": "vite preview",
-    "deploy": "vinext-cloudflare deploy"
+    "deploy": "vinext-cloudflare deploy",
+    "typecheck": "cf workers types && tsc --noEmit"
   }
 }
