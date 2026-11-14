@@ -16,6 +16,7 @@ import Sidebar, { type PageId } from "@/components/layout/Sidebar"; // Importing
 import StatCard from "@/components/overview/StatCard"; // Importing the StatCard component from a local file. This component is likely used to display statistical information in a card format.
 
 import TaskBuilder from "@/components/task-builder/TaskBuilder";
+import AdminWorkspace from "@/components/admin/AdminWorkspace";
 import type { UserRole } from "@/lib/contracts/auth";
 import { demoMembers } from "@/fixtures/users";
 
@@ -66,6 +67,7 @@ export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectId, setProjectId] = useState("");
   const [labellers, setLabellers] = useState<LabellerMember[]>([]);
+  const [membersRevision, setMembersRevision] = useState(0);
   const [labellerId, setLabellerId] = useState("");
   const [catalogError, setCatalogError] = useState("");
   const [focusAssignmentId, setFocusAssignmentId] = useState<string | null>(
@@ -132,7 +134,7 @@ export default function HomePage() {
         if (!controller.signal.aborted) setCatalogError(String(error));
       });
     return () => controller.abort();
-  }, [projectId]);
+  }, [projectId, membersRevision]);
 
   const [builderDirty, setBuilderDirty] = useState(false);
   function canLeaveBuilder() {
@@ -350,6 +352,13 @@ export default function HomePage() {
                 </section>
               ) : page === "task-builder" && role === "admin" ? (
                 <TaskBuilder onDirty={setBuilderDirty} />
+              ) : page === "team" || page === "progress" ? (
+                <AdminWorkspace
+                  key={`${projectId}:${page}`}
+                  projectId={projectId}
+                  progress={page === "progress"}
+                  onMembersChanged={() => setMembersRevision(value => value + 1)}
+                />
               ) : (
                 // In case page is not "overview", render a message indicating that the workspace has not been implemented yet.
                 // JSX: Render this section for unfinished workspaces.
