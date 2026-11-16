@@ -522,3 +522,333 @@ select:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+/* ════════════════════════════════════════════════════════════
+   PROJECT CONFIGURATION — Feature 1
+   ════════════════════════════════════════════════════════════ */
+
+.al-cfg-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .al-cfg-grid { grid-template-columns: 1fr; }
+}
+
+.al-cfg-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+}
+
+.al-cfg-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.al-cfg-heading h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.al-cfg-tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.al-cfg-tabs button {
+  padding: 5px 13px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--foreground);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.al-cfg-tabs button:hover { background: #f0f3fa; }
+.al-cfg-tabs button.active {
+  background: #5454df18;
+  border-color: #5454df88;
+  color: #3737b8;
+  font-weight: 600;
+}
+
+.al-cfg-hint {
+  font-size: 12px;
+  color: #6b7a99;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.al-cfg-error {
+  background: #fff0f0;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #b91c1c;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.al-cfg-error button {
+  margin-left: auto;
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 4px;
+  border: 1px solid #fca5a5;
+  background: #fff;
+  color: #b91c1c;
+  cursor: pointer;
+}
+
+.al-cfg-success {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #15803d;
+}
+
+.al-cfg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+}
+
+.al-cfg-field span {
+  font-weight: 500;
+  color: #3d4f6e;
+}
+
+.al-cfg-input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--foreground);
+  background: #fff;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.al-cfg-input:focus {
+  outline: none;
+  border-color: #5454df88;
+  box-shadow: 0 0 0 3px #5454df18;
+}
+
+textarea.al-cfg-input { resize: vertical; }
+
+.al-cfg-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  background: #5454df;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  align-self: flex-start;
+}
+
+.al-cfg-btn-primary:hover:not(:disabled) { background: #3737b8; }
+.al-cfg-btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.al-cfg-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 7px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  color: var(--foreground);
+  transition: background 0.15s;
+}
+
+.al-cfg-btn-icon:hover { background: #f0f3fa; }
+
+.al-cfg-card {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.al-cfg-card b { font-size: 13px; color: var(--foreground); }
+
+.al-cfg-card-sub {
+  font-size: 11px;
+  color: #6b7a99;
+  margin: 0;
+  font-family: ui-monospace, monospace;
+}
+
+.al-cfg-details {
+  font-size: 12px;
+}
+
+.al-cfg-details summary {
+  cursor: pointer;
+  color: #5454df;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  user-select: none;
+}
+
+.al-cfg-json {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-family: ui-monospace, monospace;
+  overflow-x: auto;
+  margin-top: 6px;
+  white-space: pre;
+}
+
+.al-cfg-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #e8eaf6;
+  color: #3737b8;
+}
+
+.al-cfg-badge-green {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.al-cfg-badge-amber {
+  background: #fef9c3;
+  color: #92400e;
+}
+
+/* ════════════════════════════════════════════════════════════
+   LABELLER PROGRESS — Feature 2
+   ════════════════════════════════════════════════════════════ */
+
+.al-progress-root {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.al-progress-panel {
+  padding: 22px;
+}
+
+.al-progress-scroll {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+.al-progress-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.al-progress-table th {
+  text-align: left;
+  padding: 7px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7a99;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+
+.al-progress-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #f0f3fa;
+  vertical-align: middle;
+}
+
+.al-progress-table tr:last-child td { border-bottom: none; }
+
+.al-progress-table tr:hover td { background: #f8fafc; }
+
+.al-progress-mono {
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  color: #6b7a99;
+}
+
+.al-progress-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.al-progress-bar-wrap progress {
+  width: 80px;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: #e8eaf6;
+}
+
+.al-progress-bar-wrap progress::-webkit-progress-bar { background: #e8eaf6; border-radius: 3px; }
+.al-progress-bar-wrap progress::-webkit-progress-value { background: #5454df; border-radius: 3px; }
+.al-progress-bar-wrap progress::-moz-progress-bar { background: #5454df; border-radius: 3px; }
+
+.al-progress-bar-wrap small {
+  font-size: 11px;
+  color: #6b7a99;
+  min-width: 28px;
+}
+
+.al-progress-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 16px;
+  color: #8898aa;
+  text-align: center;
+}
+
+.al-progress-empty p {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.al-progress-empty small {
+  font-size: 12px;
+  color: #9eaabf;
+}

@@ -2,18 +2,11 @@
 
 import { useEffect, useState } from "react"; // Importing the useState hook from React, which allows us to manage state in functional components.
 
-import {
-  Menu,
-  ChevronRight,
-  Database,
-  CheckCircle2,
-  ShieldCheck,
-  Headphones,
-} from "lucide-react"; // Importing specific icons from the lucide-react library, which provides a collection of SVG icons for React applications.
+import { Menu, ChevronRight } from "lucide-react"; // Importing specific icons from the lucide-react library, which provides a collection of SVG icons for React applications.
 
 import Sidebar, { type PageId } from "@/components/layout/Sidebar"; // Importing the Sidebar component and the PageId type from a local file. The Sidebar component is likely a custom component for navigation, and PageId is a type definition for page identifiers.
 
-import StatCard from "@/components/overview/StatCard"; // Importing the StatCard component from a local file. This component is likely used to display statistical information in a card format.
+// StatCard is now used inside LabellerProgress (components/overview/LabellerProgress.tsx)
 
 import TaskBuilder from "@/components/task-builder/TaskBuilder";
 import type { UserRole } from "@/lib/contracts/auth";
@@ -24,7 +17,12 @@ import LabellerOverview from "@/components/labeller/LabellerOverview";
 import IntegratedLabellerWorkspace from "@/components/labeller/IntegratedLabellerWorkspace";
 import "@/components/labeller/labeller-mode.css";
 
-type Project = { id: string; name: string };
+// Feature 1: Project Configuration (admin > settings tab)
+import ProjectConfiguration from "@/components/overview/ProjectConfiguration";
+// Feature 2: Labeller Progress (admin > overview page — stat grid + per-labeller table)
+import LabellerProgress from "@/components/overview/LabellerProgress";
+
+type Project = { id: string; name: string; slug?: string };
 type LabellerMember = { userId: string; displayName: string; role: string };
 
 // TypeScript: Map each PageId to its human-readable title.
@@ -315,49 +313,39 @@ export default function HomePage() {
               {/* Conditional rendering: Research overview */}
               {/* if page = overview, then render the statistics grid. If not, render a message indicating that the workspace has not been implemented yet. */}
               {page === "overview" ? (
-                <section
-                  className="al-stat-grid"
-                  aria-label="Research overview statistics"
-                >
-                  <StatCard
-                    label="Annotation tasks"
-                    value={0}
-                    note="No research tasks imported yet"
-                    icon={Database}
-                  />{" "}
-                  {/* Render a StatCard component with the specified props */}
-                  <StatCard
-                    label="Your submissions"
-                    value={0}
-                    note="Completed annotations"
-                    icon={CheckCircle2}
-                  />{" "}
-                  {/* Render a StatCard component with the specified props */}
-                  <StatCard
-                    label="Your drafts"
-                    value={0}
-                    note="Unsubmitted annotations"
-                    icon={ShieldCheck}
-                  />{" "}
-                  {/* Render a StatCard component with the specified props */}
-                  <StatCard
-                    label="Your remaining tasks"
-                    value={0}
-                    note="Tasks awaiting annotation"
-                    icon={Headphones}
-                  />{" "}
-                  {/* Render a StatCard component with the specified props */}
-                </section>
+                // Feature 2: Labeller Progress — stat grid + per-labeller table
+                <LabellerProgress key={projectId} projectId={projectId} />
               ) : page === "task-builder" && role === "admin" ? (
                 <TaskBuilder onDirty={setBuilderDirty} />
               ) : (
-                // In case page is not "overview", render a message indicating that the workspace has not been implemented yet.
-                // JSX: Render this section for unfinished workspaces.
-                <section className="al-panel">
-                  <h2>{titles[page]}</h2>
-
-                  <p>This workspace has not been implemented yet.</p>
-                </section>
+                // Feature 1: Project Configuration tab
+                page === "settings" ? (
+                  <ProjectConfiguration
+                    key={projectId}
+                    projectId={projectId}
+                    projects={projects}
+                    onSaved={() => {
+                      // Re-fetch projects list in parent after a new project is created
+                      const controller = new AbortController();
+                      fetch("/api/v1/projects", {
+                        signal: controller.signal,
+                        cache: "no-store",
+                      })
+                        .then((r) => r.json() as Promise<{ projects: Project[] }>)
+                        .then(({ projects: items }) => {
+                          const rows = items ?? [];
+                          setProjects(rows);
+                        })
+                        .catch(() => {/* ignore — sidebar will retry */});
+                    }}
+                  />
+                ) : (
+                  // All other unimplemented admin pages
+                  <section className="al-panel">
+                    <h2>{titles[page]}</h2>
+                    <p>This workspace has not been implemented yet.</p>
+                  </section>
+                )
               )}
             </>
           )}
