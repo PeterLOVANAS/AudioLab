@@ -1,0 +1,2980 @@
+{
+  "schema": "audiolab.upstream-notices/1",
+  "projectLicense": "Apache-2.0 for original AudioLab source only; upstream licenses retained",
+  "scope": "Exact locally inspected locked npm/Python notice texts; not a binary/component legal clearance",
+  "packages": [
+    {
+      "ecosystem": "npm",
+      "name": "jose",
+      "version": "6.2.17",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.md",
+          "sha256": "8078b0829d6c3e9ecde2f003e1966e4cad3efc6e7a640efbab0313cc166b1af1",
+          "path": "third_party/licenses/8078b0829d6c3e9ecde2f003e1966e4cad3efc6e7a640efbab0313cc166b1af1.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@alloc/quick-lru",
+      "version": "5.3.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "license",
+          "sha256": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0",
+          "path": "third_party/licenses/48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@cloudflare/build-output-utils",
+      "version": "0.9.4",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@cloudflare/config",
+      "version": "0.28.0",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@cloudflare/runtime-types",
+      "version": "0.1.15",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@cloudflare/unenv-preset",
+      "version": "2.16.2",
+      "license": "MIT OR Apache-2.0",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@cloudflare/vite-plugin",
+      "version": "2.0.0-beta.v.4",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@cloudflare/workerd-darwin-arm64",
+      "version": "1.20261019.1",
+      "license": "Apache-2.0",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@cloudflare/workers-response-store",
+      "version": "1.1.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "19a7b85046eb77c8ab308c68569abbbb59235814297b9c95dc90480f71ec7198",
+          "path": "third_party/licenses/19a7b85046eb77c8ab308c68569abbbb59235814297b9c95dc90480f71ec7198.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@cspotcode/source-map-support",
+      "version": "0.8.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.md",
+          "sha256": "3a7d3bb198e909ed642bd68bd29a7d7c09a636d27a51ec663d35f00c4760ec42",
+          "path": "third_party/licenses/3a7d3bb198e909ed642bd68bd29a7d7c09a636d27a51ec663d35f00c4760ec42.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@img/colour",
+      "version": "1.1.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.md",
+          "sha256": "e2eaa4603c14cb26f301e88648c12a853fa3f0f5da6d4b0972958c666e7f2ab8",
+          "path": "third_party/licenses/e2eaa4603c14cb26f301e88648c12a853fa3f0f5da6d4b0972958c666e7f2ab8.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@img/sharp-darwin-arm64",
+      "version": "0.35.5",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68",
+          "path": "third_party/licenses/73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@img/sharp-libvips-darwin-arm64",
+      "version": "1.3.4",
+      "license": "LGPL-3.0-or-later",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@jridgewell/gen-mapping",
+      "version": "0.3.13",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c",
+          "path": "third_party/licenses/769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@jridgewell/remapping",
+      "version": "2.3.5",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c",
+          "path": "third_party/licenses/769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@jridgewell/resolve-uri",
+      "version": "3.1.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "b8778b155bfde5a28b023a558753c0fa058a52bb9de35c343c250be1bbcdedab",
+          "path": "third_party/licenses/b8778b155bfde5a28b023a558753c0fa058a52bb9de35c343c250be1bbcdedab.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@jridgewell/source-map",
+      "version": "0.3.11",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c",
+          "path": "third_party/licenses/769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@jridgewell/sourcemap-codec",
+      "version": "1.6.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c",
+          "path": "third_party/licenses/769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@jridgewell/trace-mapping",
+      "version": "0.3.31",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c",
+          "path": "third_party/licenses/769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@jridgewell/trace-mapping",
+      "version": "0.3.9",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "0daa3c2445c4bfaaa7e8c69ec2742a8841bc920b75818ef2c7a510242de2b04a",
+          "path": "third_party/licenses/0daa3c2445c4bfaaa7e8c69ec2742a8841bc920b75818ef2c7a510242de2b04a.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@nodelib/fs.scandir",
+      "version": "2.1.5",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9363d160bf41d46d83901a5d24fc3fe2094c2afc17b4a2378914b273977ee2de",
+          "path": "third_party/licenses/9363d160bf41d46d83901a5d24fc3fe2094c2afc17b4a2378914b273977ee2de.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@nodelib/fs.stat",
+      "version": "2.0.5",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9363d160bf41d46d83901a5d24fc3fe2094c2afc17b4a2378914b273977ee2de",
+          "path": "third_party/licenses/9363d160bf41d46d83901a5d24fc3fe2094c2afc17b4a2378914b273977ee2de.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@nodelib/fs.walk",
+      "version": "1.2.8",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9363d160bf41d46d83901a5d24fc3fe2094c2afc17b4a2378914b273977ee2de",
+          "path": "third_party/licenses/9363d160bf41d46d83901a5d24fc3fe2094c2afc17b4a2378914b273977ee2de.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@oxc-project/types",
+      "version": "0.155.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "95ced5ecf1133fbf41d409b5555c86c344f83f3b019926057ddbc07cfdcc27b3",
+          "path": "third_party/licenses/95ced5ecf1133fbf41d409b5555c86c344f83f3b019926057ddbc07cfdcc27b3.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@poppinss/colors",
+      "version": "4.1.6",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.md",
+          "sha256": "c21feb678df81fa8336bfb4d7e8e3f928273992cc6743af6178f8979cb8c8d9d",
+          "path": "third_party/licenses/c21feb678df81fa8336bfb4d7e8e3f928273992cc6743af6178f8979cb8c8d9d.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@poppinss/dumper",
+      "version": "0.6.5",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.md",
+          "sha256": "bba2399e2c617b0577fc3f4e22299367625824959945318b17b39ac3c910ce5f",
+          "path": "third_party/licenses/bba2399e2c617b0577fc3f4e22299367625824959945318b17b39ac3c910ce5f.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@poppinss/exception",
+      "version": "1.2.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.md",
+          "sha256": "bba2399e2c617b0577fc3f4e22299367625824959945318b17b39ac3c910ce5f",
+          "path": "third_party/licenses/bba2399e2c617b0577fc3f4e22299367625824959945318b17b39ac3c910ce5f.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-wasm",
+      "version": "2.4.1",
+      "license": "MPL-2.0",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@rolldown/binding-darwin-arm64",
+      "version": "1.2.15",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@rolldown/pluginutils",
+      "version": "1.0.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "e1919b3b98b8bf6c1b99fcc60a0ed46027c97ac947432e1278446c9606f50161",
+          "path": "third_party/licenses/e1919b3b98b8bf6c1b99fcc60a0ed46027c97ac947432e1278446c9606f50161.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@shuding/opentype.js",
+      "version": "1.4.0-beta.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "a5b87c9bc191e7f9c06b07bd7cbbed3ed846dfdb50e859484b2c245aa1ab2e61",
+          "path": "third_party/licenses/a5b87c9bc191e7f9c06b07bd7cbbed3ed846dfdb50e859484b2c245aa1ab2e61.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@sindresorhus/is",
+      "version": "7.2.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+          "path": "third_party/licenses/5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@speed-highlight/core",
+      "version": "1.2.24",
+      "license": "CC0-1.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+          "path": "third_party/licenses/a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@tailwindcss/node",
+      "version": "4.3.4",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985",
+          "path": "third_party/licenses/60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@tailwindcss/oxide-darwin-arm64",
+      "version": "4.3.4",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985",
+          "path": "third_party/licenses/60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@tailwindcss/oxide-wasm32-wasi",
+      "version": "4.3.4",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@tailwindcss/oxide",
+      "version": "4.3.4",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985",
+          "path": "third_party/licenses/60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@tailwindcss/postcss",
+      "version": "4.3.4",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985",
+          "path": "third_party/licenses/60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@types/estree",
+      "version": "1.0.9",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+          "path": "third_party/licenses/c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@types/json-schema",
+      "version": "7.0.15",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+          "path": "third_party/licenses/c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@types/node",
+      "version": "26.6.6",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+          "path": "third_party/licenses/c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@types/react-dom",
+      "version": "19.3.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+          "path": "third_party/licenses/c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@types/react",
+      "version": "19.3.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+          "path": "third_party/licenses/c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@typescript/typescript-darwin-arm64",
+      "version": "7.0.2",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47",
+          "path": "third_party/licenses/a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47.txt"
+        },
+        {
+          "upstreamFile": "NOTICE.txt",
+          "sha256": "f5c708b59114507b8b27b48181b6883d106bbca0c1634bbee45b5e344237b66b",
+          "path": "third_party/licenses/f5c708b59114507b8b27b48181b6883d106bbca0c1634bbee45b5e344237b66b.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@typescript/typescript6",
+      "version": "6.0.2",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.txt",
+          "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47",
+          "path": "third_party/licenses/a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@unpic/core",
+      "version": "1.0.3",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@unpic/react",
+      "version": "1.0.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "682d8e67b96faf3894c23ec6fc0e1330492030ccf439694b5821efc986b47e12",
+          "path": "third_party/licenses/682d8e67b96faf3894c23ec6fc0e1330492030ccf439694b5821efc986b47e12.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@vercel/og",
+      "version": "1.0.3",
+      "license": "MPL-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+          "path": "third_party/licenses/1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@vinext/cloudflare",
+      "version": "1.2.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "19a7b85046eb77c8ab308c68569abbbb59235814297b9c95dc90480f71ec7198",
+          "path": "third_party/licenses/19a7b85046eb77c8ab308c68569abbbb59235814297b9c95dc90480f71ec7198.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@vinext/types",
+      "version": "1.0.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "19a7b85046eb77c8ab308c68569abbbb59235814297b9c95dc90480f71ec7198",
+          "path": "third_party/licenses/19a7b85046eb77c8ab308c68569abbbb59235814297b9c95dc90480f71ec7198.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@vitejs/plugin-react",
+      "version": "6.1.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "29b68325fe026047d13e187b44c33b2acacf7dc647dec4583702e59f235e13b5",
+          "path": "third_party/licenses/29b68325fe026047d13e187b44c33b2acacf7dc647dec4583702e59f235e13b5.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@vitejs/plugin-rsc",
+      "version": "0.5.38",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/ast",
+      "version": "1.14.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/floating-point-hex-parser",
+      "version": "1.13.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "8eba52066621ef20c89c488812ed5cae70f36a84c071fa5dc198c7f25e18b3ad",
+          "path": "third_party/licenses/8eba52066621ef20c89c488812ed5cae70f36a84c071fa5dc198c7f25e18b3ad.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/helper-api-error",
+      "version": "1.13.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/helper-buffer",
+      "version": "1.14.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/helper-numbers",
+      "version": "1.13.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/helper-wasm-bytecode",
+      "version": "1.13.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/helper-wasm-section",
+      "version": "1.14.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/ieee754",
+      "version": "1.13.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/leb128",
+      "version": "1.13.2",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.txt",
+          "sha256": "d1933b0432a1e0f27baf23df3b655330b0a6571bd846d4bfc6f1902cbe0ffb16",
+          "path": "third_party/licenses/d1933b0432a1e0f27baf23df3b655330b0a6571bd846d4bfc6f1902cbe0ffb16.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/utf8",
+      "version": "1.13.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/wasm-edit",
+      "version": "1.14.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/wasm-gen",
+      "version": "1.14.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/wasm-opt",
+      "version": "1.14.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/wasm-parser",
+      "version": "1.14.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@webassemblyjs/wast-printer",
+      "version": "1.14.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef",
+          "path": "third_party/licenses/6d651b5b749b483278531be91623014bdfc12951278a33d6e43477db60a620ef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@xtuc/ieee754",
+      "version": "1.2.0",
+      "license": "BSD-3-Clause",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6d5ef6dcbcc2d08589c716a674536afe8a23ac2499a814afb5b14b39cc415126",
+          "path": "third_party/licenses/6d5ef6dcbcc2d08589c716a674536afe8a23ac2499a814afb5b14b39cc415126.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@xtuc/long",
+      "version": "4.2.2",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "path": "third_party/licenses/cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "acorn-loose",
+      "version": "8.5.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "c2d8184ea9becd063aa40be243e8c6ec2c4f72828fdfe4b0752664ef73e96ed3",
+          "path": "third_party/licenses/c2d8184ea9becd063aa40be243e8c6ec2c4f72828fdfe4b0752664ef73e96ed3.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "acorn",
+      "version": "8.19.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "76a876cf886ff9be2a8b5e2e86514fed06223c8c9f0c1e9ee9606e93841e00b7",
+          "path": "third_party/licenses/76a876cf886ff9be2a8b5e2e86514fed06223c8c9f0c1e9ee9606e93841e00b7.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ajv-formats",
+      "version": "3.0.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9df3bb69929a3b650ed73b3bfa1756725aaff0ac296461605753547004eafeaf",
+          "path": "third_party/licenses/9df3bb69929a3b650ed73b3bfa1756725aaff0ac296461605753547004eafeaf.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ajv-keywords",
+      "version": "5.1.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "a25dce9c94c3ad622574cffbefd4b8845b418aa65df966d97e3204ad276ed240",
+          "path": "third_party/licenses/a25dce9c94c3ad622574cffbefd4b8845b418aa65df966d97e3204ad276ed240.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ajv",
+      "version": "8.20.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+          "path": "third_party/licenses/a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "base64-js",
+      "version": "0.0.8",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.MIT",
+          "sha256": "136239d1783a151cdbf6fd7935dd945082b9d0ee2cbb8497cc0ae49e8a743a47",
+          "path": "third_party/licenses/136239d1783a151cdbf6fd7935dd945082b9d0ee2cbb8497cc0ae49e8a743a47.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "baseline-browser-mapping",
+      "version": "2.11.32",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.txt",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "path": "third_party/licenses/c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "blake3-wasm",
+      "version": "2.1.5",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6ae51be712bd278ca37cd2204a6e836d71aacea5b7b8210d5a95c0e02a15dc35",
+          "path": "third_party/licenses/6ae51be712bd278ca37cd2204a6e836d71aacea5b7b8210d5a95c0e02a15dc35.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "braces",
+      "version": "3.0.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2",
+          "path": "third_party/licenses/35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "browserslist",
+      "version": "4.29.4",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "21c2679a63d7699c0e644409e2f17d0adbc7a965003feb06b3ff4b833d21f722",
+          "path": "third_party/licenses/21c2679a63d7699c0e644409e2f17d0adbc7a965003feb06b3ff4b833d21f722.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "buffer-from",
+      "version": "1.1.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "14275f5c8139d02054c5259d52a88ccbba662a86af18c30f071c8d082dc6004c",
+          "path": "third_party/licenses/14275f5c8139d02054c5259d52a88ccbba662a86af18c30f071c8d082dc6004c.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "camelize",
+      "version": "1.0.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "435a6722c786b0a56fbe7387028f1d9d3f3a2d0fb615bb8fee118727c3f59b7b",
+          "path": "third_party/licenses/435a6722c786b0a56fbe7387028f1d9d3f3a2d0fb615bb8fee118727c3f59b7b.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "caniuse-lite",
+      "version": "1.0.30001819",
+      "license": "CC-BY-4.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "fd3a263fe19ed8faa9068b43abaebafc02c77897b0c6fc09abc04bb592e5f16e",
+          "path": "third_party/licenses/fd3a263fe19ed8faa9068b43abaebafc02c77897b0c6fc09abc04bb592e5f16e.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "cf",
+      "version": "1.0.0-beta.21",
+      "license": "MIT OR Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+          "path": "third_party/licenses/62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a.txt"
+        },
+        {
+          "upstreamFile": "LICENSE-MIT",
+          "sha256": "9bb3b077cc8628334bab25961223dd8207252c8a56aa054195be38f1c042aaf4",
+          "path": "third_party/licenses/9bb3b077cc8628334bab25961223dd8207252c8a56aa054195be38f1c042aaf4.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "chrome-trace-event",
+      "version": "1.0.4",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.txt",
+          "sha256": "a4c8acbaf3b79d675ebd260276a91754da8f291b5253421ab9f6897c4e2ec8b2",
+          "path": "third_party/licenses/a4c8acbaf3b79d675ebd260276a91754da8f291b5253421ab9f6897c4e2ec8b2.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "color-name",
+      "version": "1.1.4",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "c064f7a3e353bc1bc977f3c897941c75ef763f44f41677e0a15370ca0853d6e2",
+          "path": "third_party/licenses/c064f7a3e353bc1bc977f3c897941c75ef763f44f41677e0a15370ca0853d6e2.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "commander",
+      "version": "2.20.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "04512a63dce4d2d506ad612dc0bd7681ccf6e3655f7b6eaef7dfac8323d1ec0b",
+          "path": "third_party/licenses/04512a63dce4d2d506ad612dc0bd7681ccf6e3655f7b6eaef7dfac8323d1ec0b.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "cookie",
+      "version": "1.1.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "c02110eedc16c7114f1a9bdc026c65626ce1d9c7e27fd51a8e0feee8a48a6858",
+          "path": "third_party/licenses/c02110eedc16c7114f1a9bdc026c65626ce1d9c7e27fd51a8e0feee8a48a6858.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "css-background-parser",
+      "version": "0.1.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "d9be3156783d47481385a916dfb1cc4b5289577e71b548a377ec71940270b8d5",
+          "path": "third_party/licenses/d9be3156783d47481385a916dfb1cc4b5289577e71b548a377ec71940270b8d5.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "css-box-shadow",
+      "version": "1.0.0-3",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "css-color-keywords",
+      "version": "1.0.0",
+      "license": "ISC",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "17a548211b4a0cfaa8991068a39d30b0e7ef5c199321bb1c3484509529a8df05",
+          "path": "third_party/licenses/17a548211b4a0cfaa8991068a39d30b0e7ef5c199321bb1c3484509529a8df05.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "css-gradient-parser",
+      "version": "0.0.17",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "112f34fd9cb305e61b039d047dab3835b3ce277b7a26c56b372022473b8f610a",
+          "path": "third_party/licenses/112f34fd9cb305e61b039d047dab3835b3ce277b7a26c56b372022473b8f610a.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "css-to-react-native",
+      "version": "3.2.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.md",
+          "sha256": "9200b800b2460900fe3bff06010726f3a29079511e80245f43a24ef89c0e9d38",
+          "path": "third_party/licenses/9200b800b2460900fe3bff06010726f3a29079511e80245f43a24ef89c0e9d38.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "csstype",
+      "version": "3.2.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "11d55bd4541c75ee7879547ac49089c489163dae49551389713c3d026cab383e",
+          "path": "third_party/licenses/11d55bd4541c75ee7879547ac49089c489163dae49551389713c3d026cab383e.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "detect-libc",
+      "version": "2.1.2",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+          "path": "third_party/licenses/b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "electron-to-chromium",
+      "version": "1.5.464",
+      "license": "ISC",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "25ba5c59dad3e0dd8f9540beaa0f0a86a10e3aec35af5fdc8e88c5f6a5c0d8c6",
+          "path": "third_party/licenses/25ba5c59dad3e0dd8f9540beaa0f0a86a10e3aec35af5fdc8e88c5f6a5c0d8c6.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "emoji-regex-xs",
+      "version": "2.0.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "3d19c2b6246b3072547af2bd05e6b4c09bd3d15955590f1f1e1d20382c919a49",
+          "path": "third_party/licenses/3d19c2b6246b3072547af2bd05e6b4c09bd3d15955590f1f1e1d20382c919a49.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "enhanced-resolve",
+      "version": "5.26.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9068a8782d2fb4c6e432cfa25334efa56f722822180570802bf86e71b6003b1e",
+          "path": "third_party/licenses/9068a8782d2fb4c6e432cfa25334efa56f722822180570802bf86e71b6003b1e.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "error-stack-parser-es",
+      "version": "1.0.5",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "fe99ed9e409014494a8147a5276cd079eae73f6998179af39ba596e7de75e8a9",
+          "path": "third_party/licenses/fe99ed9e409014494a8147a5276cd079eae73f6998179af39ba596e7de75e8a9.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "es-module-lexer",
+      "version": "1.7.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "fecc38b5e10d889686b3862e7ade17e8b3e5c94b24b7256b05a354d8524b3274",
+          "path": "third_party/licenses/fecc38b5e10d889686b3862e7ade17e8b3e5c94b24b7256b05a354d8524b3274.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "es-module-lexer",
+      "version": "2.3.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "8a4b6c44eebfb026d23719a348145a661a555568dbfdc11618ff2d0dd9306b00",
+          "path": "third_party/licenses/8a4b6c44eebfb026d23719a348145a661a555568dbfdc11618ff2d0dd9306b00.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "es-module-lexer",
+      "version": "3.0.4",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "8a4b6c44eebfb026d23719a348145a661a555568dbfdc11618ff2d0dd9306b00",
+          "path": "third_party/licenses/8a4b6c44eebfb026d23719a348145a661a555568dbfdc11618ff2d0dd9306b00.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "escalade",
+      "version": "3.2.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "license",
+          "sha256": "9a9edad7baae52622bddf3c15b2ef8a33d2c89f2d25408ad13e8a7481c6b0c97",
+          "path": "third_party/licenses/9a9edad7baae52622bddf3c15b2ef8a33d2c89f2d25408ad13e8a7481c6b0c97.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "escape-html",
+      "version": "1.0.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "255aa557a1f55224ce522f311629c0bf20854740a67955cefd798fbd1d3d1ded",
+          "path": "third_party/licenses/255aa557a1f55224ce522f311629c0bf20854740a67955cefd798fbd1d3d1ded.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "estree-walker",
+      "version": "3.0.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "8a6dcbabe7179f9c8489c08a7d874d0f1e093ae7449e03756ccf87cb9d0e296e",
+          "path": "third_party/licenses/8a6dcbabe7179f9c8489c08a7d874d0f1e093ae7449e03756ccf87cb9d0e296e.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "events",
+      "version": "3.3.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "631987b7616a325a5b97566c232418481ddf7dbb5ecadefb991e791876cc2599",
+          "path": "third_party/licenses/631987b7616a325a5b97566c232418481ddf7dbb5ecadefb991e791876cc2599.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fast-deep-equal",
+      "version": "3.1.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+          "path": "third_party/licenses/7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fast-glob",
+      "version": "3.3.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9363d160bf41d46d83901a5d24fc3fe2094c2afc17b4a2378914b273977ee2de",
+          "path": "third_party/licenses/9363d160bf41d46d83901a5d24fc3fe2094c2afc17b4a2378914b273977ee2de.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fast-uri",
+      "version": "3.1.9",
+      "license": "BSD-3-Clause",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+          "path": "third_party/licenses/b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fastq",
+      "version": "1.20.3",
+      "license": "ISC",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "c3367f6d01a79d368fc4fbb41b3615fcd92f243d6597ab96742f6f976f9325af",
+          "path": "third_party/licenses/c3367f6d01a79d368fc4fbb41b3615fcd92f243d6597ab96742f6f976f9325af.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fdir",
+      "version": "6.5.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9a39f2aadab11a3697edd668ff2d8ad885b649737b7ab4d3bf12b34e5ada0c86",
+          "path": "third_party/licenses/9a39f2aadab11a3697edd668ff2d8ad885b649737b7ab4d3bf12b34e5ada0c86.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fflate",
+      "version": "0.7.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "62249119bb7df6e54300f37a37145c26a6d4420410aac8881a119c5b427cf751",
+          "path": "third_party/licenses/62249119bb7df6e54300f37a37145c26a6d4420410aac8881a119c5b427cf751.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fill-range",
+      "version": "7.1.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2",
+          "path": "third_party/licenses/35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fsevents",
+      "version": "2.3.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "2a8a5d6197bb97a018b8a190dd3ed853d750ca87c8e80c17aad41d6c6ff448e1",
+          "path": "third_party/licenses/2a8a5d6197bb97a018b8a190dd3ed853d750ca87c8e80c17aad41d6c6ff448e1.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "glob-parent",
+      "version": "5.1.2",
+      "license": "ISC",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "2c46f1325bd3822a33c1e2c1e49c18d13127ac00f9c8b3b79196c7a126f73cd9",
+          "path": "third_party/licenses/2c46f1325bd3822a33c1e2c1e49c18d13127ac00f9c8b3b79196c7a126f73cd9.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "graceful-fs",
+      "version": "4.2.11",
+      "license": "ISC",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "f65c5d9f22a317b2a10803bd1868461ce6499c2ed7217bc80c0cc772a748789c",
+          "path": "third_party/licenses/f65c5d9f22a317b2a10803bd1868461ce6499c2ed7217bc80c0cc772a748789c.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "harfbuzzjs",
+      "version": "0.10.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "c85596583d1b7e4cfb4f21165ce0988aabd72e80a8c3a2ab6aaeedc1965e8288",
+          "path": "third_party/licenses/c85596583d1b7e4cfb4f21165ce0988aabd72e80a8c3a2ab6aaeedc1965e8288.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "has-flag",
+      "version": "4.0.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "license",
+          "sha256": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0",
+          "path": "third_party/licenses/48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "hex-rgb",
+      "version": "4.3.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+          "path": "third_party/licenses/5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ipaddr.js",
+      "version": "2.5.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "62568a2d1337b77171ecca9db10579163446de1ba6151678e81f06cdc199971b",
+          "path": "third_party/licenses/62568a2d1337b77171ecca9db10579163446de1ba6151678e81f06cdc199971b.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "is-extglob",
+      "version": "2.1.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "73b5283588baa142c5baaef5f56d3e8fdea7a30b214e8c5737e87640f882453a",
+          "path": "third_party/licenses/73b5283588baa142c5baaef5f56d3e8fdea7a30b214e8c5737e87640f882453a.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "is-glob",
+      "version": "4.0.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "4cd903859549d4b20b571041f96dfae1136ed079c476126268f9d7cc1b611150",
+          "path": "third_party/licenses/4cd903859549d4b20b571041f96dfae1136ed079c476126268f9d7cc1b611150.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "is-number",
+      "version": "7.0.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2",
+          "path": "third_party/licenses/35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jest-worker",
+      "version": "27.5.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "52412d7bc7ce4157ea628bbaacb8829e0a9cb3c58f57f99176126bc8cf2bfc85",
+          "path": "third_party/licenses/52412d7bc7ce4157ea628bbaacb8829e0a9cb3c58f57f99176126bc8cf2bfc85.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jiti",
+      "version": "2.7.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082",
+          "path": "third_party/licenses/46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "js-tokens",
+      "version": "10.0.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "3b07ef3fdd96c7f4025deb20139ec92b3fb88d3988b98047d9beee10b659f47b",
+          "path": "third_party/licenses/3b07ef3fdd96c7f4025deb20139ec92b3fb88d3988b98047d9beee10b659f47b.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "json-schema-traverse",
+      "version": "1.0.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+          "path": "third_party/licenses/7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "kleur",
+      "version": "4.1.5",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "license",
+          "sha256": "306fa513e39b23a6e8747520de761809d206b99800ef41907b530226574c59ae",
+          "path": "third_party/licenses/306fa513e39b23a6e8747520de761809d206b99800ef41907b530226574c59ae.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "lightningcss-darwin-arm64",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e",
+          "path": "third_party/licenses/5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "lightningcss",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e",
+          "path": "third_party/licenses/5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "linebreak",
+      "version": "1.1.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "cf22b8198f0886a8d4626121579114f23141070e1fceab02ab3c1c361e163440",
+          "path": "third_party/licenses/cf22b8198f0886a8d4626121579114f23141070e1fceab02ab3c1c361e163440.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "lucide-react",
+      "version": "1.61.0",
+      "license": "ISC",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57",
+          "path": "third_party/licenses/b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "magic-string",
+      "version": "0.30.21",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "1cbe51b907662f6cb1492b16c359384a595180bf0e4d101603ed525e75c4e484",
+          "path": "third_party/licenses/1cbe51b907662f6cb1492b16c359384a595180bf0e4d101603ed525e75c4e484.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "magic-string",
+      "version": "1.4.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "1cbe51b907662f6cb1492b16c359384a595180bf0e4d101603ed525e75c4e484",
+          "path": "third_party/licenses/1cbe51b907662f6cb1492b16c359384a595180bf0e4d101603ed525e75c4e484.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "merge-stream",
+      "version": "2.0.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "2cee71bf4612fc2efe1c6261e3f2b21f3c7259ef8a4f3593b095ae7a7bd65ad9",
+          "path": "third_party/licenses/2cee71bf4612fc2efe1c6261e3f2b21f3c7259ef8a4f3593b095ae7a7bd65ad9.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "merge2",
+      "version": "1.4.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "b2590e53ea6e050512c3993bfc746c394bbba9242fd6909245201bdc1dc6862a",
+          "path": "third_party/licenses/b2590e53ea6e050512c3993bfc746c394bbba9242fd6909245201bdc1dc6862a.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "micromatch",
+      "version": "4.0.8",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2",
+          "path": "third_party/licenses/35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "mime-db",
+      "version": "1.54.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "cc1dfd4dafa27271e8212cd3b274eeb3f262e40a6fdab36ddc3f9696f706f58b",
+          "path": "third_party/licenses/cc1dfd4dafa27271e8212cd3b274eeb3f262e40a6fdab36ddc3f9696f706f58b.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "miniflare",
+      "version": "5.20261019.2-beta",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "minimizer-webpack-plugin",
+      "version": "5.13.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9068a8782d2fb4c6e432cfa25334efa56f722822180570802bf86e71b6003b1e",
+          "path": "third_party/licenses/9068a8782d2fb4c6e432cfa25334efa56f722822180570802bf86e71b6003b1e.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "nanoid",
+      "version": "3.3.20",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "da4db1480d9beea3483a2eda5c53b22238d0827d57da162b48f122e04d2d9987",
+          "path": "third_party/licenses/da4db1480d9beea3483a2eda5c53b22238d0827d57da162b48f122e04d2d9987.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "neo-async",
+      "version": "2.6.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "811238ba7d85f6fe6b820703a32f92705bcf77bc352ddc3476783491c64a129a",
+          "path": "third_party/licenses/811238ba7d85f6fe6b820703a32f92705bcf77bc352ddc3476783491c64a129a.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "node-releases",
+      "version": "2.0.60",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "3706296ed611888111ceccc1dff4712844dea4bde0b185c82d718c3b69895abe",
+          "path": "third_party/licenses/3706296ed611888111ceccc1dff4712844dea4bde0b185c82d718c3b69895abe.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "obug",
+      "version": "3.0.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "ee48679d379ca6b4493d5e231094d85f818dd9be40b1a4f234fb7ff657ee35d9",
+          "path": "third_party/licenses/ee48679d379ca6b4493d5e231094d85f818dd9be40b1a4f234fb7ff657ee35d9.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "pako",
+      "version": "0.2.9",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "3bc404ffa7888053253eedcc5a667619aa08dc1be0bea400e5ff28c51602180f",
+          "path": "third_party/licenses/3bc404ffa7888053253eedcc5a667619aa08dc1be0bea400e5ff28c51602180f.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "parse-css-color",
+      "version": "0.2.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "3c8c000c81035fa1f6dceeb5eced4b60cb91811e6e1e749ab01dc8b34dea34bd",
+          "path": "third_party/licenses/3c8c000c81035fa1f6dceeb5eced4b60cb91811e6e1e749ab01dc8b34dea34bd.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "pathe",
+      "version": "2.0.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "52e92576851154bad7737e90cc72818936f43665cb0e3f7428ed8edc8cc5709b",
+          "path": "third_party/licenses/52e92576851154bad7737e90cc72818936f43665cb0e3f7428ed8edc8cc5709b.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "picocolors",
+      "version": "1.1.1",
+      "license": "ISC",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6582629e2979466878f6014313dcc2f3756c9616148682227ce3063dde310750",
+          "path": "third_party/licenses/6582629e2979466878f6014313dcc2f3756c9616148682227ce3063dde310750.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "picomatch",
+      "version": "2.3.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9",
+          "path": "third_party/licenses/d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "picomatch",
+      "version": "4.0.7",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9",
+          "path": "third_party/licenses/d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "playwright-core",
+      "version": "1.65.1",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "ThirdPartyNotices.txt",
+          "sha256": "a549d329bad8806fe279f0ecae0fc0270dec7e7c2dc8ec10f90e394f7c32b144",
+          "path": "third_party/licenses/a549d329bad8806fe279f0ecae0fc0270dec7e7c2dc8ec10f90e394f7c32b144.txt"
+        },
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb",
+          "path": "third_party/licenses/45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb.txt"
+        },
+        {
+          "upstreamFile": "NOTICE",
+          "sha256": "6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d",
+          "path": "third_party/licenses/6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "postcss-value-parser",
+      "version": "4.2.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "3687447039151857a6ba378db062172c7f33d4aa70a615c87a43a9c50e990485",
+          "path": "third_party/licenses/3687447039151857a6ba378db062172c7f33d4aa70a615c87a43a9c50e990485.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "postcss",
+      "version": "8.5.31",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "5be1f3465bba68a626777f984878814aaf35e7ef8e9fd314d469bcf887050fb8",
+          "path": "third_party/licenses/5be1f3465bba68a626777f984878814aaf35e7ef8e9fd314d469bcf887050fb8.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "prettier",
+      "version": "3.9.10",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "b0f2417199889f1c0d28ec4e0244eacf1a15de5819d61f641dd7d8f45153ac9c",
+          "path": "third_party/licenses/b0f2417199889f1c0d28ec4e0244eacf1a15de5819d61f641dd7d8f45153ac9c.txt"
+        },
+        {
+          "upstreamFile": "THIRD-PARTY-NOTICES.md",
+          "sha256": "3f58498bc5cc36173c44f33a33e2f7b30a2771274edf84bd75b8dc2d7a741dfd",
+          "path": "third_party/licenses/3f58498bc5cc36173c44f33a33e2f7b30a2771274edf84bd75b8dc2d7a741dfd.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "queue-microtask",
+      "version": "1.2.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "d4c2065e2b936e62a4eb400efb4576edec9ca1388a9f78aa288e147275e7bc8b",
+          "path": "third_party/licenses/d4c2065e2b936e62a4eb400efb4576edec9ca1388a9f78aa288e147275e7bc8b.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "react-dom",
+      "version": "19.3.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+          "path": "third_party/licenses/da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "react-server-dom-webpack",
+      "version": "19.3.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+          "path": "third_party/licenses/da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "react",
+      "version": "19.3.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+          "path": "third_party/licenses/da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "require-from-string",
+      "version": "2.0.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "license",
+          "sha256": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
+          "path": "third_party/licenses/6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "reusify",
+      "version": "1.1.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "93a1506953b08ad4874e1cc0971a1d2ac387ca510da91e4d05e460a6c4966fa3",
+          "path": "third_party/licenses/93a1506953b08ad4874e1cc0971a1d2ac387ca510da91e4d05e460a6c4966fa3.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "rolldown",
+      "version": "1.2.15",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "THIRD-PARTY-LICENSE",
+          "sha256": "a877291d800ed43692f3f9ae09d8e01cc6f7293ad39d43896059c188ffbb8b7c",
+          "path": "third_party/licenses/a877291d800ed43692f3f9ae09d8e01cc6f7293ad39d43896059c188ffbb8b7c.txt"
+        },
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "23ecfff35a5a2e80d92142f75228912c3b1abc4b5a8337a821ff4397e2f9f734",
+          "path": "third_party/licenses/23ecfff35a5a2e80d92142f75228912c3b1abc4b5a8337a821ff4397e2f9f734.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "run-parallel",
+      "version": "1.2.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "d4c2065e2b936e62a4eb400efb4576edec9ca1388a9f78aa288e147275e7bc8b",
+          "path": "third_party/licenses/d4c2065e2b936e62a4eb400efb4576edec9ca1388a9f78aa288e147275e7bc8b.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "satori",
+      "version": "0.33.5",
+      "license": "MPL-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+          "path": "third_party/licenses/1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "scheduler",
+      "version": "0.28.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93",
+          "path": "third_party/licenses/da6d3703ed11cbe42bd212c725957c98da23cbff1998c05fa4b3d976d1a58e93.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "schema-utils",
+      "version": "4.8.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9068a8782d2fb4c6e432cfa25334efa56f722822180570802bf86e71b6003b1e",
+          "path": "third_party/licenses/9068a8782d2fb4c6e432cfa25334efa56f722822180570802bf86e71b6003b1e.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "semver",
+      "version": "7.8.5",
+      "license": "ISC",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "path": "third_party/licenses/4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "sharp",
+      "version": "0.35.5",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68",
+          "path": "third_party/licenses/73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "source-map-js",
+      "version": "1.2.2",
+      "license": "BSD-3-Clause",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd",
+          "path": "third_party/licenses/6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "source-map-support",
+      "version": "0.5.21",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.md",
+          "sha256": "3a7d3bb198e909ed642bd68bd29a7d7c09a636d27a51ec663d35f00c4760ec42",
+          "path": "third_party/licenses/3a7d3bb198e909ed642bd68bd29a7d7c09a636d27a51ec663d35f00c4760ec42.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "source-map",
+      "version": "0.6.1",
+      "license": "BSD-3-Clause",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd",
+          "path": "third_party/licenses/6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "srvx",
+      "version": "1.0.7",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082",
+          "path": "third_party/licenses/46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "string.prototype.codepointat",
+      "version": "0.2.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE-MIT.txt",
+          "sha256": "483acb265f182907d1caf6cff9c16c96f31325ed23792832cc5d8b12d5f88c8a",
+          "path": "third_party/licenses/483acb265f182907d1caf6cff9c16c96f31325ed23792832cc5d8b12d5f88c8a.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "strip-literal",
+      "version": "4.0.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "af32efdd008a371c77b13eef5010c81d6c5c2f67c054b6bb74317e13ac38c171",
+          "path": "third_party/licenses/af32efdd008a371c77b13eef5010c81d6c5c2f67c054b6bb74317e13ac38c171.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "supports-color",
+      "version": "10.2.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+          "path": "third_party/licenses/5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "supports-color",
+      "version": "8.1.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+          "path": "third_party/licenses/5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "tailwindcss",
+      "version": "4.3.4",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985",
+          "path": "third_party/licenses/60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "tapable",
+      "version": "2.3.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "824ef6c33ae5ecbbab65d37f2b37da2bfc81d76cf7676ec0f59d00a0a38bdb75",
+          "path": "third_party/licenses/824ef6c33ae5ecbbab65d37f2b37da2bfc81d76cf7676ec0f59d00a0a38bdb75.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "terser",
+      "version": "5.51.2",
+      "license": "BSD-2-Clause",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "901d0a7fcaccaae9917d165039c0473c354e5da2e0e94140dde67aad9ffb19da",
+          "path": "third_party/licenses/901d0a7fcaccaae9917d165039c0473c354e5da2e0e94140dde67aad9ffb19da.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "tiny-inflate",
+      "version": "1.0.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "c0df7f551401f8f80197ff31bf69b8cd23727d127423403282514d242a3ab132",
+          "path": "third_party/licenses/c0df7f551401f8f80197ff31bf69b8cd23727d127423403282514d242a3ab132.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "22c68811e174cbbfb3813d4135918df4f540959c14d872e601d9abe83d3cde8f",
+          "path": "third_party/licenses/22c68811e174cbbfb3813d4135918df4f540959c14d872e601d9abe83d3cde8f.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "to-regex-range",
+      "version": "5.0.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "e7d1fee7347ffddccc5fd03327ffdb50f8c112be0d5016d62388a92c4ae6e7a9",
+          "path": "third_party/licenses/e7d1fee7347ffddccc5fd03327ffdb50f8c112be0d5016d62388a92c4ae6e7a9.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "turbo-stream",
+      "version": "3.2.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "04b98e13d66c19b46cb1804fd376a518a5050fd37dade28d4e7461a2e1002f23",
+          "path": "third_party/licenses/04b98e13d66c19b46cb1804fd376a518a5050fd37dade28d4e7461a2e1002f23.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "typescript",
+      "version": "6.0.3",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.txt",
+          "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47",
+          "path": "third_party/licenses/a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47.txt"
+        },
+        {
+          "upstreamFile": "ThirdPartyNoticeText.txt",
+          "sha256": "1af3c68039c57e539422da82a4faada506ce6d0ea6f90e0b699d02dbcdb7a90c",
+          "path": "third_party/licenses/1af3c68039c57e539422da82a4faada506ce6d0ea6f90e0b699d02dbcdb7a90c.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "typescript",
+      "version": "7.0.2",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47",
+          "path": "third_party/licenses/a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47.txt"
+        },
+        {
+          "upstreamFile": "NOTICE.txt",
+          "sha256": "f5c708b59114507b8b27b48181b6883d106bbca0c1634bbee45b5e344237b66b",
+          "path": "third_party/licenses/f5c708b59114507b8b27b48181b6883d106bbca0c1634bbee45b5e344237b66b.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "undici-types",
+      "version": "8.9.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27",
+          "path": "third_party/licenses/a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "undici",
+      "version": "7.29.1",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27",
+          "path": "third_party/licenses/a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "unenv",
+      "version": "2.0.0-rc.24",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082",
+          "path": "third_party/licenses/46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "unicode-trie",
+      "version": "2.0.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "43439dbd4f43837aadab215cdbe5a422cc6323a50c4ea84d8d6bbc3671666a1d",
+          "path": "third_party/licenses/43439dbd4f43837aadab215cdbe5a422cc6323a50c4ea84d8d6bbc3671666a1d.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "unpic",
+      "version": "4.2.2",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "update-browserslist-db",
+      "version": "1.3.4",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9877e90da14aa8c931a1f9d07cc2a20ce119106e5dab1ebb41af865266d0cd2a",
+          "path": "third_party/licenses/9877e90da14aa8c931a1f9d07cc2a20ce119106e5dab1ebb41af865266d0cd2a.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "vinext",
+      "version": "1.3.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "19a7b85046eb77c8ab308c68569abbbb59235814297b9c95dc90480f71ec7198",
+          "path": "third_party/licenses/19a7b85046eb77c8ab308c68569abbbb59235814297b9c95dc90480f71ec7198.txt"
+        },
+        {
+          "upstreamFile": "THIRD_PARTY_LICENSES.md",
+          "sha256": "d65a90feb8db54a3597be2f429e2edecd7714ec06089261ae5bea2979e4f9cf4",
+          "path": "third_party/licenses/d65a90feb8db54a3597be2f429e2edecd7714ec06089261ae5bea2979e4f9cf4.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "vite-plugin-commonjs",
+      "version": "0.10.4",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "4daa59a496ede97b6616b7e71724160c7a61b8945c7b17413b37e747fe6bbfce",
+          "path": "third_party/licenses/4daa59a496ede97b6616b7e71724160c7a61b8945c7b17413b37e747fe6bbfce.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "vite-plugin-dynamic-import",
+      "version": "1.6.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "4daa59a496ede97b6616b7e71724160c7a61b8945c7b17413b37e747fe6bbfce",
+          "path": "third_party/licenses/4daa59a496ede97b6616b7e71724160c7a61b8945c7b17413b37e747fe6bbfce.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "vite",
+      "version": "8.3.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.md",
+          "sha256": "387dd7baa307083401a27c58c362c30832f5ba1dba84f10cc22c33401523f45c",
+          "path": "third_party/licenses/387dd7baa307083401a27c58c362c30832f5ba1dba84f10cc22c33401523f45c.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "vitefu",
+      "version": "1.1.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "ed0b4f44d335645e243ff856c66b5ca7b353ed58d10307e6d4dbfb35658a7814",
+          "path": "third_party/licenses/ed0b4f44d335645e243ff856c66b5ca7b353ed58d10307e6d4dbfb35658a7814.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "watchpack",
+      "version": "2.6.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9068a8782d2fb4c6e432cfa25334efa56f722822180570802bf86e71b6003b1e",
+          "path": "third_party/licenses/9068a8782d2fb4c6e432cfa25334efa56f722822180570802bf86e71b6003b1e.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "web-vitals",
+      "version": "4.2.4",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "bfdeded4040e05da31ca9b6239dc83bd23fa26ac8db87342a7ca4363f68916ff",
+          "path": "third_party/licenses/bfdeded4040e05da31ca9b6239dc83bd23fa26ac8db87342a7ca4363f68916ff.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "webpack-sources",
+      "version": "3.6.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "214d0ac13edb475ec426df1979d96fd46b443debc466c0fb592e32152ae5a940",
+          "path": "third_party/licenses/214d0ac13edb475ec426df1979d96fd46b443debc466c0fb592e32152ae5a940.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "webpack",
+      "version": "5.112.2",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "9068a8782d2fb4c6e432cfa25334efa56f722822180570802bf86e71b6003b1e",
+          "path": "third_party/licenses/9068a8782d2fb4c6e432cfa25334efa56f722822180570802bf86e71b6003b1e.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "workerd",
+      "version": "1.20261019.1",
+      "license": "Apache-2.0",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ws",
+      "version": "8.21.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "2b29dcfe0d6471f7e8c92c5fb38c9f93edee10330937055440192f1832b1ecef",
+          "path": "third_party/licenses/2b29dcfe0d6471f7e8c92c5fb38c9f93edee10330937055440192f1832b1ecef.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "yoga-layout",
+      "version": "3.2.1",
+      "license": "MIT",
+      "notices": [],
+      "reviewRequired": true
+    },
+    {
+      "ecosystem": "npm",
+      "name": "youch-core",
+      "version": "0.3.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.md",
+          "sha256": "26e09f87efc06dfbe7a0ea183dd0fcc1bd2811c889d183d23df92af15625dfa1",
+          "path": "third_party/licenses/26e09f87efc06dfbe7a0ea183dd0fcc1bd2811c889d183d23df92af15625dfa1.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "youch",
+      "version": "4.1.0-beta.10",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE.md",
+          "sha256": "bba2399e2c617b0577fc3f4e22299367625824959945318b17b39ac3c910ce5f",
+          "path": "third_party/licenses/bba2399e2c617b0577fc3f4e22299367625824959945318b17b39ac3c910ce5f.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "zod",
+      "version": "4.6.5",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "3f1189b28e3866e0d979968d466b78f813f76827cfdca1fbb124cc0a5c8841f8",
+          "path": "third_party/licenses/3f1189b28e3866e0d979968d466b78f813f76827cfdca1fbb124cc0a5c8841f8.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "npm",
+      "name": "zod",
+      "version": "4.6.7",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "LICENSE",
+          "sha256": "3f1189b28e3866e0d979968d466b78f813f76827cfdca1fbb124cc0a5c8841f8",
+          "path": "third_party/licenses/3f1189b28e3866e0d979968d466b78f813f76827cfdca1fbb124cc0a5c8841f8.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "python",
+      "name": "requests",
+      "version": "2.34.2",
+      "license": "Apache-2.0",
+      "notices": [
+        {
+          "upstreamFile": "requests-2.34.2.dist-info/licenses/LICENSE",
+          "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b",
+          "path": "third_party/licenses/09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b.txt"
+        },
+        {
+          "upstreamFile": "requests-2.34.2.dist-info/licenses/NOTICE",
+          "sha256": "f5110972dedad2b4e9d314518daf3b7d72d6e02e499acd802181de6f74571dcc",
+          "path": "third_party/licenses/f5110972dedad2b4e9d314518daf3b7d72d6e02e499acd802181de6f74571dcc.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "python",
+      "name": "certifi",
+      "version": "2026.11.20",
+      "license": "MPL-2.0",
+      "notices": [
+        {
+          "upstreamFile": "certifi-2026.11.20.dist-info/licenses/LICENSE",
+          "sha256": "e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7",
+          "path": "third_party/licenses/e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "python",
+      "name": "charset-normalizer",
+      "version": "3.5.3",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "charset_normalizer-3.5.3.dist-info/licenses/LICENSE",
+          "sha256": "6d0d41bfe170ac6c7dc248c9a63e254d0fb45a60d50a8257d0af92c6e249b887",
+          "path": "third_party/licenses/6d0d41bfe170ac6c7dc248c9a63e254d0fb45a60d50a8257d0af92c6e249b887.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "python",
+      "name": "idna",
+      "version": "3.20",
+      "license": "BSD-3-Clause",
+      "notices": [
+        {
+          "upstreamFile": "idna-3.20.dist-info/licenses/LICENSE.md",
+          "sha256": "1a9a4f0e3d479a27240ddd59a9137a66ab4a0f9dfdc8ca6188cc0bfd85187f04",
+          "path": "third_party/licenses/1a9a4f0e3d479a27240ddd59a9137a66ab4a0f9dfdc8ca6188cc0bfd85187f04.txt"
+        }
+      ],
+      "reviewRequired": false
+    },
+    {
+      "ecosystem": "python",
+      "name": "urllib3",
+      "version": "2.8.0",
+      "license": "MIT",
+      "notices": [
+        {
+          "upstreamFile": "urllib3-2.8.0.dist-info/licenses/LICENSE.txt",
+          "sha256": "130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686",
+          "path": "third_party/licenses/130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686.txt"
+        }
+      ],
+      "reviewRequired": false
+    }
+  ],
+  "uninspectedPlatformPackages": [
+    "@cloudflare/workerd-darwin-64@1.20261019.1",
+    "@cloudflare/workerd-linux-64@1.20261019.1",
+    "@cloudflare/workerd-linux-arm64@1.20261019.1",
+    "@cloudflare/workerd-windows-64@1.20261019.1",
+    "@emnapi/runtime@1.11.3",
+    "@img/sharp-darwin-x64@0.35.5",
+    "@img/sharp-freebsd-wasm32@0.35.5",
+    "@img/sharp-libvips-darwin-x64@1.3.4",
+    "@img/sharp-libvips-linux-arm64@1.3.4",
+    "@img/sharp-libvips-linux-arm@1.3.4",
+    "@img/sharp-libvips-linux-ppc64@1.3.4",
+    "@img/sharp-libvips-linux-riscv64@1.3.4",
+    "@img/sharp-libvips-linux-s390x@1.3.4",
+    "@img/sharp-libvips-linux-x64@1.3.4",
+    "@img/sharp-libvips-linuxmusl-arm64@1.3.4",
+    "@img/sharp-libvips-linuxmusl-x64@1.3.4",
+    "@img/sharp-linux-arm64@0.35.5",
+    "@img/sharp-linux-arm@0.35.5",
+    "@img/sharp-linux-ppc64@0.35.5",
+    "@img/sharp-linux-riscv64@0.35.5",
+    "@img/sharp-linux-s390x@0.35.5",
+    "@img/sharp-linux-x64@0.35.5",
+    "@img/sharp-linuxmusl-arm64@0.35.5",
+    "@img/sharp-linuxmusl-x64@0.35.5",
+    "@img/sharp-wasm32@0.35.5",
+    "@img/sharp-webcontainers-wasm32@0.35.5",
+    "@img/sharp-win32-arm64@0.35.5",
+    "@img/sharp-win32-ia32@0.35.5",
+    "@img/sharp-win32-x64@0.35.5",
+    "@rolldown/binding-android-arm-eabi@1.2.15",
+    "@rolldown/binding-android-arm64@1.2.15",
+    "@rolldown/binding-darwin-x64@1.2.15",
+    "@rolldown/binding-freebsd-x64@1.2.15",
+    "@rolldown/binding-linux-arm-gnueabihf@1.2.15",
+    "@rolldown/binding-linux-arm64-gnu@1.2.15",
+    "@rolldown/binding-linux-arm64-musl@1.2.15",
+    "@rolldown/binding-linux-ppc64-gnu@1.2.15",
+    "@rolldown/binding-linux-s390x-gnu@1.2.15",
+    "@rolldown/binding-linux-x64-gnu@1.2.15",
+    "@rolldown/binding-linux-x64-musl@1.2.15",
+    "@rolldown/binding-openharmony-arm64@1.2.15",
+    "@rolldown/binding-win32-arm64-msvc@1.2.15",
+    "@rolldown/binding-win32-x64-msvc@1.2.15",
+    "@tailwindcss/oxide-android-arm64@4.3.4",
+    "@tailwindcss/oxide-darwin-x64@4.3.4",
+    "@tailwindcss/oxide-freebsd-x64@4.3.4",
+    "@tailwindcss/oxide-linux-arm-gnueabihf@4.3.4",
+    "@tailwindcss/oxide-linux-arm64-gnu@4.3.4",
+    "@tailwindcss/oxide-linux-arm64-musl@4.3.4",
+    "@tailwindcss/oxide-linux-x64-gnu@4.3.4",
+    "@tailwindcss/oxide-linux-x64-musl@4.3.4",
+    "@tailwindcss/oxide-win32-arm64-msvc@4.3.4",
+    "@tailwindcss/oxide-win32-x64-msvc@4.3.4",
+    "@typescript/typescript-aix-ppc64@7.0.2",
+    "@typescript/typescript-darwin-x64@7.0.2",
+    "@typescript/typescript-freebsd-arm64@7.0.2",
+    "@typescript/typescript-freebsd-x64@7.0.2",
+    "@typescript/typescript-linux-arm64@7.0.2",
+    "@typescript/typescript-linux-arm@7.0.2",
+    "@typescript/typescript-linux-loong64@7.0.2",
+    "@typescript/typescript-linux-mips64el@7.0.2",
+    "@typescript/typescript-linux-ppc64@7.0.2",
+    "@typescript/typescript-linux-riscv64@7.0.2",
+    "@typescript/typescript-linux-s390x@7.0.2",
+    "@typescript/typescript-linux-x64@7.0.2",
+    "@typescript/typescript-netbsd-arm64@7.0.2",
+    "@typescript/typescript-netbsd-x64@7.0.2",
+    "@typescript/typescript-openbsd-arm64@7.0.2",
+    "@typescript/typescript-openbsd-x64@7.0.2",
+    "@typescript/typescript-sunos-x64@7.0.2",
+    "@typescript/typescript-win32-arm64@7.0.2",
+    "@typescript/typescript-win32-x64@7.0.2",
+    "lightningcss-android-arm64@1.33.0",
+    "lightningcss-darwin-x64@1.33.0",
+    "lightningcss-freebsd-x64@1.33.0",
+    "lightningcss-linux-arm-gnueabihf@1.33.0",
+    "lightningcss-linux-arm64-gnu@1.33.0",
+    "lightningcss-linux-arm64-musl@1.33.0",
+    "lightningcss-linux-x64-gnu@1.33.0",
+    "lightningcss-linux-x64-musl@1.33.0",
+    "lightningcss-win32-arm64-msvc@1.33.0",
+    "lightningcss-win32-x64-msvc@1.33.0",
+    "tslib@2.8.1"
+  ]
+}

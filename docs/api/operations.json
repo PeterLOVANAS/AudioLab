@@ -1,0 +1,1238 @@
+{
+  "description": "Reviewed HTTP operation inventory; source handlers and validators are authoritative. Example IDs are synthetic shape placeholders, not live resources.",
+  "operations": [
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/session",
+      "query": "none",
+      "permission": "Public discovery",
+      "request": "No body",
+      "response": "200 {user:null|SessionUser,memberships,mode,configured,loginUrl}; errors may be described by status/error in discovery",
+      "additionalErrors": "503 config/schema unavailable",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/auth/session/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "query": "none",
+      "permission": "Explicit local DEV loopback only",
+      "request": "{username:string,password:string}",
+      "response": "200 {ok:true}; local session cookie",
+      "additionalErrors": "400 malformed, 401 invalid, 403 production, 429 limiter",
+      "exampleBody": {
+        "username": "local-admin",
+        "password": "EXAMPLE_ONLY_NOT_A_REAL_PASSWORD"
+      },
+      "requestSchema": null,
+      "scope": "development-only",
+      "source": "app/api/v1/auth/login/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "query": "none",
+      "permission": "Authenticated current identity + exact Origin",
+      "request": "{}",
+      "response": "200 {ok:true,logoutUrl:\"/cdn-cgi/access/logout\"}; clears DEV cookie/revokes exact Access token",
+      "additionalErrors": "401/403 invalid session",
+      "exampleBody": {},
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/auth/logout/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/projects",
+      "query": "none",
+      "permission": "Authenticated member; project/resource scope checked",
+      "request": "No body",
+      "response": "200 {projects: Project[]} (memberships only)",
+      "additionalErrors": "",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/projects/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects",
+      "query": "none",
+      "permission": "Authenticated administrator in at least one existing project",
+      "request": "Strict {name:1..128,slug:lowercase-hyphen <=80}",
+      "response": "201 {project:Project}; creator admin membership atomic",
+      "additionalErrors": "400 invalid, 409 duplicate slug",
+      "exampleBody": {
+        "name": "Synthetic study",
+        "slug": "synthetic-study"
+      },
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/projects/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/datasets",
+      "query": "projectId=00000000-0000-4000-8000-000000000001",
+      "permission": "Authenticated member; project/resource scope checked",
+      "request": "projectId UUID",
+      "response": "200 {datasets:Dataset[]}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/datasets/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/datasets",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "Strict {projectId:UUID,name:1..128,version:1..100,description?:<=2000}",
+      "response": "201 {dataset:Dataset}",
+      "additionalErrors": "400/404/409",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "name": "Synthetic tones",
+        "version": "v1"
+      },
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/datasets/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/assets",
+      "query": "datasetId=00000000-0000-4000-8000-000000000002",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "datasetId UUID",
+      "response": "200 {assets:AudioAsset[]}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/assets/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/assets",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "multipart/form-data: datasetId UUID; audio File; originalPath? nonempty <=500; WAV <=10 MiB",
+      "response": "201 {asset:AudioAsset}",
+      "additionalErrors": "400/404/409/413/415",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/assets/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/assets/{id}/audio",
+      "query": "none",
+      "permission": "Project admin or assigned owner of this primary/slot audio",
+      "request": "id asset UUID; optional Range:bytes=start-end",
+      "response": "200 audio/wav, 206 partial; HEAD headers without body",
+      "additionalErrors": "400/404 missing object, 416 bad range",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/assets/[id]/audio/route.ts"
+    },
+    {
+      "method": "HEAD",
+      "path": "/api/v1/assets/{id}/audio",
+      "query": "none",
+      "permission": "Project admin or assigned owner of this primary/slot audio",
+      "request": "No body; Vinext synthesizes HEAD from the exported GET, and the proxy explicitly permits audio HEAD",
+      "response": "200 audio/wav, 206 partial; HEAD headers without body",
+      "additionalErrors": "400/404 missing object, 416 bad range",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/assets/[id]/audio/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/source-records",
+      "query": "assetId=00000000-0000-4000-8000-000000000003",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "assetId UUID",
+      "response": "200 {sourceRecords:[{sourceRecordId,sourceDomain,question,choices,metadata:{}}]}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/source-records/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/source-fields",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&datasetId=00000000-0000-4000-8000-000000000002&userId=SESSION_USER_ID&recordId=SOURCE_RECORD_ID&view=admin",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "UUID project/dataset, own userId, external recordId<=200, view admin|worker, assetId? UUID",
+      "response": "200 {source:SourceFieldPayload|WorkerSourcePayload}; assigned workers use pinned task, not this admin endpoint",
+      "additionalErrors": "400/404/503 schema",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/source-fields/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dataset-ingestion/validate",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&userId=SESSION_USER_ID",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "ingestionSchema; body <=256 KiB; registered audio/dataset IDs",
+      "response": "200 {ok:true,persisted:boolean,accepted:Array<{source_record_id:string,id:string,audio_id:string}>,rejected:[]}; 422 {ok:false,accepted:[],rejected:Array<{path:string,message:string}>}",
+      "additionalErrors": "400/404/409/413/422",
+      "exampleBody": {
+        "schema_version": 1,
+        "dataset_id": "f634c610-6ceb-5cc6-a2c5-e455260da614",
+        "source_version": "v1",
+        "provenance": {
+          "origin": "synthetic-tones",
+          "revision": "generator-v1"
+        },
+        "records": [
+          {
+            "sample_id": "steady-tone",
+            "audio_id": "1b1e9f72-6fb8-5356-a9ad-eb4ca2a314f8",
+            "metadata": {
+              "originalPath": "steady-tone.wav",
+              "durationSeconds": 4,
+              "license": "CC0-1.0",
+              "generator": "generate_example_dataset.py"
+            },
+            "fields": {
+              "instruction": {
+                "type": "text",
+                "visibility": "worker",
+                "value": "Listen and annotate the synthetic tone."
+              },
+              "frequency_hz": {
+                "type": "number",
+                "visibility": "admin",
+                "value": 440
+              }
+            },
+            "items": [
+              {
+                "item_id": "listen",
+                "fields": {
+                  "prompt": {
+                    "type": "text",
+                    "visibility": "worker",
+                    "value": "Is the tone steady or pulsed? Mark its audible intervals in a grounding task."
+                  },
+                  "category": {
+                    "type": "choices",
+                    "visibility": "worker",
+                    "value": [
+                      {
+                        "id": "steady",
+                        "label": "Steady tone"
+                      },
+                      {
+                        "id": "pulsed",
+                        "label": "Pulsed tone"
+                      }
+                    ]
+                  },
+                  "alignment": {
+                    "type": "textgrid",
+                    "visibility": "admin",
+                    "value": "File type = \"ooTextFile\"\nObject class = \"TextGrid\"\nxmin = 0\nxmax = 4\ntiers? <exists>\nsize = 1\nitem []:\nitem [1]:\nclass = \"IntervalTier\"\nname = \"Events\"\nxmin = 0\nxmax = 4\nintervals: size = 3\nintervals [1]:\nxmin = 0\nxmax = 1\ntext = \"\"\nintervals [2]:\nxmin = 1\nxmax = 3\ntext = \"tone\"\nintervals [3]:\nxmin = 3\nxmax = 4\ntext = \"\"\n"
+                  }
+                },
+                "reference": {
+                  "field": "category",
+                  "value": "steady"
+                }
+              }
+            ]
+          },
+          {
+            "sample_id": "pulsed-tone",
+            "audio_id": "a46148a4-e111-5769-9d82-e8f81ccd7773",
+            "metadata": {
+              "originalPath": "pulsed-tone.wav",
+              "durationSeconds": 4,
+              "license": "CC0-1.0",
+              "generator": "generate_example_dataset.py"
+            },
+            "fields": {
+              "instruction": {
+                "type": "text",
+                "visibility": "worker",
+                "value": "Listen and annotate the synthetic tone."
+              },
+              "frequency_hz": {
+                "type": "number",
+                "visibility": "admin",
+                "value": 660
+              }
+            },
+            "items": [
+              {
+                "item_id": "listen",
+                "fields": {
+                  "prompt": {
+                    "type": "text",
+                    "visibility": "worker",
+                    "value": "Is the tone steady or pulsed? Mark its audible intervals in a grounding task."
+                  },
+                  "category": {
+                    "type": "choices",
+                    "visibility": "worker",
+                    "value": [
+                      {
+                        "id": "steady",
+                        "label": "Steady tone"
+                      },
+                      {
+                        "id": "pulsed",
+                        "label": "Pulsed tone"
+                      }
+                    ]
+                  },
+                  "alignment": {
+                    "type": "textgrid",
+                    "visibility": "admin",
+                    "value": "File type = \"ooTextFile\"\nObject class = \"TextGrid\"\nxmin = 0\nxmax = 4\ntiers? <exists>\nsize = 1\nitem []:\nitem [1]:\nclass = \"IntervalTier\"\nname = \"Events\"\nxmin = 0\nxmax = 4\nintervals: size = 5\nintervals [1]:\nxmin = 0\nxmax = 0.5\ntext = \"\"\nintervals [2]:\nxmin = 0.5\nxmax = 1.5\ntext = \"tone\"\nintervals [3]:\nxmin = 1.5\nxmax = 2.5\ntext = \"\"\nintervals [4]:\nxmin = 2.5\nxmax = 3.5\ntext = \"tone\"\nintervals [5]:\nxmin = 3.5\nxmax = 4\ntext = \"\"\n"
+                  }
+                },
+                "reference": {
+                  "field": "category",
+                  "value": "pulsed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "requestSchema": "ingestionSchema",
+      "scope": "production",
+      "source": "app/api/v1/dataset-ingestion/validate/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dataset-ingestion/import",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&userId=SESSION_USER_ID",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "ingestionSchema; body <=256 KiB; registered audio/dataset IDs",
+      "response": "200 {ok:true,persisted:boolean,accepted:Array<{source_record_id:string,id:string,audio_id:string}>,rejected:[]}; 422 {ok:false,accepted:[],rejected:Array<{path:string,message:string}>}",
+      "additionalErrors": "400/404/409/413/422",
+      "exampleBody": {
+        "schema_version": 1,
+        "dataset_id": "f634c610-6ceb-5cc6-a2c5-e455260da614",
+        "source_version": "v1",
+        "provenance": {
+          "origin": "synthetic-tones",
+          "revision": "generator-v1"
+        },
+        "records": [
+          {
+            "sample_id": "steady-tone",
+            "audio_id": "1b1e9f72-6fb8-5356-a9ad-eb4ca2a314f8",
+            "metadata": {
+              "originalPath": "steady-tone.wav",
+              "durationSeconds": 4,
+              "license": "CC0-1.0",
+              "generator": "generate_example_dataset.py"
+            },
+            "fields": {
+              "instruction": {
+                "type": "text",
+                "visibility": "worker",
+                "value": "Listen and annotate the synthetic tone."
+              },
+              "frequency_hz": {
+                "type": "number",
+                "visibility": "admin",
+                "value": 440
+              }
+            },
+            "items": [
+              {
+                "item_id": "listen",
+                "fields": {
+                  "prompt": {
+                    "type": "text",
+                    "visibility": "worker",
+                    "value": "Is the tone steady or pulsed? Mark its audible intervals in a grounding task."
+                  },
+                  "category": {
+                    "type": "choices",
+                    "visibility": "worker",
+                    "value": [
+                      {
+                        "id": "steady",
+                        "label": "Steady tone"
+                      },
+                      {
+                        "id": "pulsed",
+                        "label": "Pulsed tone"
+                      }
+                    ]
+                  },
+                  "alignment": {
+                    "type": "textgrid",
+                    "visibility": "admin",
+                    "value": "File type = \"ooTextFile\"\nObject class = \"TextGrid\"\nxmin = 0\nxmax = 4\ntiers? <exists>\nsize = 1\nitem []:\nitem [1]:\nclass = \"IntervalTier\"\nname = \"Events\"\nxmin = 0\nxmax = 4\nintervals: size = 3\nintervals [1]:\nxmin = 0\nxmax = 1\ntext = \"\"\nintervals [2]:\nxmin = 1\nxmax = 3\ntext = \"tone\"\nintervals [3]:\nxmin = 3\nxmax = 4\ntext = \"\"\n"
+                  }
+                },
+                "reference": {
+                  "field": "category",
+                  "value": "steady"
+                }
+              }
+            ]
+          },
+          {
+            "sample_id": "pulsed-tone",
+            "audio_id": "a46148a4-e111-5769-9d82-e8f81ccd7773",
+            "metadata": {
+              "originalPath": "pulsed-tone.wav",
+              "durationSeconds": 4,
+              "license": "CC0-1.0",
+              "generator": "generate_example_dataset.py"
+            },
+            "fields": {
+              "instruction": {
+                "type": "text",
+                "visibility": "worker",
+                "value": "Listen and annotate the synthetic tone."
+              },
+              "frequency_hz": {
+                "type": "number",
+                "visibility": "admin",
+                "value": 660
+              }
+            },
+            "items": [
+              {
+                "item_id": "listen",
+                "fields": {
+                  "prompt": {
+                    "type": "text",
+                    "visibility": "worker",
+                    "value": "Is the tone steady or pulsed? Mark its audible intervals in a grounding task."
+                  },
+                  "category": {
+                    "type": "choices",
+                    "visibility": "worker",
+                    "value": [
+                      {
+                        "id": "steady",
+                        "label": "Steady tone"
+                      },
+                      {
+                        "id": "pulsed",
+                        "label": "Pulsed tone"
+                      }
+                    ]
+                  },
+                  "alignment": {
+                    "type": "textgrid",
+                    "visibility": "admin",
+                    "value": "File type = \"ooTextFile\"\nObject class = \"TextGrid\"\nxmin = 0\nxmax = 4\ntiers? <exists>\nsize = 1\nitem []:\nitem [1]:\nclass = \"IntervalTier\"\nname = \"Events\"\nxmin = 0\nxmax = 4\nintervals: size = 5\nintervals [1]:\nxmin = 0\nxmax = 0.5\ntext = \"\"\nintervals [2]:\nxmin = 0.5\nxmax = 1.5\ntext = \"tone\"\nintervals [3]:\nxmin = 1.5\nxmax = 2.5\ntext = \"\"\nintervals [4]:\nxmin = 2.5\nxmax = 3.5\ntext = \"tone\"\nintervals [5]:\nxmin = 3.5\nxmax = 4\ntext = \"\"\n"
+                  }
+                },
+                "reference": {
+                  "field": "category",
+                  "value": "pulsed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "requestSchema": "ingestionSchema",
+      "scope": "production",
+      "source": "app/api/v1/dataset-ingestion/import/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dataset-ingestion/inspect",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&userId=SESSION_USER_ID&datasetId=00000000-0000-4000-8000-000000000002&recordId=SOURCE_RECORD_ID&audioId=00000000-0000-4000-8000-000000000003",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "Exact project/dataset/external record/audio identity; own actor",
+      "response": "200 {item:CanonicalStoredItem|null,labels:DatasetLabel[]}; exact protected originals from source-field repository; admin-only",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/dataset-ingestion/inspect/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/task-definitions",
+      "query": "projectId=00000000-0000-4000-8000-000000000001",
+      "permission": "Authenticated member; project/resource scope checked",
+      "request": "projectId UUID",
+      "response": "200 {definitions:TaskDefinitionSummary[]}; compact catalog, no drafts",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/task-definitions/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/task-definitions",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "createTaskDefinitionSchema",
+      "response": "201 {taskDefinition:TaskDefinitionDetail}",
+      "additionalErrors": "400/404/422",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "draft": {
+          "name": "Synthetic task",
+          "description": "",
+          "domain": "sound",
+          "instructions": "Listen independently.",
+          "policy": {
+            "requiredIndependentVotes": 2,
+            "blindToOthers": true,
+            "requiresReview": false
+          },
+          "blocks": [
+            {
+              "id": "present",
+              "type": "boolean",
+              "label": "Is the tone audible?",
+              "required": true
+            }
+          ]
+        }
+      },
+      "requestSchema": "createTaskDefinitionSchema",
+      "scope": "production",
+      "source": "app/api/v1/task-definitions/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/task-definitions/{id}",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "id definition UUID",
+      "response": "200 {taskDefinition:TaskDefinitionDetail}",
+      "additionalErrors": "400/404/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/task-definitions/[id]/route.ts"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/task-definitions/{id}",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "updateTaskDefinitionSchema",
+      "response": "200 {taskDefinition:TaskDefinitionDetail}; draft revision increments",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": {
+        "expectedRevision": 1,
+        "draft": {
+          "name": "Synthetic task",
+          "description": "",
+          "domain": "sound",
+          "instructions": "Listen independently.",
+          "policy": {
+            "requiredIndependentVotes": 2,
+            "blindToOthers": true,
+            "requiresReview": false
+          },
+          "blocks": [
+            {
+              "id": "present",
+              "type": "boolean",
+              "label": "Is the tone audible?",
+              "required": true
+            }
+          ]
+        }
+      },
+      "requestSchema": "updateTaskDefinitionSchema",
+      "scope": "production",
+      "source": "app/api/v1/task-definitions/[id]/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/task-definitions/{id}/publish",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "publishTaskDefinitionSchema",
+      "response": "201 {published:{id,version,definition,publishedAt}}",
+      "additionalErrors": "400/404/409 stale counters/422 unsupported",
+      "exampleBody": {
+        "expectedRevision": 1,
+        "expectedPublishedVersion": 0
+      },
+      "requestSchema": "publishTaskDefinitionSchema",
+      "scope": "production",
+      "source": "app/api/v1/task-definitions/[id]/publish/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/task-definitions/{id}/versions/{version}",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "id UUID; version positive integer",
+      "response": "200 {published:{id,version,definition,publishedAt}}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/task-definitions/[id]/versions/[version]/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/task-instances",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&datasetId=00000000-0000-4000-8000-000000000002",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "projectId UUID; datasetId? UUID",
+      "response": "200 {instances:TaskInstanceSummary[]}",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/task-instances/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/task-instances",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "createTaskInstanceSchema; ordered audio/source arrays checked together",
+      "response": "201 {taskInstance:TaskInstancePreview}",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "definitionId": "00000000-0000-4000-8000-000000000004",
+        "definitionVersion": 1,
+        "assetId": "00000000-0000-4000-8000-000000000003"
+      },
+      "requestSchema": "createTaskInstanceSchema",
+      "scope": "production",
+      "source": "app/api/v1/task-instances/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/task-instances/{id}",
+      "query": "none",
+      "permission": "Project admin or assigned owner of this Task Instance",
+      "request": "id UUID",
+      "response": "200 {taskInstance:TaskInstancePreview}; pinned worker-safe context",
+      "additionalErrors": "400/404/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/task-instances/[id]/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/project-members",
+      "query": "projectId=00000000-0000-4000-8000-000000000001",
+      "permission": "Authenticated member; project/resource scope checked",
+      "request": "projectId UUID",
+      "response": "200 {members:ProjectMember[]}; labeller sees only self",
+      "additionalErrors": "",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/project-members/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/project-members",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "createMemberSchema; active linked account required in production",
+      "response": "201 {member:ProjectMember}",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "userId": "example-worker",
+        "displayName": "Example labeller",
+        "role": "labeller"
+      },
+      "requestSchema": "createMemberSchema",
+      "scope": "production",
+      "source": "app/api/v1/project-members/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/worker-profiles",
+      "query": "projectId=00000000-0000-4000-8000-000000000001",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "projectId UUID",
+      "response": "200 {workers:WorkerProfile[],teams:Team[]}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/worker-profiles/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/worker-profiles",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "workerProfileSchema; profile is eligibility, not auth identity",
+      "response": "200 {workers:WorkerProfile[]}",
+      "additionalErrors": "400/409/422",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "userId": "example-worker",
+        "country": "",
+        "profession": "",
+        "languages": [],
+        "experienceYears": 0,
+        "active": true,
+        "metadata": {}
+      },
+      "requestSchema": "workerProfileSchema",
+      "scope": "production",
+      "source": "app/api/v1/worker-profiles/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/worker-profiles?action=team",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "teamSchema; active/account-ready project labellers only",
+      "response": "200 {teamId,teams:Team[]}; teamId? updates future membership",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "name": "Independent labellers",
+        "memberIds": [
+          "example-worker",
+          "example-worker-b"
+        ]
+      },
+      "requestSchema": "teamSchema",
+      "scope": "production",
+      "source": "app/api/v1/worker-profiles/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/team-jobs",
+      "query": "projectId=00000000-0000-4000-8000-000000000001",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "UUID project; jobId/assignmentId for inspection; items accepts cursor?; list includeArchived=1 optional",
+      "response": "200 {jobs:JobSummary[]}",
+      "additionalErrors": "400/404/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/team-jobs/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/team-jobs?action=catalog",
+      "query": "projectId=00000000-0000-4000-8000-000000000001",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "UUID project; jobId/assignmentId for inspection; items accepts cursor?; list includeArchived=1 optional",
+      "response": "200 {workers,teams,datasets,definitions:[{id,name,publishedVersion,versions:[{version,recordingsPerTask}]}]}",
+      "additionalErrors": "400/404/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/team-jobs/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/team-jobs?action=items",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&datasetId=00000000-0000-4000-8000-000000000002",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "UUID project; jobId/assignmentId for inspection; items accepts cursor?; list includeArchived=1 optional",
+      "response": "200 {items:AllocationItem[],nextCursor:string|null}",
+      "additionalErrors": "400/404/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/team-jobs/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/team-jobs?action=detail",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&jobId=00000000-0000-4000-8000-000000000007",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "UUID project; jobId/assignmentId for inspection; items accepts cursor?; list includeArchived=1 optional",
+      "response": "200 {summary:JobSummary,plan:JobPlan,workerProgress,assignments}",
+      "additionalErrors": "400/404/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/team-jobs/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/team-jobs?action=results",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&jobId=00000000-0000-4000-8000-000000000007",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "UUID project; jobId/assignmentId for inspection; items accepts cursor?; list includeArchived=1 optional",
+      "response": "200 JobResults (audiolab.analytics/2; completion-gated)",
+      "additionalErrors": "400/404/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/team-jobs/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/team-jobs?action=task",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&jobId=00000000-0000-4000-8000-000000000007&assignmentId=00000000-0000-4000-8000-000000000006",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "UUID project; jobId/assignmentId for inspection; items accepts cursor?; list includeArchived=1 optional",
+      "response": "200 {assignment,taskInstance:TaskInstancePreview,current}",
+      "additionalErrors": "400/404/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/team-jobs/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/team-jobs?action=preview",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "jobInputSchema; item/worker/version/resource eligibility checked",
+      "response": "200 {plan:JobPlan}; no assignments persisted",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": {
+        "jobId": "00000000-0000-4000-8000-000000000007",
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "name": "Synthetic job",
+        "datasetId": "00000000-0000-4000-8000-000000000002",
+        "definitionId": "00000000-0000-4000-8000-000000000004",
+        "definitionVersion": 1,
+        "mode": "voting",
+        "seed": "example-v1",
+        "itemKeys": [
+          "SOURCE_ITEM_KEY"
+        ],
+        "workerIds": [
+          "example-worker",
+          "example-worker-b"
+        ],
+        "sampleCount": 1
+      },
+      "requestSchema": "jobInputSchema",
+      "scope": "production",
+      "source": "app/api/v1/team-jobs/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/team-jobs?action=launch",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "jobInputSchema + expectedHash:string from exact preview; use plan.input",
+      "response": "200 JobDetail {summary,plan,assignments,workerProgress}; replay of same launched plan is idempotent",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": {
+        "jobId": "00000000-0000-4000-8000-000000000007",
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "name": "Synthetic job",
+        "datasetId": "00000000-0000-4000-8000-000000000002",
+        "definitionId": "00000000-0000-4000-8000-000000000004",
+        "definitionVersion": 1,
+        "mode": "voting",
+        "seed": "example-v1",
+        "itemKeys": [
+          "SOURCE_ITEM_KEY"
+        ],
+        "workerIds": [
+          "example-worker",
+          "example-worker-b"
+        ],
+        "sampleCount": 1,
+        "expectedHash": "EXACT_PREVIEW_HASH"
+      },
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/team-jobs/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/team-jobs?action=delete",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "{projectId:UUID,jobId:UUID}",
+      "response": "200 {deleted:true,historyPreserved:true}; archive; assignments read-only",
+      "additionalErrors": "400/404",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "jobId": "00000000-0000-4000-8000-000000000007"
+      },
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/team-jobs/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/assignments",
+      "query": "projectId=00000000-0000-4000-8000-000000000001",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "projectId UUID; labellerId? filter",
+      "response": "200 {assignments:AssignmentSummary[]}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/assignments/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/assignments",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "createAssignmentSchema",
+      "response": "201 {assignment:Assignment}; idempotent natural identity",
+      "additionalErrors": "400/404/409",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "taskInstanceId": "00000000-0000-4000-8000-000000000005",
+        "labellerId": "example-worker"
+      },
+      "requestSchema": "createAssignmentSchema",
+      "scope": "production",
+      "source": "app/api/v1/assignments/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/assignments/{id}",
+      "query": "none",
+      "permission": "Project admin or assigned owner",
+      "request": "id UUID",
+      "response": "200 {assignment,taskInstance:TaskInstancePreview}",
+      "additionalErrors": "400/404/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/assignments/[id]/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/assignments/{id}/start",
+      "query": "none",
+      "permission": "Authenticated assigned owner; labellerId must equal verified userId (admin role does not grant impersonation)",
+      "request": "startAssignmentSchema",
+      "response": "200 {assignment:Assignment}",
+      "additionalErrors": "400/404/409/410",
+      "exampleBody": {
+        "labellerId": "example-worker"
+      },
+      "requestSchema": "startAssignmentSchema",
+      "scope": "production",
+      "source": "app/api/v1/assignments/[id]/start/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/assignments/{id}/annotation",
+      "query": "labellerId=SESSION_USER_ID",
+      "permission": "Authenticated assigned owner; labellerId must equal verified userId (admin role does not grant impersonation)",
+      "request": "id UUID; own labellerId string <=128",
+      "response": "200 {assignmentId,current:AnnotationRevision|null}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/assignments/[id]/annotation/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/assignments/{id}/annotation/revisions",
+      "query": "labellerId=SESSION_USER_ID",
+      "permission": "Authenticated assigned owner; labellerId must equal verified userId (admin role does not grant impersonation)",
+      "request": "id UUID; own labellerId",
+      "response": "200 {revisions:AnnotationRevision[]}; immutable history",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/assignments/[id]/annotation/revisions/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/assignments/{id}/annotation/draft",
+      "query": "none",
+      "permission": "Authenticated assigned owner; labellerId must equal verified userId (admin role does not grant impersonation)",
+      "request": "annotationWriteSchema; values checked against resolved pinned blocks; submit requires required visible answers",
+      "response": "201 {annotation:AnnotationRevision}",
+      "additionalErrors": "400/404/409 stale or final/410 archived/422 invalid answers",
+      "exampleBody": {
+        "labellerId": "example-worker",
+        "expectedRevision": 0,
+        "answers": {
+          "present": true
+        }
+      },
+      "requestSchema": "annotationWriteSchema",
+      "scope": "production",
+      "source": "app/api/v1/assignments/[id]/annotation/draft/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/assignments/{id}/annotation/submit",
+      "query": "none",
+      "permission": "Authenticated assigned owner; labellerId must equal verified userId (admin role does not grant impersonation)",
+      "request": "annotationWriteSchema; values checked against resolved pinned blocks; submit requires required visible answers",
+      "response": "201 {annotation:AnnotationRevision}",
+      "additionalErrors": "400/404/409 stale or final/410 archived/422 invalid answers",
+      "exampleBody": {
+        "labellerId": "example-worker",
+        "expectedRevision": 0,
+        "answers": {
+          "present": true
+        }
+      },
+      "requestSchema": "annotationWriteSchema",
+      "scope": "production",
+      "source": "app/api/v1/assignments/[id]/annotation/submit/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/assignments/{id}/candidates",
+      "query": "labellerId=SESSION_USER_ID",
+      "permission": "Authenticated assigned owner; labellerId must equal verified userId (admin role does not grant impersonation)",
+      "request": "id UUID; own labellerId",
+      "response": "200 {candidateSets:Record<blockId,CandidateSetView>}; no private authors/tallies",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "legacy compatibility",
+      "source": "app/api/v1/assignments/[id]/candidates/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/labeller/assigned-queue",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&labellerId=SESSION_USER_ID",
+      "permission": "Authenticated assigned owner; labellerId must equal verified userId (admin role does not grant impersonation)",
+      "request": "projectId,labellerId; queueJobId? UUID|standalone; cursor?<=1000; limit?1..50 default20",
+      "response": "200 {jobs,definition,requiredAudio,totalAudio,totalCompleteGroups,totalSubmitted,totalPending,remainderAudio,groups,nextCursor}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/labeller/assigned-queue/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/labeller/overview",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&labellerId=SESSION_USER_ID",
+      "permission": "Authenticated assigned owner; labellerId must equal verified userId (admin role does not grant impersonation)",
+      "request": "projectId UUID and own labellerId",
+      "response": "200 {counts:{total,assigned,inProgress,submitted,reviewed,drafts},recent}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/labeller/overview/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/labeller/queue",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&labellerId=SESSION_USER_ID",
+      "permission": "Authenticated assigned owner; labellerId must equal verified userId (admin role does not grant impersonation)",
+      "request": "projectId UUID and own labellerId",
+      "response": "200 {assignments:AssignmentSummary[]}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/labeller/queue/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/labeller/queue/page",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&labellerId=SESSION_USER_ID",
+      "permission": "Authenticated assigned owner; labellerId must equal verified userId (admin role does not grant impersonation)",
+      "request": "projectId UUID, own labellerId; limit?1..50 default20; opaque cursor?",
+      "response": "200 {assignments,hasMore,nextCursor}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/labeller/queue/page/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/research-overview",
+      "query": "projectId=00000000-0000-4000-8000-000000000001",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "projectId is authorized context; aggregates only admin memberships",
+      "response": "200 ResearchOverview: {asOf,scope:admin-projects,projects,totals}",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/research-overview/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/research-export",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&jobId=00000000-0000-4000-8000-000000000007&format=json",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "projectId/jobId UUID; format? preview(default)|json|audio-json|json-zip|audio-zip; audioId UUID required for audio-json",
+      "response": "200 ResearchExport, per-audio JSON or application/zip; download headers by format",
+      "additionalErrors": "400/404/413 JSON32MiB/archive256MiB/422 no finals",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/research-export/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/assignment-allocation",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&adminId=SESSION_USER_ID&datasetId=00000000-0000-4000-8000-000000000002",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "projectId,datasetId UUID; exact adminId; cursor?<=1000",
+      "response": "200 {items:AllocationItem[],hasMore:boolean,nextCursor:string|null}; page <=100",
+      "additionalErrors": "400/404",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "production",
+      "source": "app/api/v1/assignment-allocation/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/assignment-allocation?action=preview",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "allocationSchema; <=128 KiB; prefer team-jobs for exportable release studies",
+      "response": "200 {preview:{items,pairs,uniqueItems,assignments,newAssignments,perWorker}}",
+      "additionalErrors": "400/404/409/413/422",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "adminId": "example-admin",
+        "datasetId": "00000000-0000-4000-8000-000000000002",
+        "definitionId": "00000000-0000-4000-8000-000000000004",
+        "definitionVersion": 1,
+        "itemKeys": [
+          "SOURCE_ITEM_KEY"
+        ],
+        "labellerIds": [
+          "example-worker"
+        ],
+        "independentLabellers": 1,
+        "mode": "fixed"
+      },
+      "requestSchema": "allocationSchema",
+      "scope": "production",
+      "source": "app/api/v1/assignment-allocation/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/assignment-allocation?action=confirm",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "confirmAllocationSchema; revalidate exact reviewed pairs",
+      "response": "200 {result:{uniqueItems,assignments,created,alreadyAssigned}}",
+      "additionalErrors": "400/404/409/413/422",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "adminId": "example-admin",
+        "datasetId": "00000000-0000-4000-8000-000000000002",
+        "definitionId": "00000000-0000-4000-8000-000000000004",
+        "definitionVersion": 1,
+        "itemKeys": [
+          "SOURCE_ITEM_KEY"
+        ],
+        "labellerIds": [
+          "example-worker"
+        ],
+        "independentLabellers": 1,
+        "mode": "fixed",
+        "pairs": [
+          {
+            "itemKey": "SOURCE_ITEM_KEY",
+            "labellerId": "example-worker"
+          }
+        ]
+      },
+      "requestSchema": "confirmAllocationSchema",
+      "scope": "production",
+      "source": "app/api/v1/assignment-allocation/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/candidate-sets",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "createCandidateSetSchema; immutable source references",
+      "response": "200/201 {candidateSet:CandidateSetView}",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "taskInstanceId": "00000000-0000-4000-8000-000000000005",
+        "blockId": "legacy-vote",
+        "userId": "example-admin",
+        "requestId": "example-idempotency",
+        "sources": [
+          {
+            "kind": "submission",
+            "revisionId": "00000000-0000-4000-8000-000000000006",
+            "blockId": "text"
+          },
+          {
+            "kind": "submission",
+            "revisionId": "00000000-0000-4000-8000-000000000007",
+            "blockId": "text"
+          }
+        ]
+      },
+      "requestSchema": "createCandidateSetSchema",
+      "scope": "legacy compatibility; not new authoring",
+      "source": "app/api/v1/candidate-sets/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/candidate-sets/sources",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&userId=SESSION_USER_ID&taskInstanceId=00000000-0000-4000-8000-000000000005&blockId=legacy-vote",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "own actor/task scope and eligibility; blockId string 1..80",
+      "response": "200 {sources:CandidateSourceOption[],candidateSet:CandidateSetView|null}; private admin curation inventory",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "legacy compatibility; not new authoring",
+      "source": "app/api/v1/candidate-sets/sources/route.ts"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/candidate-sets/{id}/result",
+      "query": "projectId=00000000-0000-4000-8000-000000000001&userId=SESSION_USER_ID",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "id set UUID and actor query",
+      "response": "200 {result:CandidateResult}",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": null,
+      "requestSchema": null,
+      "scope": "legacy compatibility; not new authoring",
+      "source": "app/api/v1/candidate-sets/[id]/result/route.ts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/candidate-sets/{id}/result",
+      "query": "none",
+      "permission": "Authenticated project administrator; resource project is resolved server-side",
+      "request": "{projectId:UUID,userId:own actor}",
+      "response": "200 {result:CandidateResult}; existing immutable finalization",
+      "additionalErrors": "400/404/409/422",
+      "exampleBody": {
+        "projectId": "00000000-0000-4000-8000-000000000001",
+        "userId": "example-admin"
+      },
+      "requestSchema": null,
+      "scope": "legacy compatibility; not new authoring",
+      "source": "app/api/v1/candidate-sets/[id]/result/route.ts"
+    }
+  ]
+}

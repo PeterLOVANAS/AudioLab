@@ -1,0 +1,47 @@
+.admin-workspace{display:grid;gap:20px;color:var(--text,#263545)}
+.admin-workspace .admin-panel{background:var(--surface,#fff);border:1px solid var(--border,#dce2e7);border-radius:10px;padding:24px;min-width:0}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.admin-toolbar,.admin-member{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.admin-workspace h2:not(.tb-workbench *){font-size:18px;margin:0 0 14px;display:flex;align-items:center;gap:10px}
+.admin-workspace h3:not(.tb-workbench *){font-size:15px;margin:18px 0 12px}
+.admin-workspace p:not(.tb-workbench *){line-height:1.6;margin:0 0 14px}
+.admin-workspace label:not(.tb-workbench *){display:grid;gap:7px;font-size:13px;font-weight:600;margin-bottom:16px}
+.admin-workspace input:not(.tb-workbench *),.admin-workspace select:not(.tb-workbench *){font:inherit;font-weight:400;background:#fff;color:#263545;border:1px solid #cbd4dc;border-radius:6px;padding:10px 12px;width:100%;min-width:0}
+.admin-workspace button:not(.tb-workbench *){display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #cbd4dc;border-radius:6px;padding:9px 13px;font:inherit;font-size:13px;font-weight:600;color:#33465b;background:#fff;cursor:pointer}
+.admin-workspace button:not(.tb-workbench *):hover:not(:disabled){background:#f0f4f7}
+.admin-workspace button:not(.tb-workbench *).admin-primary{background:#5554df;color:#fff;border-color:#5554df;box-shadow:0 3px 7px #5554df18}
+.admin-workspace button:not(.tb-workbench *).admin-primary:hover:not(:disabled){background:#4544c6}
+.admin-workspace button:not(.tb-workbench *):disabled{opacity:.5;cursor:not-allowed}
+.admin-workspace :focus-visible{outline:3px solid #6d9fa9;outline-offset:3px}
+.admin-hint,.admin-workspace small:not(.tb-workbench *){color:#667584;font-size:12px;font-weight:400}
+.admin-workspace small:not(.tb-workbench *){display:block;margin-top:5px;overflow-wrap:anywhere}
+.admin-note{padding:12px 16px;border:1px solid #dce5e8;border-radius:7px;background:#f1f6f7;font-size:13px;color:#45616c}
+.admin-error{padding:14px;background:#fff1f0;color:#92372c;border:1px solid #efc4be;border-radius:7px}
+.admin-success{padding:12px;background:#edf7f0;color:#316642;border-radius:7px}
+.admin-members{max-height:310px;overflow:auto;margin-bottom:20px}
+.admin-member{padding:13px 0;border-bottom:1px solid #e8ecef;font-size:14px}
+.admin-badge{display:inline-block;border:1px solid #dce3e8;background:#f3f5f7;border-radius:5px;padding:4px 8px;font-size:12px;white-space:nowrap;text-transform:capitalize}
+.admin-badge.submitted,.admin-badge.reviewed{color:#326549;background:#eaf4ed;border-color:#d3e6d8}
+.admin-badge.in_progress{color:#88602b;background:#fff5e5;border-color:#ecdfc7}
+.admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.admin-stats span{text-transform:capitalize;color:#667584;font-size:13px}
+.admin-stats strong{display:block;font-size:32px;margin:12px 0 5px;font-weight:600}
+.admin-table-scroll{overflow:auto}
+.admin-workspace table:not(.tb-workbench *){border-collapse:collapse;width:100%;text-align:left;font-size:14px}
+.admin-workspace th:not(.tb-workbench *){color:#8290a5;font-size:12px;font-weight:500;background:#fafbfe}
+.admin-workspace th:not(.tb-workbench *),.admin-workspace td:not(.tb-workbench *){padding:14px 12px;border-bottom:1px solid #e6ebee}
+.admin-workspace td:not(.tb-workbench *):first-child{min-width:200px}
+.admin-workspace audio:not(.tb-workbench *){display:block;width:100%;margin:16px 0}
+.admin-instructions{white-space:pre-wrap}
+@media(max-width:850px){.admin-grid{grid-template-columns:1fr}.admin-workspace .admin-panel{padding:18px}.admin-toolbar{flex-wrap:wrap}}
+@media(max-width:520px){.admin-stats{grid-template-columns:1fr}.admin-workspace th:not(.tb-workbench *),.admin-workspace td:not(.tb-workbench *){padding:10px 8px}}
+
+.allocation-controls{border:0;padding:0;margin:0;min-width:0}.allocation-workers{display:flex;flex-wrap:wrap;gap:12px}.admin-workspace label:not(.tb-workbench *).allocation-check{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #dce3e8;border-radius:6px;min-width:160px}.admin-workspace input:not(.tb-workbench *)[type=checkbox]{width:auto;flex-shrink:0}.allocation-items{max-height:340px;overflow:auto;margin:14px 0}.allocation-preview{margin-top:20px;border-top:1px solid #dce3e8;padding-top:10px}.allocation-panel td{overflow-wrap:anywhere}.allocation-panel button{margin-bottom:8px}
+.admin-workspace textarea:not(.tb-workbench *){width:100%;min-height:90px;border:1px solid #cbd4dc;border-radius:6px;padding:10px;box-sizing:border-box}.team-filters{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}.job-result{border-top:1px solid #dce3e8;padding-top:14px;margin-top:16px}.job-result-bar{display:grid;grid-template-columns:minmax(110px,1fr) 2fr 3em;gap:12px;align-items:center;margin:8px 0}.job-result-bar>div{background:#edf0f5;border-radius:4px;overflow:hidden;height:18px}.job-result-bar i{display:block;background:#625be7;height:100%;min-width:2px}.team-jobs input[type=checkbox]{width:auto}.team-jobs td{overflow-wrap:anywhere}.team-jobs button{margin:3px 0}
+
+/* Inspection shares Workspace controls, but has no second queue/sidebar.
+   Admin form rules above explicitly exclude this subtree to avoid input/button
+   padding and sizing collisions when both pages are loaded in the same app. */
+.admin-task-inspection .tb-workbench{grid-template-columns:minmax(0,1fr)}
+.admin-task-inspection .tb-queue{display:none}
+.admin-task-inspection .tb-workbench audio{width:100%;margin:12px 0}

@@ -1,0 +1,72 @@
+# Dependencies and build output
+node_modules/
+.next/
+dist/
+
+# Local Cloudflare D1 and R2 state
+.cloudflare/
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+.dev.vars*
+*.sqlite
+*.sqlite3
+*.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local audio data
+*.wav
+*.mp3
+*.flac
+
+# macOS
+.DS_Store
+
+*.tsbuildinfo
+
+# Repository-local package and framework caches
+/.pnpm-store/
+/.vinext/cache/
+# Vite/Vinext runtime locks and RSC caches are generated, not source.
+/.vinext/dev/
+/.wrangler/
+/coverage/
+/playwright-report/
+/test-results/
+/.pytest_cache/
+
+# SQLite journals and private CLI output must never enter a source archive.
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
+*.db-wal
+*.db-shm
+admin-credentials.json
+labellers-private.json
+access-token.json
+*.cookies
+
+# Personal editor preferences and local notes (not release inputs)
+/.vscode/
+/important.txt
+/explainNote_agents.md
+# Presentation/operator notes are retained locally pending privacy/rights review.
+/DEMO_DOCS/
+/IMPORTANT COMMAND/
+
+# Only the two generated, CC0 release example recordings are distributable.
+# Keep every other local/research WAV excluded.
+!/examples/datasets/synthetic/audio/steady-tone.wav
+!/examples/datasets/synthetic/audio/pulsed-tone.wav
+
+# Redistribution is unresolved for these two historical benchmark examples.
+# They remain on disk; already tracked/history copies require a maintainer decision.
+/docs/examples/mmau-one-sample.json
+/docs/examples/mmau-one-sample-stored.json

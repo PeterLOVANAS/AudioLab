@@ -1,0 +1,1678 @@
+/* Scoped to the builder and the reusable workbench so the main navigation keeps its existing styles. */
+.tb,
+.tb-workbench {
+  --tb-ink: #182941;
+  --tb-muted: #53657b;
+  --tb-line: #dce4ed;
+  --tb-blue: #204d78;
+  --tb-accent: #1a665e;
+  --tb-tint: #eaf5f1;
+  font:
+    14px/1.45 system-ui,
+    "Noto Sans Thai",
+    sans-serif;
+  color: var(--tb-ink);
+  min-width: 0;
+}
+.tb {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.tb :is(h1, h2, h3, h4, p),
+.tb-workbench :is(h2, h3, h4, p) {
+  margin: 0;
+}
+.tb h1 {
+  font-size: clamp(29px, 3.4vw, 42px);
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+  margin: 5px 0;
+  font-weight: 720;
+}
+.tb h2,
+.tb-workbench h2 {
+  font-size: 20px;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+  font-weight: 680;
+}
+.tb h3,
+.tb-workbench h3 {
+  font-size: 15px;
+  font-weight: 650;
+}
+.tb h4,
+.tb-workbench h4 {
+  font-weight: 650;
+}
+.tb button,
+.tb-workbench button {
+  background: white;
+  border: 1px solid var(--tb-line);
+  border-radius: 7px;
+  color: var(--tb-ink);
+  padding: 7px 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font: inherit;
+  font-weight: 550;
+}
+.tb button:hover:not(:disabled),
+.tb-workbench button:hover:not(:disabled) {
+  border-color: #8fa9bd;
+  background: #f1f6fa;
+}
+.tb button:disabled,
+.tb-workbench button:disabled {
+  opacity: 0.48;
+  cursor: default;
+}
+.tb :is(button, input, select, textarea, summary):focus-visible,
+.tb-workbench :focus-visible {
+  outline: 3px solid #73adce;
+  outline-offset: 2px;
+}
+.tb input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.tb select,
+.tb textarea,
+.tb-workbench :is(select, textarea, input[type="number"]) {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #cbd6e2;
+  border-radius: 6px;
+  background: white;
+  padding: 8px 10px;
+  color: var(--tb-ink);
+  font: inherit;
+}
+.tb :is(select, button, summary) {
+  cursor: pointer;
+}
+.tb textarea,
+.tb-workbench textarea {
+  resize: vertical;
+}
+.tb :is(input[type="checkbox"], input[type="radio"]),
+.tb-workbench :is(input[type="checkbox"], input[type="radio"]) {
+  accent-color: var(--tb-accent);
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.tb :is(small, .tb-muted),
+.tb-workbench small {
+  color: var(--tb-muted);
+  font-size: 12px;
+}
+.tb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.tb-header > div > p:last-child {
+  color: var(--tb-muted);
+}
+.tb-eyebrow,
+.tb-workbench .tb-eyebrow {
+  font:
+    700 10px/1.4 system-ui,
+    sans-serif;
+  letter-spacing: 0.15em;
+  color: var(--tb-accent);
+  margin-bottom: 5px;
+}
+.tb-actions,
+.tb-between,
+.tb-preview-caption,
+.tb-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tb button.tb-primary {
+  background: var(--tb-blue);
+  color: white;
+  border-color: var(--tb-blue);
+}
+.tb button.tb-primary:hover:not(:disabled) {
+  background: #193d60;
+}
+.tb-filebar {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 13px 16px;
+  background: #edf2f7;
+  border: 1px solid var(--tb-line);
+  border-radius: 10px;
+}
+.tb-filebar .tb-field {
+  flex: 1 1 170px;
+  max-width: 410px;
+}
+.tb-status {
+  align-self: center;
+  margin-left: auto;
+  color: var(--tb-muted);
+  font-size: 12px;
+}
+.tb-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3c8277;
+}
+.tb-dot.dirty {
+  background: #ba7425;
+}
+.tb-modes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--tb-line);
+  gap: 6px;
+}
+.tb-modes > div {
+  display: flex;
+  padding: 3px;
+  background: #e7edf3;
+  border-radius: 8px;
+}
+.tb-modes button {
+  border: 0;
+  background: transparent;
+  color: #506277;
+}
+.tb-modes button[aria-pressed="true"] {
+  color: var(--tb-blue);
+  background: white;
+  box-shadow: 0 1px 3px #18294124;
+}
+.tb-compose,
+.tb-workbench {
+  display: grid;
+  align-items: start;
+  grid-template-columns: minmax(195px, 0.72fr) minmax(0, 2fr);
+  gap: 16px;
+}
+.tb-panel {
+  background: white;
+  border: 1px solid var(--tb-line);
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 0;
+}
+.tb-stack,
+.tb-list,
+.tb-settings,
+.tb-group {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+.tb-panel > .tb-settings,
+.tb-panel > .tb-list,
+.tb-panel > .tb-stack {
+  margin-top: 16px;
+}
+.tb-palette h2 {
+  margin-bottom: 2px;
+}
+.tb-palette-group {
+  margin-top: 18px;
+}
+.tb-palette-group h3 {
+  padding-bottom: 7px;
+  margin-bottom: 3px;
+  border-bottom: 1px solid var(--tb-line);
+  font-size: 12px;
+  color: var(--tb-muted);
+}
+.tb-palette-group button {
+  border: 1px solid transparent;
+  width: 100%;
+  text-align: left;
+  justify-content: start;
+  padding: 8px 2px;
+  gap: 9px;
+}
+.tb-palette-group strong,
+.tb-palette-group small,
+.tb-block-title small {
+  display: block;
+  line-height: 1.4;
+}
+.tb-palette-group button svg {
+  margin-left: auto;
+  flex: none;
+}
+.tb-type,
+.tb-index {
+  font:
+    600 11px ui-monospace,
+    monospace;
+  border-radius: 5px;
+  padding: 6px;
+  background: #edf2f8;
+  color: #345779;
+}
+.tb-palette-group:nth-last-child(1) .tb-type {
+  background: var(--tb-tint);
+  color: var(--tb-accent);
+}
+.tb-field {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  min-width: 0;
+}
+.tb-field > span:first-child {
+  color: #374a61;
+  font-size: 12px;
+  font-weight: 650;
+}
+.tb-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.tb-grid.tb-wide {
+  grid-template-columns: 2fr 1fr;
+}
+.tb-check,
+.tb-pick {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.tb-detail {
+  border-top: 1px solid var(--tb-line);
+  padding-top: 9px;
+  font-size: 13px;
+}
+.tb-detail > summary {
+  color: #435872;
+  font-weight: 600;
+}
+.tb-detail > .tb-settings {
+  padding-top: 12px;
+}
+.tb-empty {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+  margin-top: 16px;
+  padding: 25px 16px;
+  border: 1px dashed #b3c4d1;
+  border-radius: 8px;
+  background: #f7fafb;
+  color: var(--tb-muted);
+}
+.tb-empty > svg {
+  color: var(--tb-accent);
+}
+.tb-empty h3 {
+  color: var(--tb-ink);
+}
+.tb-empty p {
+  max-width: 36ch;
+}
+.tb-empty button {
+  margin-top: 4px;
+}
+.tb-block {
+  border: 1px solid var(--tb-line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.tb-block > details > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+.tb-block > details > summary::-webkit-details-marker {
+  display: none;
+}
+.tb-block-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.tb-block-title b {
+  font-size: 14px;
+  font-weight: 650;
+}
+.tb-caret {
+  margin-left: auto;
+}
+.tb-block > details[open] > summary {
+  background: #f4f8fb;
+}
+.tb-block > details > .tb-settings,
+.tb-inset {
+  padding: 12px;
+}
+.tb-block-tools {
+  border-top: 1px solid #e6ebf0;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  gap: 3px;
+  background: #fbfcfe;
+}
+.tb-block-tools span {
+  margin-right: auto;
+  font-size: 10px;
+  color: var(--tb-muted);
+}
+.tb-block-tools button {
+  padding: 4px 6px;
+  border: 0;
+  background: transparent;
+}
+.tb-option-edit {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.tb-option-edit > span {
+  color: var(--tb-muted);
+  font-size: 12px;
+}
+.tb .tb-link {
+  justify-self: start;
+  color: var(--tb-blue);
+  border: 0;
+  padding: 3px 0;
+}
+.tb-child {
+  padding: 12px;
+  border-left: 3px solid #9cbbb7;
+  background: #f6f9fa;
+  min-width: 0;
+}
+.tb-child h4 {
+  margin-bottom: 9px;
+}
+.tb-notice {
+  border: 1px solid #d8c5a2;
+  color: #634b21;
+  background: #fff9eb;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 12px 0 !important;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.tb-notice.ok {
+  background: #edf7f1;
+  color: #245d47;
+  border-color: #c7dfd0;
+}
+.tb-notice.bad {
+  background: #fff2f1;
+  color: #8b383c;
+  border-color: #ebc7c9;
+}
+.tb-notice ul {
+  margin: 3px 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+.tb-notice button {
+  font-size: 12px;
+  padding: 3px 7px;
+}
+.tb-queue-row,
+.tb-ground {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.tb-queue-row {
+  padding: 10px;
+  margin: 15px 0 8px;
+  border-left: 3px solid var(--tb-accent);
+  background: var(--tb-tint);
+  border-radius: 5px;
+  overflow-wrap: anywhere;
+}
+.tb-queue-row svg {
+  flex: none;
+}
+.tb-instructions {
+  white-space: pre-wrap;
+  margin-top: 9px !important;
+  color: var(--tb-muted);
+}
+.tb-ground {
+  background: #edf3f7;
+  border: 1px dashed #afc1ce;
+  border-radius: 9px;
+  padding: 17px;
+  color: #436175;
+}
+.tb-ground > svg {
+  flex: none;
+}
+.tb-ground p {
+  font-size: 12px;
+}
+.tb-preview-caption,
+.tb-between {
+  justify-content: space-between;
+}
+.tb-preview-caption {
+  font-size: 12px;
+  color: var(--tb-muted);
+  margin: 7px 0 15px;
+}
+.tb-preview-caption button,
+.tb-between button {
+  font-size: 12px;
+}
+.tb-question {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid var(--tb-line);
+  border-radius: 8px;
+}
+.tb-question legend {
+  font-weight: 650;
+  padding: 0 5px;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+.tb-question legend span {
+  font:
+    600 11px ui-monospace,
+    monospace;
+  color: var(--tb-accent);
+}
+.tb-question legend em {
+  color: #956033;
+}
+.tb-question p {
+  color: var(--tb-muted);
+  font-size: 13px;
+}
+.tb-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.tb-pick {
+  color: var(--tb-ink);
+  padding: 8px 12px;
+  border: 1px solid var(--tb-line);
+  border-radius: 7px;
+  cursor: pointer;
+}
+.tb-pick:has(input:checked) {
+  background: var(--tb-tint);
+  border-color: #6b9f94;
+}
+/* Each question stores its own appearance; native inputs keep keyboard support. */
+.tb-choice-edit-fields {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 7px;
+}
+.tb-choice-options {
+  gap: 10px;
+}
+.tb-choice-options .tb-pick {
+  position: relative;
+  background: white;
+  min-height: 44px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.tb-choice-options .tb-pick input {
+  accent-color: var(--tb-accent);
+  flex-shrink: 0;
+}
+.tb-choice-options .tb-pick:has(input:checked) {
+  /* Match the existing Yes/No selection colours in all three appearances. */
+  background: var(--tb-tint);
+  border-color: #6b9f94;
+  color: var(--tb-ink);
+}
+/* Show the outer focus ring for keyboard navigation, not after mouse clicks.
+   Clicking a choice keeps the same single selected border as Yes/No. */
+.tb-choice-options .tb-pick:has(input:focus-visible) {
+  outline: 2px solid var(--tb-accent);
+  outline-offset: 3px;
+}
+.tb-choice-options .tb-pick:has(input:disabled) {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.tb-choice-cards {
+  /* Cards wrap automatically instead of overflowing a narrow screen. */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+}
+.tb-choice-cards .tb-pick {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 132px;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 10px;
+}
+.tb-choice-cards .tb-pick > span {
+  font-weight: 600;
+}
+.tb-choice-description {
+  color: var(--tb-muted);
+  font-size: 12px;
+}
+.tb-choice-compact .tb-pick {
+  padding: 12px 20px;
+  border-radius: 9px;
+}
+.tb-choice-compact .tb-pick input {
+  /* Visually hide the marker, while retaining keyboard and screen-reader input. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.tb-number {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.tb-question blockquote,
+.tb-recording {
+  margin: 0;
+  background: #f2f6fa;
+  border-radius: 6px;
+  padding: 10px;
+}
+.tb-recordings {
+  display: grid;
+  gap: 10px;
+}
+.tb-recording,
+.tb-recording label {
+  display: grid;
+  gap: 4px;
+}
+.tb-recording input,
+.tb-recording audio {
+  max-width: 100%;
+}
+.tb-trial {
+  margin-top: 15px;
+}
+@media (max-width: 1100px) {
+  .tb-compose,
+  .tb-workbench {
+    grid-template-columns: minmax(175px, 0.7fr) minmax(0, 1.8fr);
+    gap: 10px;
+  }
+  .tb-panel {
+    padding: 15px;
+  }
+}
+@media (max-width: 820px) {
+  .tb-compose,
+  .tb-workbench {
+    grid-template-columns: 1fr;
+  }
+  .tb-palette-group {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px 10px;
+  }
+  .tb-palette-group h3 {
+    grid-column: 1/-1;
+  }
+  .tb-filebar {
+    gap: 8px;
+  }
+}
+@media (max-width: 500px) {
+  .tb-grid,
+  .tb-grid.tb-wide {
+    grid-template-columns: 1fr;
+  }
+  .tb-palette-group {
+    gap: 3px;
+  }
+  .tb-palette-group button {
+    font-size: 12px;
+  }
+  .tb-palette-group small {
+    display: none;
+  }
+  .tb-modes button {
+    padding: 7px;
+    font-size: 12px;
+  }
+  .tb-panel {
+    padding: 12px;
+  }
+}
+
+/* ===============================================================
+ * AudioLab 2.0 Task Builder enhancement — style isolation.
+ * All rules stay inside `.tb` or `.tb-workbench`. We deliberately do NOT
+ * modify app/globals.css: other friends can work on Labeller/Dataset pages
+ * without this PR altering their unrelated forms or buttons.
+ * =============================================================== */
+.tb .tb-preview-workspace {
+  display: grid;
+  gap: 16px;
+}
+.tb .tb-preview-source {
+  display: grid;
+  gap: 12px;
+}
+.tb .tb-preview-source p {
+  margin: 0;
+}
+.tb .tb-preview-player {
+  display: grid;
+  gap: 10px;
+}
+.tb .tb-preview-player audio {
+  width: 100%;
+}
+.tb .tb-preview-workspace .tb-workbench {
+  min-width: 0;
+}
+.tb .tb-tool-option {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px;
+  border: 1px solid var(--tb-line);
+  border-radius: 8px;
+  cursor: pointer;
+  background: #f8fafc;
+}
+.tb .tb-tool-option span {
+  display: grid;
+  gap: 3px;
+}
+.tb .tb-tool-option small {
+  font-weight: 400;
+}
+.tb .tb-tool-option input {
+  margin-top: 3px;
+}
+.tb .tb-tier-config {
+  display: grid;
+  gap: 14px;
+  margin-block: 12px;
+}
+.tb .tb-tier-configuration {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid var(--tb-line);
+  background: #f8fafc;
+  display: grid;
+  gap: 12px;
+}
+.tb-workbench .tb-display {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 10px;
+}
+.tb-workbench .tb-display h3 {
+  margin: 0;
+}
+.tb-workbench .tb-display p {
+  white-space: pre-wrap;
+  margin: 0;
+}
+.tb-workbench .tb-section {
+  border-bottom: 2px solid #cbd6e5;
+  border-radius: 0;
+  padding-left: 4px;
+}
+.tb-workbench .tb-callout {
+  border: 1px solid #b6c6d8;
+  background: #f4f7fb;
+}
+.tb-workbench .tb-tone-success {
+  border-color: #7fb6a0;
+  background: #eaf6ee;
+  color: #1c5b47;
+}
+.tb-workbench .tb-tone-warning {
+  border-color: #dab976;
+  background: #fff5df;
+  color: #70501c;
+}
+.tb-workbench .tb-tone-info {
+  border-color: #a7c4dd;
+  background: #edf5fc;
+  color: #305575;
+}
+.tb-workbench .tb-tone-neutral {
+  background: #f2f5f8;
+}
+.tb-workbench .tb-confirmation {
+  border-color: #8ebca5;
+  background: #f2faf4;
+}
+.tb-workbench .tb-timeline-question {
+  padding: 14px 8px;
+  border: 0;
+}
+.tb-workbench .tb-grounding {
+  border: 1px solid var(--tb-line);
+  border-radius: 12px;
+  background: #fff;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+.tb-workbench .tb-ground-toolbar,
+.tb-workbench .tb-ground-actions,
+.tb-workbench .tb-tier-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tb-workbench .tb-ground-toolbar strong {
+  margin-right: auto;
+}
+.tb-workbench .tb-ground-toolbar > span {
+  font-variant-numeric: tabular-nums;
+  color: var(--tb-muted);
+}
+.tb-workbench .tb-ground-audio {
+  width: 100%;
+  min-width: 0;
+}
+.tb-workbench .tb-wave {
+  display: block;
+  width: 100%;
+  height: 112px;
+  border: 1px solid #d8e1ed;
+  border-radius: 8px;
+  cursor: crosshair;
+  touch-action: none;
+}
+.tb-workbench .tb-scroll-label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--tb-muted);
+}
+.tb-workbench .tb-scroll-label input {
+  width: 100%;
+}
+.tb-workbench .tb-follow {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 12px;
+}
+.tb-workbench .tb-tier-tabs {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.tb-workbench .tb-tier-tabs button.active {
+  background: #e9e8ff;
+  border-color: #7973d9;
+  color: #4f46b9;
+}
+.tb-workbench .tb-tier {
+  display: grid;
+  gap: 5px;
+}
+.tb-workbench .tb-tier-heading {
+  justify-content: space-between;
+}
+.tb-workbench .tb-tier-heading span {
+  color: var(--tb-muted);
+  font-size: 12px;
+}
+.tb-workbench .tb-tier-lane {
+  display: grid;
+  grid-template-columns: minmax(80px, 105px) 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.tb-workbench .tb-tier-lane > small {
+  overflow-wrap: anywhere;
+}
+.tb-workbench .tb-tier-track {
+  height: 34px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    #f0f4f7 0,
+    #f0f4f7 24px,
+    #e8eff4 25px,
+    #e8eff4 26px
+  );
+}
+.tb-workbench button.tb-segment {
+  position: absolute;
+  top: 2px;
+  height: 30px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 3px 6px;
+  font-size: 11px;
+  border: 1px solid #7ca2c6;
+  background: #dceaf7;
+  color: #214763;
+  justify-content: flex-start;
+}
+.tb-workbench button.tb-segment.chosen {
+  background: #dfddff;
+  border-color: #7973d9;
+  box-shadow: inset 0 0 0 1px #7973d9;
+}
+.tb-workbench .tb-ground-edit {
+  border: 1px solid var(--tb-line);
+  border-radius: 9px;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+  background: #f9fbfd;
+}
+.tb-workbench .tb-ground-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.tb-workbench .tb-ground-form label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.tb-workbench .tb-ground-form :is(input, select) {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid #c7d5e3;
+  border-radius: 6px;
+  padding: 7px 9px;
+  color: #19324d;
+  background: white;
+}
+.tb-workbench .tb-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.tb-workbench .tb-summary-grid > div {
+  padding: 12px;
+  background: #f2f6fa;
+  border-radius: 8px;
+  min-width: 0;
+}
+.tb-workbench .tb-summary-grid p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin-top: 6px;
+}
+.tb-workbench .tb-ipa-palette {
+  border: 1px solid #d2dce8;
+  border-radius: 8px;
+  padding: 10px;
+}
+.tb-workbench .tb-ipa-palette summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.tb-workbench .tb-ipa-palette > div {
+  display: grid;
+  gap: 5px;
+  margin-top: 12px;
+}
+.tb-workbench .tb-ipa-palette > div > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.tb-workbench .tb-ipa-palette button {
+  min-width: 32px;
+  font-family: "Noto Sans", sans-serif;
+  font-size: 16px;
+  padding: 4px 6px;
+}
+.tb-workbench .tb-textgrid-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  border: 1px solid var(--tb-line);
+  background: white;
+  padding: 7px 11px;
+  border-radius: 7px;
+}
+.tb-workbench .tb-textgrid-upload input {
+  max-width: 145px;
+  font-size: 11px;
+}
+.tb-workbench .tb-inset {
+  color: #586b7e;
+  font-size: 12px;
+}
+.tb-workbench .tb-ground-notice {
+  color: #31516e;
+  border-left: 3px solid #6e9cc1;
+  padding-left: 10px;
+}
+@media (max-width: 780px) {
+  .tb-workbench .tb-ground-form,
+  .tb-workbench .tb-summary-grid {
+    grid-template-columns: 1fr;
+  }
+  .tb-workbench .tb-tier-lane {
+    grid-template-columns: minmax(70px, 80px) 1fr;
+  }
+}
+/* Restore the original prototype's purple choice emphasis. Green is reserved
+   for explicit absence confirmations, so a selected radio and a confirmed
+   absence panel don't communicate the same state through color alone. */
+.tb-workbench .tb-choice-options .tb-pick:has(input:checked) {
+  background: #eeecff;
+  border-color: #7973d9;
+  color: #4f46b9;
+  box-shadow: 0 0 0 1px #7973d9;
+}
+.tb-workbench .tb-choice-options .tb-pick input {
+  accent-color: #7973d9;
+}
+.tb-workbench .tb-confirmation .tb-pick:has(input:checked) {
+  background: #e3f4e8;
+  color: #1c5b47;
+  border-color: #5c9e79;
+}
+.tb-workbench .tb-transcript-summary {
+  background: #f4f6fb;
+  border: 1px solid #cfd9e7;
+  display: grid;
+  gap: 10px;
+}
+.tb-workbench .tb-transcript-summary > div {
+  background: white;
+  border-radius: 7px;
+  padding: 10px;
+}
+.tb-workbench .tb-transcript-summary small {
+  display: block;
+  margin-bottom: 3px;
+}
+.tb-workbench .tb-transcript-summary p {
+  white-space: pre-wrap;
+}
+.tb-workbench .tb-standalone-waveform {
+  display: grid;
+  gap: 9px;
+  width: 100%;
+}
+.tb-workbench .tb-standalone-waveform > audio {
+  width: 100%;
+}
+
+/* ========================================================================
+   AUDIOLAB PHONETIC WORKBENCH — PROTOTYPE UI PARITY (2026-11-06)
+   ========================================================================
+   Ported layout concepts from prototype/components/research/player.tsx and
+   prototype/app/globals.css. This is NOT the old player pasted into the new
+   app: all edits still go through the new controlled BlockFields answer.
+   The selector is intentionally scoped to the Task Builder workbench.
+*/
+.tb-workbench .tb-phonetic-workbench {
+  background: #fff;
+  border: 1px solid #cbd6e5;
+  border-radius: 10px;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  box-shadow: 0 3px 18px rgba(27, 46, 70, 0.06);
+}
+.tb-workbench .tb-bench-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #f7f9fd;
+  border-bottom: 1px solid #d9e2ef;
+}
+.tb-workbench .tb-bench-identity {
+  display: grid;
+  gap: 3px;
+}
+.tb-workbench .tb-bench-identity strong {
+  color: #223850;
+  font-size: 15px;
+}
+.tb-workbench .tb-bench-identity small,
+.tb-workbench .tb-bench-revision {
+  color: #687991;
+  font-size: 11px;
+}
+.tb-workbench .tb-bench-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tb-workbench .tb-bench-focus-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #98a8c3;
+  background: white;
+  color: #233f66;
+  padding: 7px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.tb-workbench .tb-phonetic-workbench > .tb-ground-toolbar {
+  padding: 9px 14px;
+  background: #f9fbff;
+  border-bottom: 1px solid #e0e5ef;
+}
+.tb-workbench .tb-phonetic-workbench > .tb-ground-audio {
+  width: calc(100% - 28px);
+  margin: 10px 14px;
+}
+.tb-workbench .tb-phonetic-workbench > .tb-wave {
+  width: calc(100% - 28px);
+  margin: 0 14px;
+  border-radius: 2px;
+  border-color: #bccce0;
+}
+.tb-workbench .tb-phonetic-workbench > .tb-scroll-label {
+  padding: 8px 14px;
+  background: #f8fafd;
+  border-bottom: 1px solid #e2e8f0;
+}
+.tb-workbench .tb-timeline-ruler {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  background: #f1f4fa;
+  padding: 6px 14px;
+  border-block: 1px solid #dce4ee;
+  font-size: 11px;
+  color: #51637c;
+  font-variant-numeric: tabular-nums;
+}
+.tb-workbench .tb-timeline-ruler b {
+  margin-right: auto;
+  color: #304b69;
+}
+.tb-workbench .tb-layout-settings {
+  padding: 6px 14px;
+  background: #f8faff;
+  border-bottom: 1px solid #e0e7f1;
+}
+.tb-workbench .tb-layout-settings summary {
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #3f5370;
+}
+.tb-workbench .tb-layout-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 10px 0 4px;
+}
+.tb-workbench .tb-layout-controls label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+}
+.tb-workbench .tb-layout-controls input[type="range"] {
+  width: 110px;
+}
+.tb-workbench .tb-phonetic-workbench > .tb-tier-tabs {
+  padding: 9px 14px;
+  background: #f9fbfd;
+}
+.tb-workbench .tb-tiers-viewport {
+  overflow: auto;
+  min-height: 100px;
+  border-block: 1px solid #d6e0ea;
+  background: #fff;
+  padding: 6px 14px;
+}
+.tb-workbench .tb-tiers-viewport .tb-tier {
+  margin-bottom: 6px;
+  border: 1px solid #d6dfec;
+  border-radius: 5px;
+  gap: 0;
+  overflow: hidden;
+}
+.tb-workbench .tb-tiers-viewport .tb-tier-heading {
+  padding: 5px 9px;
+  background: #eef2f8;
+  color: #3b5572;
+}
+.tb-workbench .tb-tiers-viewport .tb-tier-lane {
+  gap: 0;
+  grid-template-columns: 110px minmax(0, 1fr);
+  border-top: 1px solid #e8edf4;
+}
+.tb-workbench .tb-tiers-viewport .tb-tier-lane > small {
+  padding: 8px 9px;
+  background: #f8fafc;
+  font-size: 11px;
+}
+.tb-workbench .tb-tiers-viewport .tb-tier-track {
+  border-radius: 0;
+  height: 38px;
+}
+.tb-workbench .tb-tiers-viewport .tb-segment {
+  top: 3px;
+  height: 32px;
+  border-radius: 3px;
+  background: #e5f2f4;
+  color: #244953;
+  border-color: #4b92a1;
+}
+.tb-workbench .tb-tiers-viewport .tb-segment.chosen {
+  background: #ffe3a0;
+  border: 2px solid #b48224;
+  color: #503a11;
+}
+.tb-workbench .tb-bench-status {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 8px 14px;
+  background: #eef3f9;
+  color: #4d6079;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid #d8e0ee;
+}
+.tb-workbench .tb-phonetic-workbench > .tb-ground-edit,
+.tb-workbench .tb-phonetic-workbench > .tb-summary-grid,
+.tb-workbench .tb-phonetic-workbench > .tb-ground-actions,
+.tb-workbench .tb-phonetic-workbench > .tb-timing-section,
+.tb-workbench .tb-phonetic-workbench > .tb-ground-notice,
+.tb-workbench .tb-phonetic-workbench > .tb-inset {
+  margin: 12px 14px;
+}
+.tb-workbench .tb-timing-section {
+  display: grid;
+  gap: 12px;
+  border-top: 1px solid #d5dfeb;
+  padding-top: 12px;
+}
+.tb-workbench .tb-timing-head h4 {
+  margin: 0;
+  font-size: 15px;
+}
+.tb-workbench .tb-timing-head p {
+  font-size: 12px;
+  color: #64748b;
+  margin: 4px 0 0;
+}
+.tb-workbench .tb-timing-tier {
+  border: 1px solid #d7deeb;
+  border-radius: 7px;
+  overflow: hidden;
+}
+.tb-workbench .tb-timing-tier h5 {
+  padding: 8px 12px;
+  margin: 0;
+  background: #eff3f9;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.tb-workbench .tb-timing-tier h5 span {
+  font-weight: 400;
+  color: #60728a;
+}
+.tb-workbench .tb-timing-scroll {
+  overflow: auto;
+}
+.tb-workbench .tb-timing-table {
+  width: 100%;
+  min-width: 580px;
+  border-collapse: collapse;
+}
+.tb-workbench .tb-timing-table th {
+  text-align: left;
+  background: #f7f9fd;
+  color: #607088;
+  font-size: 11px;
+  padding: 8px;
+  border-bottom: 1px solid #d5deeb;
+}
+.tb-workbench .tb-timing-table td {
+  padding: 5px;
+  border-bottom: 1px solid #e5ebf2;
+}
+.tb-workbench .tb-timing-table input,
+.tb-workbench .tb-timing-table select {
+  width: 100%;
+  min-width: 80px;
+  padding: 6px;
+  border: 1px solid #d6dfec;
+  border-radius: 4px;
+  background: #fff;
+  color: #243e59;
+  font-size: 12px;
+}
+.tb-workbench .tb-timing-table td:first-child input {
+  min-width: 115px;
+}
+.tb-workbench .tb-timing-tier > small {
+  display: block;
+  padding: 9px;
+  color: #60728a;
+}
+/* Focus mode is NOT a new route. It temporarily occupies the viewport,
+   exactly like the original prototype's r-workbench-focus presentation. */
+.tb-workbench .tb-phonetic-workbench.tb-grounding-focus {
+  position: fixed !important;
+  z-index: 1500;
+  inset: 8px;
+  overflow: auto;
+  display: block;
+  max-width: none;
+  width: auto;
+  height: auto;
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 0 0 20px rgba(15, 25, 42, 0.75);
+}
+.tb-workbench .tb-grounding-focus > * {
+  margin-bottom: 0;
+}
+@media (max-width: 700px) {
+  .tb-workbench .tb-phonetic-workbench.tb-grounding-focus {
+    inset: 0;
+    border-radius: 0;
+  }
+  .tb-workbench .tb-tiers-viewport .tb-tier-lane {
+    grid-template-columns: 80px minmax(0, 1fr);
+  }
+  .tb-workbench .tb-bench-header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Task Builder v3: native drag handle, with keyboard alternative (Alt+Arrow). */
+.tb-block-tools .tb-drag-handle {
+  cursor: grab;
+  touch-action: none;
+  min-width: 36px;
+  border: 1px dashed #9aa8bb;
+  background: #f6f8fc;
+}
+.tb-block-tools .tb-drag-handle:active {
+  cursor: grabbing;
+}
+.tb-block.tb-drop-before {
+  outline: 2px dashed #7973d9;
+  outline-offset: 3px;
+}
+.tb-conditional-recipe {
+  padding: 10px 15px;
+  border-top: 1px dashed #d7dce8;
+  background: #f9fbfe;
+}
+.tb-conditional-recipe summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+}
+.tb-conditional-recipe .tb-field {
+  max-width: 280px;
+}
+/* The original prototype's timing-table treatment, scoped to this workbench. */
+.tb-prototype-shell .r-prototype-tables {
+  padding: 16px 20px;
+  background: #fff;
+  border: 1px solid #e1e6f0;
+  border-radius: 10px;
+  margin-top: 14px;
+}
+.tb-prototype-shell .r-prototype-tables-top {
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.tb-prototype-shell .r-prototype-tables .r-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tb-prototype-shell .r-prototype-tables .r-table th,
+.tb-prototype-shell .r-prototype-tables .r-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #dce1e8;
+}
+.tb-prototype-shell .r-prototype-tables .r-table input,
+.tb-prototype-shell .r-prototype-tables .r-table select {
+  min-width: 70px;
+  max-width: 165px;
+  border: 1px solid #dce1e8;
+  border-radius: 5px;
+  padding: 7px;
+}
+.tb-prototype-shell .r-prototype-summaries {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 13px 0;
+}
+.tb-prototype-shell .r-prototype-summaries section {
+  background: #f6f8fc;
+  border: 1px solid #e1e6f0;
+  border-radius: 8px;
+  padding: 12px;
+}
+.tb-prototype-shell .r-prototype-summaries p {
+  white-space: pre-wrap;
+  margin-top: 8px;
+}
+.tb-prototype-shell .r-prototype-io {
+  margin-top: 14px;
+}
+.tb-prototype-shell .r-prototype-io input[type="file"] {
+  display: none;
+}
+@media (max-width: 780px) {
+  .tb-prototype-shell .r-prototype-summaries {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* A conditional green check panel matches the original Negation UX. */
+.tb-callout.tb-tone-success + .tb-question.tb-confirmation {
+  background: #edf8f0;
+  border: 1px solid #79ba8c;
+  border-top: 0;
+  border-radius: 0 0 9px 9px;
+  margin-top: -12px;
+}
+.tb-callout.tb-tone-success:has(+ .tb-question.tb-confirmation) {
+  border-radius: 9px 9px 0 0;
+}
+.tb-prototype-confirm {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 15px;
+  border-radius: 7px;
+  background: #ebf6ef;
+  color: #276244;
+  border: 1px solid #a1ceb0;
+  cursor: pointer;
+}
+.tb-prototype-confirm input {
+  width: 18px;
+  height: 18px;
+  accent-color: #248458;
+  flex-shrink: 0;
+}
+
+.tb-grounding-full-block {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  margin: 16px 0;
+}
+.tb-grounding-full-block > header {
+  padding: 10px 0;
+  color: #3c4c67;
+}
+.tb-grounding-full-block > header b {
+  font-size: 15px;
+}
+.tb-grounding-full-block .r-workbench {
+  box-shadow: 0 3px 10px #182c4c13;
+}
+
+.tb-drop-end {
+  padding: 18px;
+  border: 2px dashed #7973d9;
+  border-radius: 9px;
+  color: #655c9e;
+  text-align: center;
+  margin: 10px 0;
+}
+
+/* v4: batch/research controls. Scoped to the Task Builder workbench. */
+.tb-batch-grid,
+.tb-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
+  gap: 1rem;
+}
+.tb-batch-card,
+.tb-comparison-unit {
+  border: 1px solid var(--tb-border, #d8dde7);
+  border-radius: 14px;
+  padding: 1rem;
+  background: var(--tb-panel, #fff);
+}
+.tb-batch-card h4,
+.tb-comparison-unit h4 {
+  margin: 0 0 0.65rem;
+  font-size: 0.96rem;
+}
+.tb-batch-card audio,
+.tb-comparison-audio audio,
+.tb-ranking-sources audio {
+  display: block;
+  width: 100%;
+  margin: 0.45rem 0;
+}
+.tb-comparison-tracks {
+  display: grid;
+  gap: 0.65rem;
+}
+.tb-comparison-audio {
+  border-radius: 10px;
+  background: var(--tb-tint, #f2f4f8);
+  padding: 0.6rem;
+}
+.tb-comparison-audio small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.tb-comp-choices {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+.tb-comp-choices button {
+  cursor: pointer;
+  border: 1px solid #b9c3d1;
+  border-radius: 9px;
+  padding: 0.55rem 0.8rem;
+  background: white;
+}
+.tb-comp-size-sm button {
+  padding: 0.25rem 0.45rem;
+  font-size: 0.78rem;
+}
+.tb-comp-size-lg button {
+  padding: 0.85rem 1.15rem;
+  font-size: 1.05rem;
+  min-width: 105px;
+}
+.tb-comp-choices button.selected {
+  background: #eeecff;
+  border-color: #7973d9;
+  color: #4f46b9;
+  box-shadow: 0 0 0 1px #7973d9;
+}
+.tb-comparison-below {
+  padding: 0.4rem 0.25rem;
+  border-top: 1px solid #dce2ec;
+  margin-top: 0.8rem;
+}
+.tb-ranking-sources {
+  display: grid;
+  gap: 0.55rem;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+.tb-ranking-sources > div {
+  padding: 0.55rem;
+  border: 1px solid #dce2ec;
+  border-radius: 10px;
+}
+.tb-ranking-order {
+  list-style: none;
+  padding: 0;
+  margin: 0.9rem 0;
+}
+.tb-ranking-order li {
+  border: 1px solid #dce2ec;
+  border-radius: 9px;
+  padding: 0.65rem;
+  margin-bottom: 0.35rem;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.tb-ranking-order li[draggable="true"] {
+  cursor: grab;
+}
+.tb-ranking-order .tb-ranking-arrows {
+  margin-left: auto;
+  display: flex;
+  gap: 0.3rem;
+}
+.tb-inline-followups {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.75rem 0 0.25rem 1rem;
+  padding: 0.8rem;
+  border-left: 3px solid #6a9d8c;
+  background: #f5faf8;
+}
+.tb-inline-child {
+  display: grid;
+  gap: 0.45rem;
+}
+.tb-inline-config {
+  display: grid;
+  gap: 0.3rem;
+  border: 1px dashed #c7ced8;
+  padding: 0.55rem;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+}
+.tb-followup-settings {
+  grid-column: 1/-1;
+}
+.tb-rating-slider input[type="range"] {
+  width: 100%;
+  accent-color: #7973d9;
+}
+.tb-rating-slider output {
+  font-weight: 650;
+  margin-left: 0.7rem;
+}
+
+/* Dataset controls use the same field rhythm inside a block and on narrow panes.
+   Scope margins here so global article/fieldset defaults do not double spacing. */
+.tb-source-settings {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--tb-line);
+  border-radius: 10px;
+}
+.tb-source-settings legend { padding: 0 6px; font-weight: 650; }
+.tb-source-settings p, .tb-source-settings label,
+.tb-source-sample h3, .tb-source-sample p { margin: 0; }
+.tb-source-sample { display: grid; gap: 14px; margin-block: 16px; }
+.tb-source-settings input, .tb-source-settings select,
+.tb-source-sample select { min-width: 0; max-width: 100%; }
+.tb-source-settings .tb-check { align-self: end; padding-block: 8px; }
+@media (max-width: 720px) {
+  .tb-source-settings .tb-grid, .tb-source-sample .tb-grid { grid-template-columns: minmax(0, 1fr); }
+}
+.tb-source-settings, .tb-source-sample { overflow-wrap: anywhere; }
+.tb-source-preview { display: grid; gap: 8px; padding: 12px; background: var(--tb-tint); border-radius: 8px; }
+.tb-source-preview ul { margin: 0; padding-left: 20px; }
+
+/* One numbered native-input list supports long class vocabularies in standalone
+   forms and within every batch card. Keep labels wrapping inside grid panels. */
+.tb-choice-exam {display:flex;flex-direction:column;gap:.35rem;min-width:0;}
+.tb-choice-exam .tb-pick {display:flex;align-items:baseline;gap:.65rem;padding:.55rem .75rem;min-width:0;}
+.tb-choice-exam .tb-pick > span {white-space:normal;overflow-wrap:anywhere;}
+.tb-exam-marker {display:inline-block;min-width:2.2em;margin-right:.4rem;font-variant-numeric:tabular-nums;}
+.tb-choice-json-import {margin:.65rem 0;padding:.65rem;border:1px solid var(--border,#d1d5db);border-radius:.5rem;}
+.tb-choice-json-import textarea {display:block;width:100%;min-height:7rem;margin:.5rem 0;box-sizing:border-box;}
+.tb-source-answer-preview {margin:.75rem 0;padding:.75rem;background:var(--surface,#f5f6f8);border-radius:.5rem;min-width:0;}
+.tb-source-answer-preview pre {white-space:pre-wrap;overflow-wrap:anywhere;max-height:16rem;overflow:auto;}
+.tb-batch-card {min-width:0;}
+.tb-batch-card audio {max-width:100%;}
+
+/* One Grounding editor, per-record answers, for mixed multi-audio tasks. */
+.tb-grounding-audio-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.tb-workbench .tb-grounding-audio-tabs button[aria-selected=true],.tb .tb-grounding-audio-tabs button[aria-selected=true]{background:#204d78;color:#fff;border-color:#204d78}
+.tb-grounding-switch>p{margin-bottom:12px}
+
+/* Native checkbox semantics stay unchanged across choice appearances. */
+.tb-choice-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+.tb-choice-checkbox-grid .tb-pick {
+  min-width: 0;
+  align-items: flex-start;
+  padding: 0.75rem;
+  border: 1px solid var(--border, #dce2e8);
+  border-radius: 8px;
+}
+.tb-choice-checkbox-grid .tb-pick span {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 540px) {
+  .tb-choice-checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+}

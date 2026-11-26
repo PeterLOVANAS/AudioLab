@@ -1,0 +1,9 @@
+SPDX-License-Identifier: CC0-1.0
+
+The synthetic audio data, manifest and reference annotations in this directory
+are dedicated to the public domain under CC0 1.0 Universal:
+https://creativecommons.org/publicdomain/zero/1.0/
+
+These fixtures are generated from mathematical sine waves without external
+recordings, voices, research corpora or samples. This dedication applies to this
+example dataset only; it does not select or change the AudioLab source license.

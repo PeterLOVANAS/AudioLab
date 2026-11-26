@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "labellers": [
+    {
+      "username": "labeller-alice",
+      "display_name": "Alice",
+      "country": "Thailand",
+      "profession": "Linguist",
+      "languages": ["Thai", "English"],
+      "experience_years": 3,
+      "metadata": {"specialty": "Phonetics"}
+    },
+    {
+      "username": "labeller-bob",
+      "display_name": "Bob",
+      "country": "Japan",
+      "profession": "Researcher",
+      "languages": ["Japanese", "English"],
+      "experience_years": 2,
+      "metadata": {"specialty": "Audio classification"}
+    }
+  ]
+}

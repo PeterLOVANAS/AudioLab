@@ -1,0 +1,518 @@
+/* ================================================================
+   PROTOTYPE PARITY / V5: visual skin for the REAL Labeller Workspace.
+   Source: original prototype (r-queue, r-task-card, r-definition, .button).
+   Do NOT apply these rules to Task Builder, Admin, or the app's sidebar.
+   No audio or D1 calls are initiated by these selectors.
+   ================================================================ */
+.alw4-audio-workspace {
+  --alw4-ink: #27344f;
+  --alw4-muted: #8290a8;
+  --alw4-edge: #e1e6f0;
+  --alw4-purple: #625bdd;
+  --alw4-purple-pale: #f3f1ff;
+  --alw4-purple-border: #d8d2f8;
+  color: var(--alw4-ink);
+  font-family:
+    Inter,
+    "Noto Sans Thai",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: 13px;
+}
+.alw4-audio-workspace .alw3-workspace-heading {
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+.alw4-audio-workspace .alw3-workspace-heading h1 {
+  font-size: clamp(22px, 2.3vw, 28px);
+  font-weight: 650;
+  letter-spacing: -0.75px;
+  line-height: 1.2;
+  margin: 6px 0;
+}
+.alw4-audio-workspace .alw3-workspace-heading p {
+  font-size: 12px;
+  line-height: 1.65;
+  color: #7d899f;
+  max-width: 680px;
+}
+.alw4-audio-workspace .al-eyebrow {
+  font-size: 10px;
+  letter-spacing: 1.7px;
+  color: #8c96ac;
+  font-weight: 700;
+}
+
+/* Prototype's 220px queue: the Builder preview used a much wider fractional column. */
+.alw4-audio-workspace .tb-workbench {
+  grid-template-columns: minmax(210px, 238px) minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  font-family: inherit;
+  font-size: 13px;
+}
+.alw4-audio-workspace .tb-workbench > .tb-queue {
+  padding: 0;
+  border: 1px solid var(--alw4-edge);
+  border-radius: 11px;
+  overflow: hidden;
+  position: sticky;
+  top: 16px;
+  background: #fff;
+  box-shadow: 0 2px 5px #23365a06;
+}
+.alw4-audio-workspace .tb-workbench > .tb-stack {
+  min-width: 0;
+  gap: 18px;
+  margin: 0;
+}
+.alw4-audio-workspace .tb-workbench > .tb-stack > .tb-panel {
+  border: 1px solid var(--alw4-edge);
+  border-radius: 11px;
+  box-shadow: 0 2px 5px #23365a06;
+}
+.alw4-audio-workspace .tb-workbench > .tb-stack > .tb-workbench-instructions {
+  background: #f0effb;
+  border-color: #e0ddf2;
+  color: #645b93;
+  padding: 18px 20px;
+}
+.alw4-audio-workspace .tb-workbench-instructions .tb-eyebrow {
+  color: #857bb6;
+}
+.alw4-audio-workspace .tb-workbench-instructions h2 {
+  color: #574e89;
+  font-size: 18px;
+}
+.alw4-audio-workspace .tb-workbench-instructions .tb-instructions {
+  color: #756d99;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.alw4-audio-workspace .alw4-queue {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+.alw4-audio-workspace .alw4-queue-head {
+  padding: 16px 14px 9px;
+  gap: 4px;
+}
+.alw4-audio-workspace .alw4-queue-head h2 {
+  font-size: 15px;
+  letter-spacing: -0.2px;
+  font-weight: 630;
+  margin: 0;
+}
+.alw4-audio-workspace .alw4-counter {
+  border: 1px solid #e2e7f2;
+  background: #f6f8fd;
+  color: #69768e;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 3px 6px;
+  min-width: 28px;
+  text-align: center;
+}
+.alw4-audio-workspace .alw4-queue-summary {
+  font-size: 10px;
+  color: #9aa4b7;
+  line-height: 1.5;
+  margin: 2px 0 0;
+}
+.alw4-audio-workspace .alw4-source-config {
+  margin: 4px 12px 6px;
+  border: 1px solid #e7e9f3;
+  border-radius: 7px;
+  background: #fbfcff;
+}
+.alw4-audio-workspace .alw4-source-config summary {
+  cursor: pointer;
+  display: grid;
+  gap: 2px;
+  padding: 8px 9px;
+  font-size: 10px;
+  font-weight: 650;
+  color: #66728c;
+}
+.alw4-audio-workspace .alw4-source-config summary::marker {
+  color: #8279c1;
+}
+.alw4-audio-workspace .alw4-source-config summary small {
+  display: block;
+  font-weight: 450;
+  color: #989fb2;
+  font-size: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.alw4-audio-workspace .alw4-source-config[open] {
+  background: #fff;
+}
+.alw4-audio-workspace .alw4-source-fields {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+  border-top: 1px solid #e9edf5;
+}
+.alw4-audio-workspace .alw4-field {
+  font-size: 10px;
+  line-height: 1.4;
+  gap: 5px;
+  color: #68758f;
+}
+.alw4-audio-workspace .alw4-field select {
+  font-size: 11px;
+  min-height: 32px;
+  padding: 6px 7px;
+  border-color: #e1e6f0;
+  border-radius: 7px;
+}
+.alw4-audio-workspace .alw4-batch-note {
+  margin: 2px 12px 9px;
+  padding: 6px 8px;
+  font-size: 10px;
+  gap: 6px;
+  background: #f1f7f5;
+  color: #618375;
+  border: 1px solid #e0ece7;
+  border-radius: 6px;
+}
+.alw4-audio-workspace .alw4-queue-info {
+  font-size: 10px;
+  color: #8491a7;
+  line-height: 1.6;
+  padding: 6px 12px;
+  margin: 0;
+}
+.alw4-audio-workspace .alw4-queue-tools {
+  display: grid;
+  gap: 8px;
+  padding: 2px 12px 10px;
+}
+.alw4-audio-workspace .alw4-search {
+  height: 33px;
+  padding: 0 9px;
+  color: #a3adbd;
+  border: 1px solid #e1e6f0;
+  border-radius: 7px;
+}
+.alw4-audio-workspace .alw4-search input {
+  font-size: 11px;
+  padding: 7px 0;
+}
+.alw4-audio-workspace .alw4-filter {
+  font-size: 11px;
+  min-height: 34px;
+  border: 1px solid #e1e6f0;
+  border-radius: 7px;
+  padding: 7px 8px;
+}
+.alw4-audio-workspace
+  :is(.alw4-search, .alw4-filter, .alw4-field select):focus-within {
+  outline: 2px solid #928af3;
+  outline-offset: 1px;
+}
+.alw4-audio-workspace .alw4-queue-list {
+  max-height: min(68vh, 660px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 3px 7px 9px;
+}
+.alw4-audio-workspace .alw4-audio-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 5px;
+  min-height: unset;
+  margin: 0;
+  padding: 12px 11px;
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: #fff;
+  color: #4d5473;
+  box-shadow: none;
+  transition:
+    background 0.14s,
+    border-color 0.14s;
+}
+.alw4-audio-workspace .alw4-audio-row:hover:not(:disabled) {
+  background: #f7f6fc;
+  border-color: #e7e2f9;
+}
+.alw4-audio-workspace .alw4-audio-row.active,
+.alw4-audio-workspace .alw4-audio-row[aria-pressed="true"] {
+  background: var(--alw4-purple-pale);
+  border-color: var(--alw4-purple-border);
+  box-shadow: none;
+}
+.alw4-audio-workspace .alw4-card-id {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: #9a9fb3;
+  line-height: 1.5;
+}
+.alw4-audio-workspace .alw4-card-title {
+  display: block;
+  max-width: 100%;
+  font-size: 12px;
+  font-weight: 620;
+  color: #4c5474;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.alw4-audio-workspace .alw4-card-subtitle {
+  font-size: 10px;
+  color: #939cb0;
+  white-space: nowrap;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.alw4-audio-workspace .alw4-card-footer {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 3px;
+}
+.alw4-audio-workspace .alw4-card-status {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #e1e7f0;
+  border-radius: 5px;
+  padding: 3px 7px;
+  color: #72819a;
+  background: #f6f8fc;
+  font-size: 10px;
+  font-weight: 550;
+  text-transform: capitalize;
+  line-height: 1.4;
+}
+.alw4-audio-workspace .alw4-card-status-in_progress,
+.alw4-audio-workspace .alw4-card-status-assigned {
+  background: #fff6e9;
+  border-color: #f3dfbd;
+  color: #a16f32;
+}
+.alw4-audio-workspace .alw4-card-status-submitted,
+.alw4-audio-workspace .alw4-card-status-reviewed {
+  background: #e7f6ed;
+  border-color: #c4e9d3;
+  color: #36866f;
+}
+.alw4-audio-workspace .alw4-card-count {
+  font-size: 9px;
+  color: #8d97a9;
+}
+.alw4-audio-workspace .alw4-load-more {
+  min-height: 32px;
+  margin-top: 4px;
+}
+.alw4-audio-workspace .alw4-privacy {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  padding: 13px 12px;
+  border-top: 1px solid #e6eaf3;
+  background: #fbfcff;
+  font-size: 9px;
+  color: #9ba4b7;
+  line-height: 1.55;
+}
+
+/* Recreate the prototype's subtle buttons while retaining current handlers. */
+.alw4-audio-workspace :is(.alw3-primary, .alw3-secondary) {
+  border-radius: 7px;
+  padding: 9px 13px;
+  min-height: 35px;
+  font:
+    550 12px/1.4 Inter,
+    "Noto Sans Thai",
+    sans-serif;
+  transition:
+    background 0.14s,
+    border-color 0.14s,
+    box-shadow 0.14s;
+}
+.alw4-audio-workspace .alw3-primary {
+  background: var(--alw4-purple);
+  border-color: var(--alw4-purple);
+  color: white;
+  box-shadow: 0 3px 7px #5554df18;
+}
+.alw4-audio-workspace .alw3-primary:hover:not(:disabled) {
+  background: #4d47c7;
+  border-color: #4d47c7;
+}
+.alw4-audio-workspace .alw3-secondary {
+  background: #fff;
+  border-color: #dfe4ef;
+  color: #5c6681;
+}
+.alw4-audio-workspace .alw3-secondary:hover:not(:disabled) {
+  background: #f4f2ff;
+  border-color: #c8c1ee;
+  color: #5149a5;
+}
+.alw4-audio-workspace .alw3-actions {
+  padding: 13px 0 2px;
+  margin-top: 12px;
+  gap: 8px;
+}
+.alw4-audio-workspace .alw3-task-meta > span {
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-size: 10px;
+}
+/* Respect the Builder's choice-size settings; only add hover feedback. */
+.alw4-audio-workspace
+  .tb-workbench
+  .tb-choice-options
+  .tb-pick:hover:not(:has(input:disabled)) {
+  border-color: #c6bef3;
+  box-shadow: 0 2px 7px #5d54bc10;
+}
+.alw4-audio-workspace :is(button, input, select, textarea):focus-visible {
+  outline: 2px solid #9087f2;
+  outline-offset: 2px;
+}
+
+/* Fallback for installs that add only the skin import and keep the V4 queue JSX. */
+.alw4-audio-workspace .alw4-audio-row > .alw3-queue-number {
+  display: block;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #9a9fb3;
+  font-size: 9px;
+  font-weight: 500;
+}
+.alw4-audio-workspace .alw4-audio-row > .alw3-queue-text {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+.alw4-audio-workspace .alw4-audio-row .alw3-queue-text strong {
+  font-size: 12px;
+  color: #4c5474;
+  font-weight: 620;
+}
+.alw4-audio-workspace .alw4-audio-row .alw3-queue-text small {
+  font-size: 10px;
+  color: #939cb0;
+}
+.alw4-audio-workspace .alw4-audio-row > .alw3-status {
+  display: inline-block;
+  max-width: none;
+  align-self: flex-start;
+  margin: 2px 0 0;
+  font-size: 10px;
+  background: #f6f8fc;
+  color: #72819a;
+  border: 1px solid #e1e7f0;
+  border-radius: 5px;
+}
+
+/* Dark appearance: only these new outer surfaces, not the specialist editor. */
+[data-theme="dark"] .alw4-audio-workspace {
+  --alw4-ink: #e1e7f3;
+  --alw4-muted: #abb6c9;
+  --alw4-edge: #3a465d;
+  --alw4-purple-pale: #312c54;
+  --alw4-purple-border: #6b61a2;
+}
+[data-theme="dark"] .alw4-audio-workspace .tb-workbench > .tb-queue,
+[data-theme="dark"] .alw4-audio-workspace .alw4-audio-row,
+[data-theme="dark"] .alw4-audio-workspace .alw4-source-config,
+[data-theme="dark"] .alw4-audio-workspace .alw4-source-config[open] {
+  background: #182231;
+  color: #e4e9f2;
+  border-color: #3a465d;
+}
+[data-theme="dark"] .alw4-audio-workspace .alw4-audio-row.active {
+  background: #312c54;
+  border-color: #6b61a2;
+}
+[data-theme="dark"] .alw4-audio-workspace .alw4-card-title {
+  color: #e3e5f4;
+}
+[data-theme="dark"] .alw4-audio-workspace .alw4-source-config summary {
+  color: #c0c9e0;
+}
+[data-theme="dark"]
+  .alw4-audio-workspace
+  .tb-workbench
+  > .tb-stack
+  > .tb-workbench-instructions {
+  background: #292544;
+  color: #d0c5f7;
+  border-color: #514b7b;
+}
+[data-theme="dark"]
+  .alw4-audio-workspace
+  .tb-workbench-instructions
+  :is(h2, .tb-instructions) {
+  color: #d3c9f6;
+}
+
+@media (max-width: 1150px) {
+  .alw4-audio-workspace .tb-workbench {
+    grid-template-columns: minmax(194px, 215px) minmax(0, 1fr);
+    gap: 16px;
+  }
+}
+@media (max-width: 880px) {
+  .alw4-audio-workspace .tb-workbench {
+    grid-template-columns: 1fr;
+  }
+  .alw4-audio-workspace .tb-workbench > .tb-queue {
+    position: static;
+  }
+  .alw4-audio-workspace .alw4-queue-list {
+    max-height: 245px;
+  }
+}
+@media (max-width: 580px) {
+  .alw4-audio-workspace .alw3-workspace-heading h1 {
+    font-size: 23px;
+  }
+  .alw4-audio-workspace .alw3-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .alw4-audio-workspace .alw3-actions button {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .alw4-audio-workspace .alw4-audio-row,
+  .alw4-audio-workspace :is(.alw3-primary, .alw3-secondary) {
+    transition: none;
+  }
+}
+
+/* Queue controls are outside the collapsed legacy source-config details. Give
+   their label, select and help text a full-width row rather than inline layout. */
+.alw4-audio-workspace label.alw4-job-picker{display:grid;gap:7px;margin:12px;padding:12px;border:1px solid #dce4ed;border-radius:8px;background:#fff;font-size:13px}
+.alw4-audio-workspace .alw4-job-picker select{display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;font:inherit;min-height:40px;padding:9px 10px}
+.alw4-audio-workspace .alw4-job-picker small{font-size:11px;line-height:1.5;color:#667584}
+.alw4-audio-workspace .alw4-current-job{font-weight:600;color:#384d69;overflow-wrap:anywhere}

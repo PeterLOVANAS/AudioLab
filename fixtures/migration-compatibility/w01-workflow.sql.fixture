@@ -1,0 +1,81 @@
+-- Workflow drafts, published graphs and execution history.
+CREATE TABLE workflow_definitions (
+  id TEXT PRIMARY KEY NOT NULL,
+  project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE RESTRICT,
+  name TEXT NOT NULL,
+  draft_graph_json TEXT NOT NULL,
+  draft_revision INTEGER NOT NULL DEFAULT 1 CHECK (draft_revision >= 1),
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_workflow_definitions_project
+  ON workflow_definitions(project_id, created_at, id);
+
+CREATE TABLE workflow_versions (
+  workflow_id TEXT NOT NULL REFERENCES workflow_definitions(id) ON DELETE RESTRICT,
+  version INTEGER NOT NULL CHECK (version >= 1),
+  graph_json TEXT NOT NULL,
+  published_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (workflow_id, version)
+);
+
+CREATE TRIGGER workflow_versions_no_update
+BEFORE UPDATE ON workflow_versions
+BEGIN
+  SELECT RAISE(ABORT, 'Published workflow versions are immutable');
+END;
+
+CREATE TRIGGER workflow_versions_no_delete
+BEFORE DELETE ON workflow_versions
+BEGIN
+  SELECT RAISE(ABORT, 'Published workflow versions are immutable');
+END;
+
+CREATE TABLE workflow_batches (
+  id TEXT PRIMARY KEY NOT NULL,
+  workflow_id TEXT NOT NULL,
+  workflow_version INTEGER NOT NULL,
+  request_id TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (workflow_id, workflow_version)
+    REFERENCES workflow_versions(workflow_id, version) ON DELETE RESTRICT,
+  UNIQUE (workflow_id, request_id)
+);
+
+CREATE INDEX idx_workflow_batches_version
+  ON workflow_batches(workflow_id, workflow_version, created_at, id);
+
+CREATE TABLE workflow_item_runs (
+  id TEXT PRIMARY KEY NOT NULL,
+  batch_id TEXT NOT NULL REFERENCES workflow_batches(id) ON DELETE RESTRICT,
+  source_record_db_id TEXT NOT NULL REFERENCES source_records(id) ON DELETE RESTRICT,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (batch_id, source_record_db_id)
+);
+
+CREATE INDEX idx_workflow_item_runs_source
+  ON workflow_item_runs(source_record_db_id);
+
+CREATE TABLE workflow_stage_runs (
+  id TEXT PRIMARY KEY NOT NULL,
+  item_run_id TEXT NOT NULL REFERENCES workflow_item_runs(id) ON DELETE RESTRICT,
+  node_id TEXT NOT NULL,
+  attempt INTEGER NOT NULL DEFAULT 1 CHECK (attempt >= 1),
+  state TEXT NOT NULL DEFAULT 'waiting' CHECK (state IN (
+    'waiting', 'ready', 'allocated', 'in_progress', 'submitted',
+    'accepted', 'rejected', 'cancelled'
+  )),
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (item_run_id, node_id, attempt)
+);
+
+-- Existing standalone instances retain NULL. Workflow callers use a
+-- stage-specific instance_key to preserve the existing ingestion uniqueness.
+ALTER TABLE task_instances ADD COLUMN workflow_stage_run_id TEXT
+  REFERENCES workflow_stage_runs(id) ON DELETE RESTRICT;
+
+CREATE UNIQUE INDEX idx_task_instances_workflow_stage_run
+  ON task_instances(workflow_stage_run_id)
+  WHERE workflow_stage_run_id IS NOT NULL;

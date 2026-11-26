@@ -1,0 +1,314 @@
+/* Labeller mode shares the existing AudioLab topbar/sidebar. All new classes
+   are namespaced, so Builder V4 and other teammate pages are not restyled. */
+.alw3-mode {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  padding-bottom: 1.6rem;
+}
+.alw3-mode button {
+  cursor: pointer;
+}
+.alw3-mode button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.alw3-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.alw3-header h1 {
+  font-size: clamp(1.5rem, 3vw, 2.15rem);
+  margin: 0.2rem 0 0.35rem;
+  line-height: 1.2;
+}
+.alw3-header p {
+  margin: 0.15rem 0 0;
+  color: var(--al-muted, #66758a);
+}
+.alw3-primary,
+.alw3-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border-radius: 9px;
+  padding: 0.62rem 0.9rem;
+  font: inherit;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+.alw3-primary {
+  border: 1px solid #245c83;
+  background: #245c83;
+  color: white;
+}
+.alw3-primary:hover:not(:disabled) {
+  background: #174567;
+}
+.alw3-secondary {
+  border: 1px solid #d4dfeb;
+  background: #fff;
+  color: #243e59;
+}
+.alw3-secondary:hover:not(:disabled) {
+  background: #edf3f8;
+}
+.alw3-panel,
+.alw3-stat {
+  background: #fff;
+  border: 1px solid #e1e8f1;
+  border-radius: 13px;
+  padding: 1.15rem;
+  box-shadow: 0 3px 18px rgb(28 52 79 / 3%);
+}
+.alw3-panel h2 {
+  font-size: 1.08rem;
+  margin: 0 0 0.5rem;
+}
+.alw3-panel p {
+  margin: 0.35rem 0;
+  color: #596c80;
+}
+.alw3-pad {
+  padding: 1.25rem;
+}
+.alw3-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+.alw3-stat {
+  display: grid;
+  gap: 1rem;
+}
+.alw3-stat strong {
+  font-size: clamp(1.75rem, 3vw, 2.3rem);
+  font-variant-numeric: tabular-nums;
+}
+.alw3-stat-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: #556779;
+  font-size: 0.88rem;
+}
+.alw3-row-split {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.alw3-progress progress {
+  width: 100%;
+  height: 14px;
+  accent-color: #1a7569;
+}
+.alw3-muted {
+  color: #66758a;
+  font-size: 0.9rem;
+}
+.alw3-recent {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+.alw3-recent button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  gap: 0.7rem;
+  padding: 0.7rem;
+  border: 1px solid #e3e8ef;
+  border-radius: 9px;
+  background: #fbfcfe;
+  color: #223850;
+}
+.alw3-recent button:hover {
+  background: #f0f6fb;
+}
+.alw3-recent small {
+  display: block;
+  margin-top: 0.2rem;
+  color: #708092;
+}
+.alw3-status {
+  flex: none;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #436a80;
+  text-transform: capitalize;
+  background: #e8f2f7;
+  border-radius: 20px;
+  padding: 0.2rem 0.48rem;
+}
+.alw3-error {
+  padding: 0.78rem 0.9rem;
+  border: 1px solid #e2a8a8;
+  border-radius: 9px;
+  color: #922f2f;
+  background: #fff4f4;
+  white-space: pre-wrap;
+}
+.alw3-error button {
+  margin-left: 0.5rem;
+  padding: 0.2rem 0.6rem;
+}
+.alw3-dev-note {
+  font-size: 0.78rem;
+  color: #7d8795;
+}
+.alw3-workspace {
+  width: 100%;
+}
+.alw3-workspace .tb-workbench {
+  margin-top: 0.4rem;
+}
+.alw3-queue-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: #203b56;
+  padding: 0.7rem 0.5rem;
+  margin: 0.28rem 0;
+}
+.alw3-queue-row.active {
+  background: #e8f4f0;
+  border-color: #b3dcd3;
+}
+.alw3-queue-row:hover:not(.active) {
+  background: #edf2f7;
+}
+.alw3-queue-number {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #e8eef5;
+  font-size: 0.76rem;
+  flex: none;
+}
+.alw3-queue-text {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1;
+}
+.alw3-queue-text strong,
+.alw3-queue-text small {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.alw3-queue-text small {
+  color: #657b90;
+  font-size: 0.74rem;
+}
+.alw3-queue-divider {
+  height: 1px;
+  background: #d9e1ec;
+  margin: 1rem 0;
+}
+.alw3-full {
+  width: 100%;
+}
+.alw3-preview-notice {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #d4e0eb;
+  border-radius: 9px;
+  color: #395a74;
+  background: #eff6fb;
+  font-size: 0.87rem;
+}
+.alw3-source {
+  border: 1px solid #e2e7ef;
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin: 0.65rem 0;
+}
+.alw3-source h3 {
+  font-size: 1rem;
+  margin: 0 0 0.4rem;
+}
+.alw3-task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+.alw3-task-meta > span {
+  display: inline-block;
+  padding: 0.25rem 0.55rem;
+  border-radius: 15px;
+  background: #edf3f8;
+  color: #45617b;
+  font-size: 0.78rem;
+}
+.alw3-task-meta .alw3-save-saved,
+.alw3-task-meta .alw3-save-submitted {
+  color: #126349;
+  background: #dff2eb;
+}
+.alw3-task-meta .alw3-save-dirty,
+.alw3-task-meta .alw3-save-conflict,
+.alw3-task-meta .alw3-save-error {
+  color: #8e4a09;
+  background: #fff0d8;
+}
+.alw3-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.alw3-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.alw3-empty {
+  color: #66758a;
+}
+@media (max-width: 1050px) {
+  .alw3-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 650px) {
+  .alw3-stat-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem;
+  }
+  .alw3-stat {
+    padding: 0.8rem;
+  }
+  .alw3-workspace .tb-workbench {
+    display: block;
+  }
+  .alw3-header {
+    flex-direction: column;
+  }
+}
+
+.alw3-success {
+  margin: 12px 0;
+  padding: 12px 16px;
+  border: 1px solid #86c9a4;
+  border-radius: 8px;
+  color: #166534;
+  background: #edf9f0;
+}

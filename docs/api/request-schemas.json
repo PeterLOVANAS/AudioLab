@@ -1,0 +1,2484 @@
+{
+  "description": "Generated request shapes; server semantic/refinement/authorization checks remain authoritative.",
+  "schemas": {
+    "taskDraftSchema": {
+      "source": "lib/backend/validation/task-definitions.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 4000
+          },
+          "domain": {
+            "type": "string",
+            "enum": [
+              "sound",
+              "speech",
+              "general"
+            ]
+          },
+          "instructions": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000
+          },
+          "instructionBinding": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "dataset"
+              },
+              "fieldId": {
+                "type": "string",
+                "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+              },
+              "type": {
+                "type": "string",
+                "const": "string"
+              },
+              "missingValuePolicy": {
+                "type": "string",
+                "enum": [
+                  "block",
+                  "empty",
+                  "use_default"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "fieldId",
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          "blocks": {
+            "minItems": 1,
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "single_choice",
+                    "multiple_choice",
+                    "boolean",
+                    "number",
+                    "rating_scale",
+                    "text",
+                    "transcript",
+                    "timeline_annotation",
+                    "continuous_rating",
+                    "candidate_vote",
+                    "audio_comparison",
+                    "ranking",
+                    "repeated_group",
+                    "section",
+                    "callout",
+                    "audio_player",
+                    "transcript_summary"
+                  ]
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "allowCustom": {
+                  "type": "boolean"
+                },
+                "showSourceAnswer": {
+                  "type": "boolean"
+                },
+                "trainingAnswerPreview": {
+                  "type": "boolean"
+                },
+                "answerAppearance": {
+                  "type": "string",
+                  "enum": [
+                    "cards",
+                    "compact",
+                    "bullets",
+                    "exam",
+                    "checkbox-grid"
+                  ]
+                },
+                "sourceBindings": {
+                  "type": "object",
+                  "properties": {
+                    "preview": {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "dataset"
+                        },
+                        "fieldId": {
+                          "type": "string",
+                          "pattern": "^(reference_answer|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "string",
+                            "number",
+                            "boolean",
+                            "choices",
+                            "textgrid",
+                            "json"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "fieldId",
+                        "type"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "label": {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "dataset"
+                        },
+                        "fieldId": {
+                          "type": "string",
+                          "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "string"
+                        },
+                        "missingValuePolicy": {
+                          "type": "string",
+                          "enum": [
+                            "block",
+                            "empty",
+                            "use_default"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "fieldId",
+                        "type"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "helpText": {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "dataset"
+                        },
+                        "fieldId": {
+                          "type": "string",
+                          "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "string"
+                        },
+                        "missingValuePolicy": {
+                          "type": "string",
+                          "enum": [
+                            "block",
+                            "empty",
+                            "use_default"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "fieldId",
+                        "type"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "options": {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "dataset"
+                        },
+                        "fieldId": {
+                          "type": "string",
+                          "pattern": "^(choices|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "string[]",
+                            "choices",
+                            "string"
+                          ]
+                        },
+                        "format": {
+                          "type": "string",
+                          "enum": [
+                            "array",
+                            "json",
+                            "lines",
+                            "delimiter"
+                          ]
+                        },
+                        "delimiter": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 8
+                        },
+                        "stripPrefix": {
+                          "type": "boolean"
+                        },
+                        "missingValuePolicy": {
+                          "type": "string",
+                          "enum": [
+                            "block",
+                            "use_default"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "fieldId",
+                        "type"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "value": {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "dataset"
+                        },
+                        "fieldId": {
+                          "type": "string",
+                          "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "string",
+                            "textgrid"
+                          ]
+                        },
+                        "missingValuePolicy": {
+                          "type": "string",
+                          "enum": [
+                            "block",
+                            "empty",
+                            "use_default"
+                          ]
+                        },
+                        "mode": {
+                          "type": "string",
+                          "enum": [
+                            "reference",
+                            "read_only",
+                            "prefill"
+                          ]
+                        },
+                        "fallback": {
+                          "type": "string",
+                          "maxLength": 20000
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "fieldId",
+                        "type",
+                        "mode"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "id",
+                "type",
+                "label",
+                "required"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "policy": {
+            "type": "object",
+            "properties": {
+              "requiredIndependentVotes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              },
+              "blindToOthers": {
+                "type": "boolean"
+              },
+              "requiresReview": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "requiredIndependentVotes",
+              "blindToOthers",
+              "requiresReview"
+            ],
+            "additionalProperties": false
+          },
+          "workspace": {
+            "type": "object",
+            "properties": {
+              "waveform": {
+                "type": "boolean"
+              },
+              "spectrogram": {
+                "type": "boolean"
+              },
+              "pitch": {
+                "type": "boolean"
+              },
+              "formants": {
+                "type": "boolean"
+              },
+              "mfcc": {
+                "type": "boolean"
+              },
+              "allowTextGridImport": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "domain",
+          "instructions",
+          "blocks",
+          "policy"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "createTaskDefinitionSchema": {
+      "source": "lib/backend/validation/task-definitions.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "draft": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 4000
+              },
+              "domain": {
+                "type": "string",
+                "enum": [
+                  "sound",
+                  "speech",
+                  "general"
+                ]
+              },
+              "instructions": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "instructionBinding": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "dataset"
+                  },
+                  "fieldId": {
+                    "type": "string",
+                    "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                  },
+                  "type": {
+                    "type": "string",
+                    "const": "string"
+                  },
+                  "missingValuePolicy": {
+                    "type": "string",
+                    "enum": [
+                      "block",
+                      "empty",
+                      "use_default"
+                    ]
+                  }
+                },
+                "required": [
+                  "kind",
+                  "fieldId",
+                  "type"
+                ],
+                "additionalProperties": false
+              },
+              "blocks": {
+                "minItems": 1,
+                "maxItems": 100,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "single_choice",
+                        "multiple_choice",
+                        "boolean",
+                        "number",
+                        "rating_scale",
+                        "text",
+                        "transcript",
+                        "timeline_annotation",
+                        "continuous_rating",
+                        "candidate_vote",
+                        "audio_comparison",
+                        "ranking",
+                        "repeated_group",
+                        "section",
+                        "callout",
+                        "audio_player",
+                        "transcript_summary"
+                      ]
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "allowCustom": {
+                      "type": "boolean"
+                    },
+                    "showSourceAnswer": {
+                      "type": "boolean"
+                    },
+                    "trainingAnswerPreview": {
+                      "type": "boolean"
+                    },
+                    "answerAppearance": {
+                      "type": "string",
+                      "enum": [
+                        "cards",
+                        "compact",
+                        "bullets",
+                        "exam",
+                        "checkbox-grid"
+                      ]
+                    },
+                    "sourceBindings": {
+                      "type": "object",
+                      "properties": {
+                        "preview": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "dataset"
+                            },
+                            "fieldId": {
+                              "type": "string",
+                              "pattern": "^(reference_answer|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "string",
+                                "number",
+                                "boolean",
+                                "choices",
+                                "textgrid",
+                                "json"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "fieldId",
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "label": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "dataset"
+                            },
+                            "fieldId": {
+                              "type": "string",
+                              "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                            },
+                            "type": {
+                              "type": "string",
+                              "const": "string"
+                            },
+                            "missingValuePolicy": {
+                              "type": "string",
+                              "enum": [
+                                "block",
+                                "empty",
+                                "use_default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "fieldId",
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "helpText": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "dataset"
+                            },
+                            "fieldId": {
+                              "type": "string",
+                              "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                            },
+                            "type": {
+                              "type": "string",
+                              "const": "string"
+                            },
+                            "missingValuePolicy": {
+                              "type": "string",
+                              "enum": [
+                                "block",
+                                "empty",
+                                "use_default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "fieldId",
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "options": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "dataset"
+                            },
+                            "fieldId": {
+                              "type": "string",
+                              "pattern": "^(choices|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "string[]",
+                                "choices",
+                                "string"
+                              ]
+                            },
+                            "format": {
+                              "type": "string",
+                              "enum": [
+                                "array",
+                                "json",
+                                "lines",
+                                "delimiter"
+                              ]
+                            },
+                            "delimiter": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 8
+                            },
+                            "stripPrefix": {
+                              "type": "boolean"
+                            },
+                            "missingValuePolicy": {
+                              "type": "string",
+                              "enum": [
+                                "block",
+                                "use_default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "fieldId",
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "value": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "dataset"
+                            },
+                            "fieldId": {
+                              "type": "string",
+                              "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "string",
+                                "textgrid"
+                              ]
+                            },
+                            "missingValuePolicy": {
+                              "type": "string",
+                              "enum": [
+                                "block",
+                                "empty",
+                                "use_default"
+                              ]
+                            },
+                            "mode": {
+                              "type": "string",
+                              "enum": [
+                                "reference",
+                                "read_only",
+                                "prefill"
+                              ]
+                            },
+                            "fallback": {
+                              "type": "string",
+                              "maxLength": 20000
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "fieldId",
+                            "type",
+                            "mode"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type",
+                    "label",
+                    "required"
+                  ],
+                  "additionalProperties": {}
+                }
+              },
+              "policy": {
+                "type": "object",
+                "properties": {
+                  "requiredIndependentVotes": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 20
+                  },
+                  "blindToOthers": {
+                    "type": "boolean"
+                  },
+                  "requiresReview": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "requiredIndependentVotes",
+                  "blindToOthers",
+                  "requiresReview"
+                ],
+                "additionalProperties": false
+              },
+              "workspace": {
+                "type": "object",
+                "properties": {
+                  "waveform": {
+                    "type": "boolean"
+                  },
+                  "spectrogram": {
+                    "type": "boolean"
+                  },
+                  "pitch": {
+                    "type": "boolean"
+                  },
+                  "formants": {
+                    "type": "boolean"
+                  },
+                  "mfcc": {
+                    "type": "boolean"
+                  },
+                  "allowTextGridImport": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "name",
+              "description",
+              "domain",
+              "instructions",
+              "blocks",
+              "policy"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "projectId",
+          "draft"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "updateTaskDefinitionSchema": {
+      "source": "lib/backend/validation/task-definitions.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "draft": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 4000
+              },
+              "domain": {
+                "type": "string",
+                "enum": [
+                  "sound",
+                  "speech",
+                  "general"
+                ]
+              },
+              "instructions": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              },
+              "instructionBinding": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "dataset"
+                  },
+                  "fieldId": {
+                    "type": "string",
+                    "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                  },
+                  "type": {
+                    "type": "string",
+                    "const": "string"
+                  },
+                  "missingValuePolicy": {
+                    "type": "string",
+                    "enum": [
+                      "block",
+                      "empty",
+                      "use_default"
+                    ]
+                  }
+                },
+                "required": [
+                  "kind",
+                  "fieldId",
+                  "type"
+                ],
+                "additionalProperties": false
+              },
+              "blocks": {
+                "minItems": 1,
+                "maxItems": 100,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "single_choice",
+                        "multiple_choice",
+                        "boolean",
+                        "number",
+                        "rating_scale",
+                        "text",
+                        "transcript",
+                        "timeline_annotation",
+                        "continuous_rating",
+                        "candidate_vote",
+                        "audio_comparison",
+                        "ranking",
+                        "repeated_group",
+                        "section",
+                        "callout",
+                        "audio_player",
+                        "transcript_summary"
+                      ]
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "allowCustom": {
+                      "type": "boolean"
+                    },
+                    "showSourceAnswer": {
+                      "type": "boolean"
+                    },
+                    "trainingAnswerPreview": {
+                      "type": "boolean"
+                    },
+                    "answerAppearance": {
+                      "type": "string",
+                      "enum": [
+                        "cards",
+                        "compact",
+                        "bullets",
+                        "exam",
+                        "checkbox-grid"
+                      ]
+                    },
+                    "sourceBindings": {
+                      "type": "object",
+                      "properties": {
+                        "preview": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "dataset"
+                            },
+                            "fieldId": {
+                              "type": "string",
+                              "pattern": "^(reference_answer|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "string",
+                                "number",
+                                "boolean",
+                                "choices",
+                                "textgrid",
+                                "json"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "fieldId",
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "label": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "dataset"
+                            },
+                            "fieldId": {
+                              "type": "string",
+                              "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                            },
+                            "type": {
+                              "type": "string",
+                              "const": "string"
+                            },
+                            "missingValuePolicy": {
+                              "type": "string",
+                              "enum": [
+                                "block",
+                                "empty",
+                                "use_default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "fieldId",
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "helpText": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "dataset"
+                            },
+                            "fieldId": {
+                              "type": "string",
+                              "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                            },
+                            "type": {
+                              "type": "string",
+                              "const": "string"
+                            },
+                            "missingValuePolicy": {
+                              "type": "string",
+                              "enum": [
+                                "block",
+                                "empty",
+                                "use_default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "fieldId",
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "options": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "dataset"
+                            },
+                            "fieldId": {
+                              "type": "string",
+                              "pattern": "^(choices|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "string[]",
+                                "choices",
+                                "string"
+                              ]
+                            },
+                            "format": {
+                              "type": "string",
+                              "enum": [
+                                "array",
+                                "json",
+                                "lines",
+                                "delimiter"
+                              ]
+                            },
+                            "delimiter": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 8
+                            },
+                            "stripPrefix": {
+                              "type": "boolean"
+                            },
+                            "missingValuePolicy": {
+                              "type": "string",
+                              "enum": [
+                                "block",
+                                "use_default"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "fieldId",
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "value": {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "dataset"
+                            },
+                            "fieldId": {
+                              "type": "string",
+                              "pattern": "^(question|(?:item|sample)\\.[a-zA-Z][a-zA-Z0-9_]{0,63})$"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "string",
+                                "textgrid"
+                              ]
+                            },
+                            "missingValuePolicy": {
+                              "type": "string",
+                              "enum": [
+                                "block",
+                                "empty",
+                                "use_default"
+                              ]
+                            },
+                            "mode": {
+                              "type": "string",
+                              "enum": [
+                                "reference",
+                                "read_only",
+                                "prefill"
+                              ]
+                            },
+                            "fallback": {
+                              "type": "string",
+                              "maxLength": 20000
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "fieldId",
+                            "type",
+                            "mode"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type",
+                    "label",
+                    "required"
+                  ],
+                  "additionalProperties": {}
+                }
+              },
+              "policy": {
+                "type": "object",
+                "properties": {
+                  "requiredIndependentVotes": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 20
+                  },
+                  "blindToOthers": {
+                    "type": "boolean"
+                  },
+                  "requiresReview": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "requiredIndependentVotes",
+                  "blindToOthers",
+                  "requiresReview"
+                ],
+                "additionalProperties": false
+              },
+              "workspace": {
+                "type": "object",
+                "properties": {
+                  "waveform": {
+                    "type": "boolean"
+                  },
+                  "spectrogram": {
+                    "type": "boolean"
+                  },
+                  "pitch": {
+                    "type": "boolean"
+                  },
+                  "formants": {
+                    "type": "boolean"
+                  },
+                  "mfcc": {
+                    "type": "boolean"
+                  },
+                  "allowTextGridImport": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "name",
+              "description",
+              "domain",
+              "instructions",
+              "blocks",
+              "policy"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "expectedRevision",
+          "draft"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "publishTaskDefinitionSchema": {
+      "source": "lib/backend/validation/task-definitions.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "expectedPublishedVersion": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "expectedRevision",
+          "expectedPublishedVersion"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "createTaskInstanceSchema": {
+      "source": "lib/backend/validation/task-instances.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "definitionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "definitionVersion": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "assetId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "audioAssetIds": {
+            "minItems": 2,
+            "maxItems": 24,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            }
+          },
+          "sourceRecordIds": {
+            "minItems": 2,
+            "maxItems": 24,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          "sourceRecordId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "projectId",
+          "definitionId",
+          "definitionVersion",
+          "assetId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "createMemberSchema": {
+      "source": "lib/backend/validation/assignments.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "userId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "labeller"
+            ]
+          }
+        },
+        "required": [
+          "projectId",
+          "userId",
+          "displayName",
+          "role"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "createAssignmentSchema": {
+      "source": "lib/backend/validation/assignments.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "taskInstanceId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "labellerId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "projectId",
+          "taskInstanceId",
+          "labellerId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "startAssignmentSchema": {
+      "source": "lib/backend/validation/assignments.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "labellerId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "labellerId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "annotationWriteSchema": {
+      "source": "lib/backend/validation/annotations.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "labellerId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "expectedRevision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "answers": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "labellerId",
+          "expectedRevision",
+          "answers"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "jobInputSchema": {
+      "source": "lib/backend/validation/team-jobs.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "teamId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "datasetId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "definitionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "definitionVersion": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "individual",
+              "voting"
+            ]
+          },
+          "seed": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "itemKeys": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          },
+          "useEntireDataset": {
+            "type": "boolean"
+          },
+          "workerIds": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          },
+          "sampleCount": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000
+          }
+        },
+        "required": [
+          "jobId",
+          "projectId",
+          "name",
+          "datasetId",
+          "definitionId",
+          "definitionVersion",
+          "mode",
+          "seed",
+          "itemKeys",
+          "workerIds",
+          "sampleCount"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "workerProfileSchema": {
+      "source": "lib/backend/validation/team-jobs.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "userId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "profession": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "languages": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            }
+          },
+          "experienceYears": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "metadata": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "maxLength": 60
+            },
+            "additionalProperties": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "required": [
+          "projectId",
+          "userId",
+          "country",
+          "profession",
+          "languages",
+          "experienceYears",
+          "active",
+          "metadata"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "teamSchema": {
+      "source": "lib/backend/validation/team-jobs.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "teamId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "memberIds": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          }
+        },
+        "required": [
+          "projectId",
+          "name",
+          "memberIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "allocationSchema": {
+      "source": "lib/backend/validation/assignment-allocation.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "adminId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "datasetId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "definitionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "definitionVersion": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "itemKeys": {
+            "minItems": 1,
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          },
+          "labellerIds": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          "independentLabellers": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "fixed",
+              "balanced"
+            ]
+          }
+        },
+        "required": [
+          "projectId",
+          "adminId",
+          "datasetId",
+          "definitionId",
+          "definitionVersion",
+          "itemKeys",
+          "labellerIds",
+          "independentLabellers",
+          "mode"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "confirmAllocationSchema": {
+      "source": "lib/backend/validation/assignment-allocation.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "adminId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "datasetId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "definitionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "definitionVersion": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "itemKeys": {
+            "minItems": 1,
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          },
+          "labellerIds": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          "independentLabellers": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "fixed",
+              "balanced"
+            ]
+          },
+          "pairs": {
+            "minItems": 1,
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "itemKey": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "labellerId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                }
+              },
+              "required": [
+                "itemKey",
+                "labellerId"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "projectId",
+          "adminId",
+          "datasetId",
+          "definitionId",
+          "definitionVersion",
+          "itemKeys",
+          "labellerIds",
+          "independentLabellers",
+          "mode",
+          "pairs"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "ingestionSchema": {
+      "source": "lib/backend/validation/dataset-ingestion.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "number",
+            "const": 1
+          },
+          "dataset_id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "source_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "origin": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60,
+                "pattern": "^[A-Za-z0-9_.-]+$"
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60,
+                "pattern": "^[A-Za-z0-9_.-]+$"
+              }
+            },
+            "required": [
+              "origin",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "records": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sample_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 60,
+                  "pattern": "^[A-Za-z0-9_.-]+$"
+                },
+                "audio_id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                "fields": {
+                  "default": {},
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,63}$"
+                  },
+                  "additionalProperties": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "textgrid"
+                          },
+                          "file": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 255
+                              },
+                              "media_type": {
+                                "type": "string",
+                                "const": "text/praat-textgrid"
+                              },
+                              "encoding": {
+                                "type": "string",
+                                "enum": [
+                                  "utf-8",
+                                  "utf-16le",
+                                  "utf-16be"
+                                ]
+                              },
+                              "sha256": {
+                                "type": "string",
+                                "pattern": "^[a-f0-9]{64}$"
+                              },
+                              "content_base64": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 280000,
+                                "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "media_type",
+                              "encoding",
+                              "sha256",
+                              "content_base64"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "visibility": {
+                            "type": "string",
+                            "enum": [
+                              "worker",
+                              "admin"
+                            ]
+                          },
+                          "value": {
+                            "type": "string",
+                            "maxLength": 200000
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "visibility",
+                          "value"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "text"
+                          },
+                          "value": {
+                            "type": "string",
+                            "maxLength": 20000
+                          },
+                          "visibility": {
+                            "type": "string",
+                            "enum": [
+                              "worker",
+                              "admin"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "value",
+                          "visibility"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "number"
+                          },
+                          "value": {
+                            "type": "number"
+                          },
+                          "visibility": {
+                            "type": "string",
+                            "enum": [
+                              "worker",
+                              "admin"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "value",
+                          "visibility"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "boolean"
+                          },
+                          "value": {
+                            "type": "boolean"
+                          },
+                          "visibility": {
+                            "type": "string",
+                            "enum": [
+                              "worker",
+                              "admin"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "value",
+                          "visibility"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "choices"
+                          },
+                          "value": {
+                            "minItems": 2,
+                            "maxItems": 50,
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 60,
+                                  "pattern": "^[A-Za-z0-9_.-]+$"
+                                },
+                                "label": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 2000
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "label"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "visibility": {
+                            "type": "string",
+                            "enum": [
+                              "worker",
+                              "admin"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "value",
+                          "visibility"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  }
+                },
+                "metadata": {
+                  "default": {},
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "items": {
+                  "minItems": 1,
+                  "maxItems": 20,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "item_id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 60,
+                        "pattern": "^[A-Za-z0-9_.-]+$"
+                      },
+                      "fields": {
+                        "type": "object",
+                        "propertyNames": {
+                          "type": "string",
+                          "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,63}$"
+                        },
+                        "additionalProperties": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "textgrid"
+                                },
+                                "file": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 255
+                                    },
+                                    "media_type": {
+                                      "type": "string",
+                                      "const": "text/praat-textgrid"
+                                    },
+                                    "encoding": {
+                                      "type": "string",
+                                      "enum": [
+                                        "utf-8",
+                                        "utf-16le",
+                                        "utf-16be"
+                                      ]
+                                    },
+                                    "sha256": {
+                                      "type": "string",
+                                      "pattern": "^[a-f0-9]{64}$"
+                                    },
+                                    "content_base64": {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 280000,
+                                      "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "media_type",
+                                    "encoding",
+                                    "sha256",
+                                    "content_base64"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "visibility": {
+                                  "type": "string",
+                                  "enum": [
+                                    "worker",
+                                    "admin"
+                                  ]
+                                },
+                                "value": {
+                                  "type": "string",
+                                  "maxLength": 200000
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "visibility",
+                                "value"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "text"
+                                },
+                                "value": {
+                                  "type": "string",
+                                  "maxLength": 20000
+                                },
+                                "visibility": {
+                                  "type": "string",
+                                  "enum": [
+                                    "worker",
+                                    "admin"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "value",
+                                "visibility"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "number"
+                                },
+                                "value": {
+                                  "type": "number"
+                                },
+                                "visibility": {
+                                  "type": "string",
+                                  "enum": [
+                                    "worker",
+                                    "admin"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "value",
+                                "visibility"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "boolean"
+                                },
+                                "value": {
+                                  "type": "boolean"
+                                },
+                                "visibility": {
+                                  "type": "string",
+                                  "enum": [
+                                    "worker",
+                                    "admin"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "value",
+                                "visibility"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "choices"
+                                },
+                                "value": {
+                                  "minItems": 2,
+                                  "maxItems": 50,
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 60,
+                                        "pattern": "^[A-Za-z0-9_.-]+$"
+                                      },
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 2000
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "label"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "visibility": {
+                                  "type": "string",
+                                  "enum": [
+                                    "worker",
+                                    "admin"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "value",
+                                "visibility"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
+                      },
+                      "annotations": {
+                        "default": [],
+                        "maxItems": 20,
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "field": {
+                              "type": "string",
+                              "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,63}$"
+                            },
+                            "value": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "boolean"
+                                },
+                                {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "field",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "reference": {
+                        "type": "object",
+                        "properties": {
+                          "field": {
+                            "type": "string",
+                            "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,63}$"
+                          },
+                          "value": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "field",
+                          "value"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "item_id",
+                      "fields"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "sample_id",
+                "audio_id",
+                "items"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "schema_version",
+          "dataset_id",
+          "source_version",
+          "provenance",
+          "records"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "createCandidateSetSchema": {
+      "source": "lib/backend/validation/candidate-sets.ts",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "taskInstanceId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "blockId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "userId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "requestId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "sources": {
+            "minItems": 2,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "dataset_annotation"
+                    },
+                    "labelId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1000
+                    },
+                    "field": {
+                      "type": "string",
+                      "enum": [
+                        "value",
+                        "text",
+                        "transcript",
+                        "label",
+                        "sound_label"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "labelId"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "submission"
+                    },
+                    "revisionId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    "blockId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "revisionId",
+                    "blockId"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "curated"
+                    },
+                    "candidateId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "candidateId"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "projectId",
+          "taskInstanceId",
+          "blockId",
+          "userId",
+          "requestId",
+          "sources"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

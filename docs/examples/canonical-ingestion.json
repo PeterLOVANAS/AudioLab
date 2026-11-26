@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "dataset_id": "11111111-1111-4111-8111-111111111111",
+  "source_version": "v1",
+  "provenance": {"origin": "MMAU", "revision": "release-1"},
+  "records": [{
+    "sample_id": "clip-001",
+    "audio_id": "22222222-2222-4222-8222-222222222222",
+    "fields": {"instruction": {"type": "text", "visibility": "worker", "value": "Listen carefully."}},
+    "metadata": {"split": "example"},
+    "items": [{
+      "item_id": "q1",
+      "fields": {
+        "question": {"type": "text", "visibility": "worker", "value": "Which sound is audible?"},
+        "choices": {"type": "choices", "visibility": "worker", "value": [{"id": "bird", "label": "Birdsong"}, {"id": "rain", "label": "Rain"}]}
+      },
+      "annotations": [{"field": "choices", "value": "bird"}],
+      "reference": {"field": "choices", "value": "bird"}
+    }]
+  }]
+}

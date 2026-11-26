@@ -1,0 +1,25 @@
+{
+  "issuer": "https://replace-with-team.cloudflareaccess.com",
+  "bootstrap": true,
+  "project": {
+    "id": "REPLACE_WITH_NEW_PROJECT_UUID",
+    "name": "Listening study",
+    "slug": "listening-study"
+  },
+  "accounts": [
+    {
+      "mode": "create",
+      "userId": "REPLACE_WITH_NEW_ACCOUNT_UUID",
+      "username": "research-admin",
+      "displayName": "Research administrator",
+      "subject": "REPLACE_WITH_VERIFIED_ACCESS_USER_SUBJECT"
+    }
+  ],
+  "memberships": [
+    {
+      "projectId": "REPLACE_WITH_SAME_PROJECT_UUID",
+      "userId": "REPLACE_WITH_SAME_ACCOUNT_UUID",
+      "role": "admin"
+    }
+  ]
+}

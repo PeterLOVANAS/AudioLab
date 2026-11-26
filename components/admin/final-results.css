@@ -1,0 +1,79 @@
+.final-results small {
+  display: block;
+  color: var(--muted, #64748b);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.final-results table {
+  width: 100%;
+}
+.final-results td,
+.final-results th {
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.final-results meter {
+  width: 100%;
+  height: 18px;
+  accent-color: #346a8a;
+}
+.result-inspector {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  background: var(--panel, #fff);
+}
+.result-inspector audio {
+  width: min(100%, 600px);
+}
+.result-inspector svg {
+  width: 100%;
+  min-height: 64px;
+  display: block;
+  background: #f8fafc;
+  border-radius: 6px;
+}
+.result-inspector pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.result-inspector input[type="range"] {
+  width: 100%;
+}
+.result-inspector details {
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+.progress-views {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.progress-views button[aria-pressed="true"] {
+  background: #173b52;
+  color: white;
+}
+
+.question-distribution {
+  margin: 12px 0;
+}
+.rank-distribution {
+  margin: 16px 0;
+}
+.rank-bars {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.rank-bars > div {
+  display: grid;
+  gap: 4px;
+  min-width: 100px;
+  flex: 1;
+}
+.rank-bars b {
+  font-variant-numeric: tabular-nums;
+}

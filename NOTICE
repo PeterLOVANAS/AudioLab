@@ -1,0 +1,10 @@
+AudioLab
+Copyright 2026 AudioLab contributors.
+
+Original AudioLab source is licensed under Apache License 2.0; see LICENSE.
+Contributor acknowledgements are in ACKNOWLEDGEMENTS.md.
+
+Third-party components retain their respective copyrights and licenses.
+See THIRD_PARTY_NOTICES.md and third_party/manifest.json for preserved notices.
+The generated synthetic example dataset has its own CC0 dedication at
+examples/datasets/synthetic/LICENSE.

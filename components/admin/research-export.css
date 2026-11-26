@@ -1,0 +1,181 @@
+.research-export {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+}
+.research-export .al-panel {
+  min-width: 0;
+  padding: 22px;
+}
+.export-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.export-toolbar label {
+  display: grid;
+  gap: 7px;
+  min-width: 220px;
+  flex: 1;
+}
+.export-select,
+.export-input {
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #ccd5e0;
+  border-radius: 7px;
+  padding: 10px 12px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.export-input {
+  flex: 1;
+  min-width: 180px;
+}
+.export-button {
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: #fff;
+  color: #263c56;
+  cursor: pointer;
+}
+.export-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.export-button[aria-pressed="true"],
+.export-primary {
+  background: #204d78;
+  border-color: #204d78;
+  color: white;
+}
+.export-form.tb-workbench {
+  display: block;
+  min-width: 0;
+  margin-top: 14px;
+}
+.export-error {
+  padding: 12px;
+  color: #92372c;
+  background: #fff1f0;
+  border-radius: 7px;
+}
+.export-note {
+  padding: 12px;
+  background: #fff6df;
+  border: 1px solid #ebd6a5;
+  border-radius: 7px;
+}
+.export-hint,
+.export-id {
+  color: #617187;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.export-source,
+.export-answer {
+  border-top: 1px solid #dce4ed;
+  margin-top: 16px;
+  padding-top: 14px;
+}
+.export-source pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 280px;
+  overflow: auto;
+  padding: 12px;
+  background: #f4f6fa;
+}
+.research-export audio {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+}
+.export-chart {
+  padding: 16px;
+  border: 1px solid #dce4ed;
+  border-radius: 8px;
+  margin: 14px 0;
+}
+.export-chart h4 {
+  margin: 0 0 10px;
+}
+.export-chart p {
+  font-size: 12px;
+  color: #617187;
+}
+.export-vote-row {
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr) 2fr 3em;
+  gap: 12px;
+  align-items: center;
+  margin: 10px 0;
+}
+.export-vote-row > span {
+  overflow-wrap: anywhere;
+}
+.export-vote-track {
+  background: #edf1f6;
+  border-radius: 4px;
+  height: 20px;
+  overflow: hidden;
+}
+.export-vote-track > span {
+  display: block;
+  height: 100%;
+  background: #4568a8;
+}
+.research-export :focus-visible {
+  outline: 3px solid #73adce;
+  outline-offset: 2px;
+}
+@media (max-width: 600px) {
+  .export-toolbar {
+    align-items: stretch;
+  }
+  .export-toolbar label {
+    min-width: 0;
+    width: 100%;
+  }
+  .export-vote-row {
+    grid-template-columns: 1fr 1fr 2em;
+    gap: 8px;
+  }
+  .research-export .al-panel {
+    padding: 16px;
+  }
+}
+
+.export-toolbar label.export-history-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 0 1 auto;
+  font-size: 13px;
+}
+.export-history-toggle input {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  margin: 0;
+}
+
+/* Readable answer summaries stay scoped to Research Export, including nested
+   repeated entries and timelines; no global list/form selectors are changed. */
+.research-export .export-readable-answer {margin:14px 0;padding:14px 16px;background:#f5f8fc;border:1px solid #dce5ef;border-radius:9px;overflow-wrap:anywhere}
+.research-export .export-readable-answer h4 {margin:0 0 10px}
+.research-export .export-readable-answer ol {margin:8px 0;padding-left:24px}
+.research-export .export-readable-answer li {padding:4px 0}
+.research-export .export-readable-answer dl {margin:8px 0}
+.research-export .export-readable-answer dt {font-weight:600;text-transform:capitalize;color:#52657d}
+.research-export .export-readable-answer dd {margin:4px 0 12px 12px}

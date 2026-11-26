@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "dataset_id": "f634c610-6ceb-5cc6-a2c5-e455260da614",
+  "source_version": "v1",
+  "provenance": {
+    "origin": "synthetic-tones",
+    "revision": "generator-v1"
+  },
+  "records": [
+    {
+      "sample_id": "steady-tone",
+      "audio_id": "1b1e9f72-6fb8-5356-a9ad-eb4ca2a314f8",
+      "metadata": {
+        "originalPath": "steady-tone.wav",
+        "durationSeconds": 4,
+        "license": "CC0-1.0",
+        "generator": "generate_example_dataset.py"
+      },
+      "fields": {
+        "instruction": {
+          "type": "text",
+          "visibility": "worker",
+          "value": "Listen and annotate the synthetic tone."
+        },
+        "frequency_hz": {
+          "type": "number",
+          "visibility": "admin",
+          "value": 440
+        }
+      },
+      "items": [
+        {
+          "item_id": "listen",
+          "fields": {
+            "prompt": {
+              "type": "text",
+              "visibility": "worker",
+              "value": "Is the tone steady or pulsed? Mark its audible intervals in a grounding task."
+            },
+            "category": {
+              "type": "choices",
+              "visibility": "worker",
+              "value": [
+                {
+                  "id": "steady",
+                  "label": "Steady tone"
+                },
+                {
+                  "id": "pulsed",
+                  "label": "Pulsed tone"
+                }
+              ]
+            },
+            "alignment": {
+              "type": "textgrid",
+              "visibility": "admin",
+              "value": "File type = \"ooTextFile\"\nObject class = \"TextGrid\"\nxmin = 0\nxmax = 4\ntiers? <exists>\nsize = 1\nitem []:\nitem [1]:\nclass = \"IntervalTier\"\nname = \"Events\"\nxmin = 0\nxmax = 4\nintervals: size = 3\nintervals [1]:\nxmin = 0\nxmax = 1\ntext = \"\"\nintervals [2]:\nxmin = 1\nxmax = 3\ntext = \"tone\"\nintervals [3]:\nxmin = 3\nxmax = 4\ntext = \"\"\n"
+            }
+          },
+          "reference": {
+            "field": "category",
+            "value": "steady"
+          }
+        }
+      ]
+    },
+    {
+      "sample_id": "pulsed-tone",
+      "audio_id": "a46148a4-e111-5769-9d82-e8f81ccd7773",
+      "metadata": {
+        "originalPath": "pulsed-tone.wav",
+        "durationSeconds": 4,
+        "license": "CC0-1.0",
+        "generator": "generate_example_dataset.py"
+      },
+      "fields": {
+        "instruction": {
+          "type": "text",
+          "visibility": "worker",
+          "value": "Listen and annotate the synthetic tone."
+        },
+        "frequency_hz": {
+          "type": "number",
+          "visibility": "admin",
+          "value": 660
+        }
+      },
+      "items": [
+        {
+          "item_id": "listen",
+          "fields": {
+            "prompt": {
+              "type": "text",
+              "visibility": "worker",
+              "value": "Is the tone steady or pulsed? Mark its audible intervals in a grounding task."
+            },
+            "category": {
+              "type": "choices",
+              "visibility": "worker",
+              "value": [
+                {
+                  "id": "steady",
+                  "label": "Steady tone"
+                },
+                {
+                  "id": "pulsed",
+                  "label": "Pulsed tone"
+                }
+              ]
+            },
+            "alignment": {
+              "type": "textgrid",
+              "visibility": "admin",
+              "value": "File type = \"ooTextFile\"\nObject class = \"TextGrid\"\nxmin = 0\nxmax = 4\ntiers? <exists>\nsize = 1\nitem []:\nitem [1]:\nclass = \"IntervalTier\"\nname = \"Events\"\nxmin = 0\nxmax = 4\nintervals: size = 5\nintervals [1]:\nxmin = 0\nxmax = 0.5\ntext = \"\"\nintervals [2]:\nxmin = 0.5\nxmax = 1.5\ntext = \"tone\"\nintervals [3]:\nxmin = 1.5\nxmax = 2.5\ntext = \"\"\nintervals [4]:\nxmin = 2.5\nxmax = 3.5\ntext = \"tone\"\nintervals [5]:\nxmin = 3.5\nxmax = 4\ntext = \"\"\n"
+            }
+          },
+          "reference": {
+            "field": "category",
+            "value": "pulsed"
+          }
+        }
+      ]
+    }
+  ]
+}

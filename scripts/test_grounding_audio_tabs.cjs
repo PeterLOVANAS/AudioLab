@@ -1,0 +1,14 @@
+/** Server-rendered control contract only; no browser/audio decoding involved. */
+const fs=require('node:fs'),path=require('node:path'),ts=require('@typescript/typescript6'),assert=require('node:assert/strict');
+const root=process.cwd(),cache=new Map();
+function load(file){file=path.resolve(root,file);if(cache.has(file))return cache.get(file).exports;const mod={exports:{}};cache.set(file,mod);const code=ts.transpileModule(fs.readFileSync(file,'utf8'),{fileName:file,compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX,esModuleInterop:true}}).outputText.replaceAll('import.meta.env.DEV','true');new Function('require','module','exports',code)(name=>{if(name.endsWith('.css'))return {};if(!name.startsWith('@/')&&!name.startsWith('.'))return require(name);const base=name.startsWith('@/')?path.resolve(root,name.slice(2)):path.resolve(path.dirname(file),name);const target=[base,base+'.ts',base+'.tsx',path.join(base,'index.ts')].find(candidate=>fs.existsSync(candidate)&&fs.statSync(candidate).isFile());if(!target)throw Error(name);return load(target);},mod,mod.exports);return mod.exports;}
+const {taskBatchDefinition,markGroundingTabs}=load('lib/contracts/task-batch-definition.ts');
+const original={id:'form',version:1,blocks:[{id:'choice',type:'single_choice',numBatch:4},{id:'ground',type:'timeline_annotation',label:'Ground',required:true,numBatch:1,tiers:[{id:'events',name:'Events',kind:'interval',labelMode:'text'}]}]};
+const adjusted=markGroundingTabs(original,taskBatchDefinition(original,2));assert.equal(original.blocks[0].numBatch,4);assert.equal(original.blocks[1].numBatch,1);assert.equal(adjusted.blocks[0].numBatch,2);assert.equal(adjusted.blocks[1].numBatch,2);assert.equal(adjusted.blocks[1].audioNavigation,'tabs');
+assert.equal(taskBatchDefinition(original,1).blocks[0].numBatch,1);
+assert.throws(()=>taskBatchDefinition({...original,blocks:[{id:'compare',type:'audio_comparison',numBatch:4,comparisonSize:2}]},1),/complete groups/);
+const React=require('react'),{renderToStaticMarkup}=require('react-dom/server'),BlockFields=load('components/workbench/BlockFields.tsx').default;
+const html=renderToStaticMarkup(React.createElement(BlockFields,{blocks:[adjusted.blocks[1]],answers:{ground:[{tiers:{events:[]}},{tiers:{events:[]}}]},onChange(){},readOnly:true,samples:{batchAudio:[{id:'a',url:'/a.wav',label:'A'},{id:'b',url:'/b.wav',label:'B'}]}}));
+assert(html.includes('Grounding recording'));assert.equal((html.match(/role="tab"/g)||[]).length,2);
+assert(!/<button[^>]*disabled[^>]*role="tab"/.test(html));assert(html.includes('Audio 1 of 2'));
+console.log('PASS runtime-only tail projection, published form unchanged, mixed Grounding tabs, singleton remainder, comparison guard and navigable read-only tabs in server-rendered markup.');
