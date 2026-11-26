@@ -10,7 +10,9 @@ or unapproved affiliation is included.
 | --- | --- | --- |
 | Prototype audio workbench | `PrototypeAudioPlayer.tsx` and CSS describe the original port | Maintainer states ownership and authorizes Apache 2.0; original source comments retained |
 | Acoustic worker/analysis | Current files are byte-identical to audited historical prototype blobs `452dce609b58…` / `c6503f7b3e7c…` | Maintainer states ownership and authorizes Apache 2.0; historical absence of a license was not treated as a grant |
-| Project Configuration/Progress teammate | Existing integration commit `53f5f09` retains contribution; active progress is TeamJobProgress | Maintainer confirms contributor authority for Apache 2.0; role-based credit retained |
+| Project Configuration/Progress — [@fnxly](https://github.com/fnxly) | Existing integration commit `53f5f09` retains contribution; active progress is TeamJobProgress | Maintainer confirms contributor authority for Apache 2.0; named public-handle credit retained |
+| Task Builder/choice appearance — [@tomoelovesalmon](https://github.com/tomoelovesalmon) | Original merged Task Builder and appearance changes retained and extended | Verified public GitHub account credited in acknowledgements |
+| Member/assignment workspace and workflow contracts — [@machmeena](https://github.com/machmeena) | Original merged administration and shared-contract changes retained and extended | Verified public GitHub account credited; no workflow-engine claim |
 | Historical migration compatibility fixture | Exact commit/hash in its [README](../fixtures/migration-compatibility/README.md); original migration untouched | Maintainer confirms authority for Apache 2.0; test-only, not a runtime engine |
 | Current example dataset | Mathematical sine synthesis, exact generator/hash tests and scoped CC0 dedication | Scoped CC0 dedication and generator provenance retained |
 | Curated UI screenshots | Verified synthetic-data Chrome acceptance, no private corpus | Maintainer confirms underlying contribution rights; no blanket screenshot CC0 claim |

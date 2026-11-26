@@ -149,6 +149,19 @@ python scripts/import_dataset.py --base-url "$AUDIOLAB_BASE_URL" \
   [acknowledgements](ACKNOWLEDGEMENTS.md), [third-party notices](THIRD_PARTY_NOTICES.md)
   and [change history](CHANGELOG.md).
 
+## Contributors
+
+AudioLab includes original work by:
+
+- [@tomoelovesalmon](https://github.com/tomoelovesalmon) — Task Builder and choice appearance options.
+- [@machmeena](https://github.com/machmeena) — administrator member/assignment workspace and shared workflow contracts.
+- [@fnxly](https://github.com/fnxly) — Project Configuration and the original Labeller Progress implementation.
+- [@PeterLOVANAS](https://github.com/PeterLOVANAS) — project maintenance, integration and release preparation.
+
+The release extends these contributions. See [acknowledgements](ACKNOWLEDGEMENTS.md)
+for attribution scope and upstream credits, or view the
+[GitHub Contributors graph](https://github.com/PeterLOVANAS/AudioLab/graphs/contributors).
+
 ## Known limitations
 
 PCM WAV ingestion is limited to 10 MiB/file. Original-answer matching supports
